@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/KamiMeow/event-band-api/issues"
   },
-  "homepage": "https://github.com/KamiMeow/event-band-api#readme"
+  "homepage": "https://github.com/KamiMeow/event-band-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
