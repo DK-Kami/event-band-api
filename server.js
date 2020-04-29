@@ -1,7 +1,6 @@
 const app = require('./app');
 
 app.init();
-app.listen(confug.PORT, err => {
+app.listen(utils.PORT, err => {
   if (err) throw err;
-  // app.connectToDB();
 });
