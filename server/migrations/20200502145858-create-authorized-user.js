@@ -51,7 +51,6 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('AuthorizedUsers');
-  }
+  down: (queryInterface, Sequelize)
+    => queryInterface.dropTable('AuthorizedUsers'),
 };
