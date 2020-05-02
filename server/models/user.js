@@ -71,14 +71,19 @@ export default (sequelize, DataTypes) => {
         },
       },
     }
-  }, {});
+  }, {
+    getterMethods: {
+      fullName: () => this.name + ' ' + this.surname,
+    },
+  });
 
   User.associate = models => {
     // associations can be defined here
-    User.belongsTo(models.AuthorizedUser, {
-      foreignKey: 'userId',
-      onDelete: 'CASCADE'
-    });
+
+    // User.belongsTo(models.AuthorizedUser, {
+    //   foreignKey: 'userId',
+    //   onDelete: 'CASCADE'
+    // });
   };
 
   User.beforeCreate(user => user.uuid = uuid());

@@ -1,0 +1,69 @@
+import uuid from 'uuid/v4';
+
+export default (sequelize, DataTypes) => {
+  const AuthorizedUser = sequelize.define('AuthorizedUser', {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    uuid: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isUUID: 4,
+      },
+    },
+    nickname: {
+      type: DataTypes.STRING,
+      allowNull: {
+        args: false,
+        msg: 'Please enter your nickname',
+      },
+    },
+    refreshToken: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    token: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    salt: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: {
+        args: false,
+        msg: 'Please enter your nickname',
+      },
+      validate: {
+        len: {
+          args: [6, 30],
+          msg: 'The length of the name must be less than 30 and more than 6',
+        },
+      }
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      // onDelete: 'CASCADE',
+      // references: {
+      //   model: 'User',
+      //   key: 'id',
+      //   as: 'userId',
+      // }
+    },
+  }, {});
+
+  AuthorizedUser.associate = models => {
+    // associations can be defined here
+
+    // AuthorizedUser.hasOne(models.User, {
+    //   onDelete: "cascade"
+    // });
+  };
+
+  AuthorizedUser.beforeCreate(user => user.uuid = uuid());
+  return AuthorizedUser;
+};
