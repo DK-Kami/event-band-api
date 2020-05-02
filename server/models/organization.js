@@ -22,8 +22,8 @@ export default (sequelize, DataTypes) => {
       },
       validate: {
         len: {
-          args: [2, 100],
-          msg: 'The length of the name must be less than 100 and more than 2',
+          args: [0, 100],
+          msg: 'The length of the name must be less than 100',
         },
       }
     },
