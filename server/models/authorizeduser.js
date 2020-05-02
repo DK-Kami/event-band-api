@@ -2,12 +2,6 @@ import uuid from 'uuid/v4';
 
 export default (sequelize, DataTypes) => {
   const AuthorizedUser = sequelize.define('AuthorizedUser', {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
-      primaryKey: true,
-    },
     uuid: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -40,7 +34,7 @@ export default (sequelize, DataTypes) => {
       },
       validate: {
         len: {
-          args: [6, 30],
+          args: [6, 100],
           msg: 'The length of the name must be less than 30 and more than 6',
         },
       }
