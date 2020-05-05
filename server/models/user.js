@@ -73,11 +73,9 @@ export default (sequelize, DataTypes) => {
 
   User.associate = models => {
     // associations can be defined here
-
-    // User.belongsTo(models.AuthorizedUser, {
-    //   foreignKey: 'userId',
-    //   onDelete: 'CASCADE'
-    // });
+    User.hasOne(models.AuthorizedUser);
+    User.hasMany(models.Organizator);
+    User.hasMany(models.Subscriber);
   };
 
   User.beforeCreate(user => user.uuid = uuid());

@@ -47,6 +47,9 @@ export default (sequelize, DataTypes) => {
 
   Event.associate = models => {
     // associations can be defined here
+    Event.hasMany(models.Ticket);
+    Event.hasMany(models.Tag);
+    Event.hasMany(models.Subscriber);
   };
 
   Event.beforeCreate(event => event.uuid = uuid());

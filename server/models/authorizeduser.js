@@ -39,23 +39,11 @@ export default (sequelize, DataTypes) => {
         },
       }
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      // onDelete: 'CASCADE',
-      // references: {
-      //   model: 'User',
-      //   key: 'id',
-      //   as: 'userId',
-      // }
-    },
   }, {});
 
   AuthorizedUser.associate = models => {
     // associations can be defined here
-
-    // AuthorizedUser.hasOne(models.User, {
-    //   onDelete: "cascade"
-    // });
+    AuthorizedUser.belongsTo(models.User);
   };
 
   AuthorizedUser.beforeCreate(user => user.uuid = uuid());

@@ -44,8 +44,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
   }, {});
-  Ticket.associate = function(models) {
+  Ticket.associate = models => {
     // associations can be defined here
+    Ticket.belongsTo(models.Event);
   };
   return Ticket;
 };

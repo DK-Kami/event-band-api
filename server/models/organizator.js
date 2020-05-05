@@ -25,6 +25,8 @@ export default (sequelize, DataTypes) => {
 
   Organizator.associate = models => {
     // associations can be defined here
+    Organizator.belongsTo(models.Organization);
+    Organizator.belongsTo(models.User);
   };
 
   Organizator.beforeCreate(organizator => organizator.uuid = uuid());

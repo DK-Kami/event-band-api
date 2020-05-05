@@ -23,6 +23,9 @@ export default (sequelize, DataTypes) => {
 
   Subscriber.associate = models => {
     // associations can be defined here
+    Subscriber.belongsTo(models.Organization);
+    Subscriber.belongsTo(models.Event);
+    Subscriber.belongsTo(models.User);
   };
 
   Subscriber.beforeCreate(subscriber => subscriber.uuid = uuid());
