@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function(queryInterface, Sequelize) {
     return queryInterface.createTable('Events', {
       id: {
         type: Sequelize.INTEGER,
@@ -44,6 +44,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize)
-    => queryInterface.dropTable('Events'),
+  down: function(queryInterface, Sequelize) {
+    return queryInterface.dropTable('Events');
+  },
 };
