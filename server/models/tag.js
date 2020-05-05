@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import { v4 } from 'uuid';
 
 export default (sequelize, DataTypes) => {
   const Tag = sequelize.define('Tag', {
@@ -28,6 +28,6 @@ export default (sequelize, DataTypes) => {
     Tag.hasMany(models.Event);
   };
 
-  Tag.beforeCreate(tag => tag.uuid = uuid());
+  Tag.beforeCreate(tag => tag.uuid = v4());
   return Tag;
 };

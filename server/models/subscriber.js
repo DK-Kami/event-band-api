@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import { v4 } from 'uuid';
 
 export default (sequelize, DataTypes) => {
   const Subscriber = sequelize.define('Subscriber', {
@@ -28,6 +28,6 @@ export default (sequelize, DataTypes) => {
     Subscriber.belongsTo(models.User);
   };
 
-  Subscriber.beforeCreate(subscriber => subscriber.uuid = uuid());
+  Subscriber.beforeCreate(subscriber => subscriber.uuid = v4());
   return Subscriber;
 };

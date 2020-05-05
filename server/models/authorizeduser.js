@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import { v4 } from 'uuid';
 
 export default (sequelize, DataTypes) => {
   const AuthorizedUser = sequelize.define('AuthorizedUser', {
@@ -46,6 +46,6 @@ export default (sequelize, DataTypes) => {
     AuthorizedUser.belongsTo(models.User);
   };
 
-  AuthorizedUser.beforeCreate(user => user.uuid = uuid());
+  AuthorizedUser.beforeCreate(user => user.uuid = v4());
   return AuthorizedUser;
 };

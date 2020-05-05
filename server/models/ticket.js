@@ -1,5 +1,6 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+import { v4 } from 'uuid';
+
+export default (sequelize, DataTypes) => {
   const Ticket = sequelize.define('Ticket', {
     uuid: {
       type: DataTypes.UUID,
@@ -44,9 +45,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
   }, {});
+
   Ticket.associate = models => {
     // associations can be defined here
     Ticket.belongsTo(models.Event);
   };
+
+  Ticket.beforeCreate(ticket => ticket.uuid = v4());
   return Ticket;
 };
