@@ -19,11 +19,11 @@ module.exports = {
       },
       refreshToken: {
         type: Sequelize.STRING,
-        unique: true,
+        // unique: true,
       },
       token: {
         type: Sequelize.STRING,
-        unique: true,
+        // unique: true,
       },
       salt: {
         type: Sequelize.STRING,

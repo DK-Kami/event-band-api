@@ -19,11 +19,11 @@ export default (sequelize, DataTypes) => {
     },
     refreshToken: {
       type: DataTypes.STRING,
-      unique: true,
+      // unique: true,
     },
     token: {
       type: DataTypes.STRING,
-      unique: true,
+      // unique: true,
     },
     salt: DataTypes.STRING,
     password: {
