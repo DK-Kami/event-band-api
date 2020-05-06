@@ -3,12 +3,12 @@ class Model {
     this.model = model;
   }
 
-  static async getAll(raw = true) {
+  async getAll(raw = true) {
     const data = await this.model.findAll({ raw });
     return data;
   }
 
-  static async getById(id, raw = false) {
+  async getById(id, raw = false) {
     const data = await this.model.findByPk(id, { raw });
     return data;
   }
