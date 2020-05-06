@@ -1,5 +1,5 @@
-import User from '../User';
-const router = require('../Base/Router')();
+import router from '../Base/Router';
+import User from './User';
 
 router.use('/', async (req, res) => {
   const users = await User.getAll;
