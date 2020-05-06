@@ -1,5 +1,6 @@
-const router = require('../Base/Router')();
+import router from '../Base/Router';
+import userRouter from '../User';
 
-router.use('users', require('../User'));
+router.use('users', userRouter);
 
 export default router;

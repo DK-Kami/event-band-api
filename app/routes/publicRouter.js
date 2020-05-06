@@ -1,3 +1,3 @@
-const router = require('../Base/Router')();
+import router from '../Base/Router';
 
 export default router;
