@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export default (sequelize, DataTypes) => {
   const Ticket = sequelize.define('Ticket', {
     uuid: {
@@ -50,7 +48,5 @@ export default (sequelize, DataTypes) => {
     // associations can be defined here
     Ticket.belongsTo(models.Event);
   };
-
-  Ticket.beforeCreate(ticket => ticket.uuid = v4());
   return Ticket;
 };

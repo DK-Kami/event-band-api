@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export default (sequelize, DataTypes) => {
   const AuthorizedUser = sequelize.define('AuthorizedUser', {
     uuid: {
@@ -45,7 +43,5 @@ export default (sequelize, DataTypes) => {
     // associations can be defined here
     AuthorizedUser.belongsTo(models.User);
   };
-
-  AuthorizedUser.beforeCreate(user => user.uuid = v4());
   return AuthorizedUser;
 };

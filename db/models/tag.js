@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export default (sequelize, DataTypes) => {
   const Tag = sequelize.define('Tag', {
     uuid: {
@@ -27,7 +25,5 @@ export default (sequelize, DataTypes) => {
     // associations can be defined here
     Tag.hasMany(models.Event);
   };
-
-  Tag.beforeCreate(tag => tag.uuid = v4());
   return Tag;
 };

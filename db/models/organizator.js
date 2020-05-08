@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export default (sequelize, DataTypes) => {
   const Organizator = sequelize.define('Organizator', {
     uuid: {
@@ -28,7 +26,5 @@ export default (sequelize, DataTypes) => {
     Organizator.belongsTo(models.Organization);
     Organizator.belongsTo(models.User);
   };
-
-  Organizator.beforeCreate(organizator => organizator.uuid = v4());
   return Organizator;
 };

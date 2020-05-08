@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export default (sequelize, DataTypes) => {
   const Event = sequelize.define('Event', {
     uuid: {
@@ -51,7 +49,5 @@ export default (sequelize, DataTypes) => {
     Event.hasMany(models.Tag);
     Event.hasMany(models.Subscriber);
   };
-
-  Event.beforeCreate(event => event.uuid = v4());
   return Event;
 };

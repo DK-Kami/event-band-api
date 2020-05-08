@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     uuid: {
@@ -77,7 +75,5 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Organizator);
     User.hasMany(models.Subscriber);
   };
-
-  User.beforeCreate(user => user.uuid = v4());
   return User;
 };
