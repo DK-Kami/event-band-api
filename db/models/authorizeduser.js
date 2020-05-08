@@ -27,14 +27,14 @@ export default (sequelize, DataTypes) => {
     },
     salt: DataTypes.STRING,
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1024),
       allowNull: {
         args: false,
         msg: 'Please enter your nickname',
       },
       validate: {
         len: {
-          args: [6, 100],
+          args: [6, 1024],
           msg: 'The length of the name must be less than 30 and more than 6',
         },
       }
