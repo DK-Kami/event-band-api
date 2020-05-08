@@ -1,8 +1,7 @@
-import Model from '../Base/Model';
 import models from '../../db/models';
+import Model from '../Base/Model';
 
 const {
-  AuthorizedUser: AuthorizedUserModel,
   User: UserModel,
 } = models;
 
