@@ -16,10 +16,10 @@ module.exports = {
       status: {
         type: Sequelize.INTEGER,
       },
-      userId: {
+      UserId: {
         type: Sequelize.INTEGER,
       },
-      orgId: {
+      OrgId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

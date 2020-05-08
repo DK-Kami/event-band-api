@@ -31,7 +31,7 @@ module.exports = {
       datetimeFrom: {
         type: Sequelize.DATE,
       },
-      orgId: {
+      OZzrgId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

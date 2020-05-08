@@ -34,7 +34,7 @@ module.exports = {
       datetimeFrom: {
         type: Sequelize.DATE
       },
-      eventId: {
+      EventId: {
         type: Sequelize.INTEGER
       },
       createdAt: {

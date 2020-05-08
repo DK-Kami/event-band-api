@@ -13,13 +13,13 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      orgId: {
+      OrgId: {
         type: Sequelize.INTEGER
       },
-      eventId: {
+      EventId: {
         type: Sequelize.INTEGER
       },
-      userId: {
+      UserId: {
         type: Sequelize.INTEGER
       },
       createdAt: {

@@ -29,10 +29,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       password: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1024),
         allowNull: false,
       },
-      userId: {
+      UserId: {
         type: Sequelize.INTEGER,
         // onDelete: 'CASCADE',
         // references: {
