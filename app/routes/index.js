@@ -1,14 +1,18 @@
-import mainRouter from '../Base/Router';
 import publicRouter from './publicRouter';
 import privateRouter from './privateRouter';
+import Router from '../Base/Router';
+import auth from './auth';
+const mainRouter = new Router();
 
-mainRouter.use('/api', privateRouter);
-mainRouter.use('/', publicRouter);
+mainRouter.use('/api', auth.required, privateRouter);
+mainRouter.use('/', auth.optional, publicRouter);
 
-mainRouter.use('*', (req, res) => {
+mainRouter.use('*', (req, res, next) => {
+  console.log(publicRouter);
   res.status(500).send({
     message: 'method not implemented',
   });
+  next();
 });
 
 export default mainRouter;
