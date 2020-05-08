@@ -12,6 +12,11 @@ class Model {
     const data = await this.model.findByPk(id, { raw });
     return data;
   }
+
+  async getOne(queryObject) {
+    const data = await this.model.findOne(queryObject)
+    return data;
+  }
 };
 
 export default Model;
