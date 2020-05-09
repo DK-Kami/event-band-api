@@ -1,10 +1,12 @@
+import { v4 } from 'uuid';
+
 class Model {
   constructor(model) {
     this.model = model;
   }
 
-  async getAll(raw = true) {
-    const data = await this.model.findAll({ raw });
+  async getAll(queryObject) {
+    const data = await this.model.findAll(queryObject);
     return data;
   }
 
@@ -15,6 +17,12 @@ class Model {
 
   async getOne(queryObject) {
     const data = await this.model.findOne(queryObject)
+    return data;
+  }
+
+  async create(createData) {
+    createData.uuid = v4();
+    const data = await this.model.create(createData);
     return data;
   }
 };
