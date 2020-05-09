@@ -13,6 +13,13 @@ class AuthorizedUser extends Model {
     super(AuthorizedUserModel);
   }
 
+  async create(data) {
+    data.salt = crypto.randomBytes(16).toString('hex');
+    data.password = this.cryptoPassword(data.password, data.salt);
+    const authUser = await this.model.create(data);
+    return authUser;
+  }
+
   cryptoPassword(password, salt) {
     const hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
     return hash;
