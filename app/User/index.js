@@ -77,9 +77,9 @@ authRouter.post('/register', async (req, res, next) => {
       user: AuthorizedUser.toAuthJSON(authUser, user),
     });
   }
-  catch(e) {
-    console.log(e);
-    res.status(400).send({ message: e });
+  catch(message) {
+    console.log(message);
+    res.status(400).send({ message });
   }
 
   // try {

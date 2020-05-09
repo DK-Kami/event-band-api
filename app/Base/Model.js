@@ -20,22 +20,32 @@ class Model {
     return data;
   }
 
-  async create(createData) {
-    createData.uuid = v4();
-    const data = await this.Model.create(createData);
-    return data;
-  }
   // async create(createData) {
   //   createData.uuid = v4();
-  //   console.log('createData', createData)
-  //   const newModel = this.Model.build(createData);
-  //   // console.log('newModel', newModel);
-  //   const isValid = await newModel.validate();
-  //   console.log('validate', isValid);
-  //   return newModel;
-  //   // const data = await this.Model.create(createData);
-  //   // return data;
+  //   const data = await this.Model.create(createData);
+  //   return data;
   // }
+
+  async create(createData) {
+    createData.uuid = v4();
+    try {
+      const newModel = await this.Model.create(createData);
+      return newModel;
+    }
+    catch(error) {
+      if (error.name === 'SequelizeValidationError') {
+        const errors = error.errors.map(e => e.message);
+        console.log('error', errors);
+        return Promise.reject(errors[0]);
+      }
+    }
+    // const newModel = this.Model.build(createData);
+    // console.log('newModel', newModel);
+    // const isValid = await newModel.validate();
+    // console.log('validate', isValid);
+    // const data = await this.Model.create(createData);
+    // return data;
+  }
 };
 
 export default Model;
