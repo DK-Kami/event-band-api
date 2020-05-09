@@ -69,10 +69,6 @@ authRouter.post('/login', (req, res, next) => {
 authRouter.post('/register', async (req, res, next) => {
   const data = req.body;
 
-  console.log(User.model);
-  const hui = User.model.validation(data);
-  console.log(hui);
-
   try {
     const user = await User.create(data);
     const authUser = await AuthorizedUser.create(data);
@@ -82,19 +78,36 @@ authRouter.post('/register', async (req, res, next) => {
     });
   }
   catch(e) {
-    const { constraint, routine } = e.parent;
-    console.error(e);
-    console.log(constraint, routine);
-
-    let message = '';
-    switch (routine) {
-      case '_bt_check_unique':
-        message = 'Email is already taken';
-        break;
-    }
-
-    res.status(400).send({ message });
+    console.log(e);
+    res.status(400).send({ message: e });
   }
+
+  // try {
+    // const user = await User.create(data);
+    // console.log('user', user);
+    // res.status(201).send({ user });
+  //   const authUser = await AuthorizedUser.create(data);
+
+  //   res.status(201).send({
+  //     user: AuthorizedUser.toAuthJSON(authUser, user),
+  //   });
+  // }
+  // catch(e) {
+  //   console.log(e);
+  //   res.status(400).send(e);
+  //   const { constraint, routine } = e.parent;
+  //   console.error(e);
+  //   console.log(constraint, routine);
+
+  //   let message = '';
+  //   switch (routine) {
+  //     case '_bt_check_unique':
+  //       message = 'Email is already taken';
+  //       break;
+  //   }
+
+  //   res.status(400).send({ message });
+  // }
 });
 
 export {
