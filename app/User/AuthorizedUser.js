@@ -16,7 +16,7 @@ class AuthorizedUser extends Model {
   async create(data) {
     data.salt = crypto.randomBytes(16).toString('hex');
     data.password = this.cryptoPassword(data.password, data.salt);
-    const authUser = await this.model.create(data);
+    const authUser = await this.Model.create(data);
     return authUser;
   }
 
