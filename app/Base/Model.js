@@ -33,18 +33,29 @@ class Model {
       return newModel;
     }
     catch(error) {
+      let message = 'very very bad request, but name: ' + error.name;
+
       if (error.name === 'SequelizeValidationError') {
         const errors = error.errors.map(e => e.message);
         console.log('error', errors);
-        return Promise.reject(errors[0]);
+        message = errors[0];
       }
+      else if (error.name === 'SequelizeUniqueConstraintError') {
+        const {
+          constraint,
+          routine,
+        } = error.original;
+
+        switch(routine) {
+          case '_bt_check_unique':
+            const field = constraint.split('_')[1];
+            message = field + ' is already taken';
+          break;
+        }
+      }
+
+      return Promise.reject(message);
     }
-    // const newModel = this.Model.build(createData);
-    // console.log('newModel', newModel);
-    // const isValid = await newModel.validate();
-    // console.log('validate', isValid);
-    // const data = await this.Model.create(createData);
-    // return data;
   }
 };
 
