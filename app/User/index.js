@@ -17,16 +17,6 @@ userRouter.get('/hui', (req, res) => {
   res.status(200).send('private hui');
 });
 
-authRouter.get('/hui', async (req, res) => {
-  // console.log('public hui');
-  // res.status(200).send('public hui');
-
-  const users = await User.getOne({
-    where: { email: 'suka@blyat.com' },
-  });
-  return res.status(200).send({ users });
-});
-
 
 authRouter.post('/login', (req, res, next) => {
   const { email, password } = req.body;
@@ -59,6 +49,22 @@ authRouter.post('/login', (req, res, next) => {
 
     return next(res.status(401));
   })(req, res, next);
+});
+authRouter.post('/register', async (req, res, next) => {
+  const data = req.body;
+
+  try {
+    const user = await User.create(data);
+    const authUser = await AuthorizedUser.create(data);
+
+    res.status(201).send({
+      user: AuthorizedUser.toAuthJSON(authUser, user),
+    });
+  }
+  catch(e) {
+    next(e);
+    res.status(400).send(e);
+  }
 });
 
 export {
