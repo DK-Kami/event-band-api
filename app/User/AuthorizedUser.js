@@ -27,6 +27,7 @@ class AuthorizedUser extends Model {
 
   generateJWT(authUserUUID, userUUID) {
     return jwt.sign({
+      uuid: userUUID,
       authUserUUID,
       userUUID,
     }, 'secret');
