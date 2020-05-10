@@ -14,6 +14,13 @@ class Model {
     const data = await this.Model.findByPk(id, { raw });
     return data;
   }
+  async getByUUID(uuid, raw = false) {
+    const data = await this.Model.findOne({
+      where: { uuid },
+      raw,
+    });
+    return data;
+  }
 
   async getOne(queryObject) {
     const data = await this.Model.findOne(queryObject)
