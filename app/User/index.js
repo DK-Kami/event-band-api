@@ -1,6 +1,5 @@
 import passport from 'passport';
 import Router from '../Base/Router';
-import auth from '../routes/auth';
 import AuthorizedUser from './AuthorizedUser';
 import User from './User';
 
@@ -13,30 +12,31 @@ userRouter.get('/', async (req, res) => {
 });
 
 userRouter.get('/profile', async (req, res) => {
-  auth.verifyToken(req, (err, user) => {
-    if (err) {
-      return res.status(401).send({
-        message: 'Incorrect token',
-      });
-    }
+  const { uuid } = req.payload;
+  const user = await User.getByUUID(uuid);
+  const authUser = await user.getAuthorizedUser();
 
-    console.log(user);
-    res.status(200).send({
-      message: 'hui pososeh, ok?)',
-    });
+  res.status(200).send({
+    user: AuthorizedUser.toAuthJSON(authUser, user),
   });
 });
 
 
 userRouter.get('/hui', (req, res) => {
-  res.status(200).send('private hui');
+  res.status(200).send({
+    message: 'private hui',
+  });
+});
+authRouter.get('/hui', (req, res) => {
+  res.status(200).send({
+    message: 'public hui',
+  });
 });
 
 
 
 authRouter.post('/login', (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
 
   if(!email) {
     return res.status(400).send({
@@ -81,33 +81,6 @@ authRouter.post('/register', async (req, res, next) => {
     console.log(message);
     res.status(400).send({ message });
   }
-
-  // try {
-    // const user = await User.create(data);
-    // console.log('user', user);
-    // res.status(201).send({ user });
-  //   const authUser = await AuthorizedUser.create(data);
-
-  //   res.status(201).send({
-  //     user: AuthorizedUser.toAuthJSON(authUser, user),
-  //   });
-  // }
-  // catch(e) {
-  //   console.log(e);
-  //   res.status(400).send(e);
-  //   const { constraint, routine } = e.parent;
-  //   console.error(e);
-  //   console.log(constraint, routine);
-
-  //   let message = '';
-  //   switch (routine) {
-  //     case '_bt_check_unique':
-  //       message = 'Email is already taken';
-  //       break;
-  //   }
-
-  //   res.status(400).send({ message });
-  // }
 });
 
 export {
