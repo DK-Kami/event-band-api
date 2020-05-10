@@ -8,7 +8,8 @@ const authRouter = new Router();
 
 userRouter.get('/', async (req, res) => { 
   const users = await User.getAll();
-  return res.status(200).send({ users });
+  const authUsers = await AuthorizedUser.getAll();
+  return res.status(200).send({ users, authUsers });
 });
 
 userRouter.get('/profile', async (req, res) => {
@@ -20,6 +21,33 @@ userRouter.get('/profile', async (req, res) => {
     user: AuthorizedUser.toAuthJSON(authUser, user),
   });
 });
+userRouter.put('/profile', async (req, res) => {
+  const {
+    authUserUUID,
+    userUUID,
+  } = req.payload;
+  const {
+    nickname,
+    surname,
+    email,
+    name,
+  } = req.body;
+
+  const user = await User.update(
+    { surname, email, name },
+    { uuid: userUUID },
+  );
+  const authUser = await AuthorizedUser.update(
+    { nickname },
+    { uuid: authUserUUID },
+  );
+
+  res.status(200).send({
+    user: AuthorizedUser.toAuthJSON(authUser, user),
+  });
+});
+
+
 
 
 userRouter.get('/hui', (req, res) => {
@@ -51,18 +79,19 @@ authRouter.post('/login', (req, res, next) => {
   }
 
   return passport.authenticate('local', { session: false }, (err, user) => {
-    if(err) {
+    if (err) {
       console.log('error', err);
       return res.status(400).send(err);
     }
 
-    if(user) {
+    if (user) {
       console.log(user);
-      user.token = AuthorizedUser.generateJWT(user.email, user.uuid);
+      user.token = AuthorizedUser.generateJWT(user.authUserUUID, user.userUUID);
 
       return res.status(200).json({ user });
     }
 
+    console.log(user);
     return next(res.status(400));
   })(req, res, next);
 });
@@ -71,6 +100,7 @@ authRouter.post('/register', async (req, res, next) => {
 
   try {
     const user = await User.create(data);
+    data.UserId = user.id;
     const authUser = await AuthorizedUser.create(data);
 
     res.status(201).send({

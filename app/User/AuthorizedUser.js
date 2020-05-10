@@ -25,16 +25,18 @@ class AuthorizedUser extends Model {
     return hash;
   }
 
-  generateJWT(email, uuid) {
+  generateJWT(authUserUUID, userUUID) {
     return jwt.sign({
-      email,
-      uuid,
+      authUserUUID,
+      userUUID,
     }, 'secret');
   }
   toAuthJSON(authUser, user) {
     const avatar = gravatar.url(user.email, { s: 200 });
 
     return {
+      authUserUUID: user.uuid,
+      userUUID: user.uuid,
       uuid: user.uuid,
       nickname: authUser.nickname,
       token: authUser.token,
