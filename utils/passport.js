@@ -12,15 +12,15 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
 }, async (email, password, done) => {
   const user = await User.getOne({ where: { email }});
-  if (!user) return done(null, false, incorectError);
+  if (!user) return done(incorectError);
 
   const authUser = await user.getAuthorizedUser();
 
-  if (!authUser) return done(null, false, incorectError);
+  if (!authUser) return done(incorectError);
 
   const passwordIsMatch = AuthorizedUser.cryptoPassword(password, authUser.salt) === authUser.password;
   if (passwordIsMatch) {
     return done(null, AuthorizedUser.toAuthJSON(authUser, user));
   }
-  return done(null, false, incorectError);
+  return done(incorectError);
 }));
