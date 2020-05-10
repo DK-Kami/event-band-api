@@ -6,7 +6,7 @@ class Model {
   }
 
   handleError(error) {
-    let message = 'very very bad request, but name: ' + error.name;
+    let message = 'very very bad request, but name: ' + error.name + ' and error: ' + error;
 
     if (error.name === 'SequelizeValidationError') {
       const errors = error.errors.map(e => e.message);
@@ -52,9 +52,16 @@ class Model {
     return data;
   }
 
-  async update(updateData, where) {
+  async update(updateData = [], where) {
+    console.log(updateData, where);
     try {
-      const updateModel = await this.Model.update(updateData, { where });
+      const updateModel = await this.getOne({ where });
+
+      Object.keys(updateData).forEach(key => {
+        updateModel[key] = updateData[key];
+      });
+
+      updateModel.save();
       return updateModel;
     }
     catch(error) {
