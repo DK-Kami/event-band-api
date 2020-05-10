@@ -37,6 +37,17 @@ export default (sequelize, DataTypes) => {
         msg: 'Please enter the event start date',
       },
     },
+    coords: {
+      type: DataTypes.GEOMETRY('POINT'),
+      validation: {
+        isValidCoordinates(value) {
+          const validCoordinates = /^([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)$/;
+          if (!value.match(validCoordinates)) {
+            throw new Error('Invalid coordinate format');
+          }
+        }
+      }
+    },
     datetimeFrom: DataTypes.DATE,
     orgId: {
       type: DataTypes.INTEGER,

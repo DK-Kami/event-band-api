@@ -24,6 +24,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      coords: {
+        type: Sequelize.STRING,
+      },
       datetimeTo: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -31,7 +34,7 @@ module.exports = {
       datetimeFrom: {
         type: Sequelize.DATE,
       },
-      OZzrgId: {
+      OrgId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
