@@ -25,13 +25,8 @@ class AuthorizedUser extends Model {
     return hash;
   }
 
-  generateJWT({ email, uuid }) {
-    const today = new Date();
-    const expirationDate = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
-  
+  generateJWT(email, uuid) {
     return jwt.sign({
-      exp: parseInt(expirationDate.getTime() / 1000, 10),
       email,
       uuid,
     }, 'secret');
