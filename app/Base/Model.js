@@ -5,6 +5,31 @@ class Model {
     this.Model = Model;
   }
 
+  handleError(error) {
+    let message = 'very very bad request, but name: ' + error.name;
+
+    if (error.name === 'SequelizeValidationError') {
+      const errors = error.errors.map(e => e.message);
+      console.log('error', errors);
+      message = errors[0];
+    }
+    else if (error.name === 'SequelizeUniqueConstraintError') {
+      const {
+        constraint,
+        routine,
+      } = error.original;
+
+      switch(routine) {
+        case '_bt_check_unique':
+          const field = constraint.split('_')[1];
+          message = field + ' is already taken';
+        break;
+      }
+    }
+
+    return message;
+  }
+
   async getAll(queryObject) {
     const data = await this.Model.findAll(queryObject);
     return data;
@@ -27,11 +52,16 @@ class Model {
     return data;
   }
 
-  // async create(createData) {
-  //   createData.uuid = v4();
-  //   const data = await this.Model.create(createData);
-  //   return data;
-  // }
+  async update(updateData, where) {
+    try {
+      const updateModel = await this.Model.update(updateData, { where });
+      return updateModel;
+    }
+    catch(error) {
+      const message = this.handleError(error);
+      return Promise.reject(message);
+    }
+  }
 
   async create(createData) {
     createData.uuid = v4();
@@ -40,27 +70,7 @@ class Model {
       return newModel;
     }
     catch(error) {
-      let message = 'very very bad request, but name: ' + error.name;
-
-      if (error.name === 'SequelizeValidationError') {
-        const errors = error.errors.map(e => e.message);
-        console.log('error', errors);
-        message = errors[0];
-      }
-      else if (error.name === 'SequelizeUniqueConstraintError') {
-        const {
-          constraint,
-          routine,
-        } = error.original;
-
-        switch(routine) {
-          case '_bt_check_unique':
-            const field = constraint.split('_')[1];
-            message = field + ' is already taken';
-          break;
-        }
-      }
-
+      const message = this.handleError(error);
       return Promise.reject(message);
     }
   }
