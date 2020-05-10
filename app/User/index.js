@@ -12,57 +12,6 @@ userRouter.get('/', async (req, res) => {
   return res.status(200).send({ users, authUsers });
 });
 
-userRouter.get('/profile', async (req, res) => {
-  const { uuid } = req.payload;
-  const user = await User.getByUUID(uuid);
-  const authUser = await user.getAuthorizedUser();
-
-  res.status(200).send({
-    user: AuthorizedUser.toAuthJSON(authUser, user),
-  });
-});
-userRouter.put('/profile', async (req, res) => {
-  const {
-    authUserUUID,
-    userUUID,
-  } = req.payload;
-  const {
-    nickname,
-    surname,
-    email,
-    name,
-  } = req.body;
-
-  const user = await User.update(
-    { surname, email, name },
-    { uuid: userUUID },
-  );
-  const authUser = await AuthorizedUser.update(
-    { nickname },
-    { uuid: authUserUUID },
-  );
-
-  res.status(200).send({
-    user: AuthorizedUser.toAuthJSON(authUser, user),
-  });
-});
-
-
-
-
-userRouter.get('/hui', (req, res) => {
-  res.status(200).send({
-    message: 'private hui',
-  });
-});
-authRouter.get('/hui', (req, res) => {
-  res.status(200).send({
-    message: 'public hui',
-  });
-});
-
-
-
 authRouter.post('/login', (req, res, next) => {
   const { email, password } = req.body;
 
