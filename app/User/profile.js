@@ -1,7 +1,9 @@
 import crypto from 'crypto';
 import Router from '../Base/Router';
+import Organization from '../Organization/Organization';
 import AuthorizedUser from './AuthorizedUser';
 import User from './User';
+import { Op } from 'sequelize';
 
 const profileRouter = new Router();
 const passwordRouter = new Router();
@@ -11,8 +13,24 @@ profileRouter.get('/', async (req, res) => {
   const user = await User.getByUUID(uuid);
   const authUser = await user.getAuthorizedUser();
 
+  const organizers = await user.getOrganizers();
+  const orgIds = organizers.map(o => o.OrganizationId);
+  const organizations = await Organization.getAll({
+    where: {
+      id: {
+        [Op.in]: orgIds,
+      },
+    },
+  });
+
   res.status(200).send({
     user: AuthorizedUser.toAuthJSON(authUser, user),
+    organizations: organizations.map(organization => ({
+      logo: '/organizations/' + organization.logo,
+      reputation: organization.reputation,
+      uuid: organization.uuid,
+      name: organization.name,
+    })),
   });
 });
 
@@ -60,7 +78,6 @@ passwordRouter.get('/request-password', async (req, res) => {
   }
 
   const authUser = await user.getAuthorizedUser();
-
   const refreshToken = crypto.randomBytes(32).toString('hex');
   authUser.refreshToken = refreshToken;
   authUser.save();
