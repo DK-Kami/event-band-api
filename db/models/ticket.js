@@ -39,7 +39,7 @@ export default (sequelize, DataTypes) => {
       },
     },
     datetimeFrom: DataTypes.DATE,
-    eventId: {
+    EventId: {
       type: DataTypes.INTEGER,
     },
   }, {});
