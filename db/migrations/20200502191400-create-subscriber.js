@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      OrgId: {
+      OrganizationId: {
         type: Sequelize.INTEGER
       },
       EventId: {

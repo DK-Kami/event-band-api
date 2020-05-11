@@ -30,7 +30,7 @@ module.exports = {
       datetimeFrom: {
         type: Sequelize.DATE,
       },
-      OrgId: {
+      OrganizationId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
