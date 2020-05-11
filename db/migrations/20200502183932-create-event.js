@@ -20,10 +20,6 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
-      count: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       coords: {
         type: Sequelize.STRING,
       },
