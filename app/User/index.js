@@ -51,6 +51,7 @@ authRouter.post('/register', async (req, res, next) => {
     const user = await User.create(data);
     data.UserId = user.id;
     const authUser = await AuthorizedUser.create(data);
+    authUser.token = AuthorizedUser.generateJWT(user.uuid, authUser.uuid);
 
     res.status(201).send({
       user: AuthorizedUser.toAuthJSON(authUser, user),
