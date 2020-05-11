@@ -1,6 +1,8 @@
+import crypto from 'crypto';
 import Router from '../Base/Router';
 import AuthorizedUser from './AuthorizedUser';
 import User from './User';
+
 const profileRouter = new Router();
 const passwordRouter = new Router();
 
@@ -45,14 +47,52 @@ profileRouter.put('/', async (req, res) => {
   }
 });
 
-profileRouter.get('/request-password', async (req, res) => {
-  const { email } = req.params;
-  const authUser = await AuthorizedUser.getByUUID(authUserUUID);
-
-  s
-  res.status(200).send({
-    message: 'all ok',
+passwordRouter.get('/request-password', async (req, res) => {
+  const { email } = req.query;
+  const user = await User.getOne({
+    where: { email },
   });
+  const authUser = await user.getAuthorizedUser();
+
+  const refreshToken = crypto.randomBytes(32).toString('hex');
+  authUser.refreshToken = refreshToken;
+  authUser.save();
+
+  // res.status(200).send({ message: 'All ok' });
+  res.status(200).send({ refreshToken });
+});
+
+passwordRouter.post('/change-password', async (req, res) => {
+  const {
+    password,
+    token,
+  } = req.body;
+
+  console.log('password, token');
+  try {
+    console.log(password, token);
+    const authUser = await AuthorizedUser.getOne({
+      where: { refreshToken: token },
+    });
+
+    console.log(authUser);
+    if (!authUser) throw new Error;
+
+    authUser.salt = crypto.randomBytes(16).toString('hex');
+    authUser.password = AuthorizedUser.cryptoPassword(password, authUser.salt);
+    authUser.refreshToken = '';
+    await authUser.save();
+
+    res.status(200).send({
+      message: 'All ok',
+    });
+  }
+  catch(e) {
+    console.log(e);
+    res.status(400).send({
+      message: 'wrong token',
+    });
+  }
 });
 
 export {
