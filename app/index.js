@@ -5,6 +5,7 @@ import routes from './routes';
 import '../utils/passport';
 
 const app = express();
+app.use(express.static(__dirname + '/public'));
 
 const allowCrossDomain = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
