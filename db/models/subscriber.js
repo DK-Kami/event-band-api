@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
         isUUID: 4,
       },
     },
-    orgId: {
+    OrganizationId: {
       type: DataTypes.INTEGER,
     },
     eventId: {

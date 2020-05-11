@@ -39,9 +39,6 @@ export default (sequelize, DataTypes) => {
       },
     },
     datetimeFrom: DataTypes.DATE,
-    EventId: {
-      type: DataTypes.INTEGER,
-    },
   }, {});
 
   Ticket.associate = models => {

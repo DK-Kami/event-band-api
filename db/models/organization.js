@@ -42,6 +42,7 @@ export default (sequelize, DataTypes) => {
     // associations can be defined here
     Organization.hasMany(models.Organizator);
     Organization.hasMany(models.Subscriber);
+    Organization.hasMany(models.Event);
   };
   return Organization;
 };

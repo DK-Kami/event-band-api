@@ -41,13 +41,11 @@ export default (sequelize, DataTypes) => {
       }
     },
     datetimeFrom: DataTypes.DATE,
-    orgId: {
-      type: DataTypes.INTEGER,
-    },
   }, {});
 
   Event.associate = models => {
     // associations can be defined here
+    Event.belongsTo(models.Organization);
     Event.hasMany(models.Ticket);
     Event.hasMany(models.Subscriber);
   };

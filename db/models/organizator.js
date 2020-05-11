@@ -13,12 +13,6 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-    },
-    orgId: {
-      type: DataTypes.INTEGER,
-    },
   }, {});
 
   Organizator.associate = models => {
