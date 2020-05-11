@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Organizator = sequelize.define('Organizator', {
+  const Organizer = sequelize.define('Organizer', {
     uuid: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -15,10 +15,10 @@ export default (sequelize, DataTypes) => {
     },
   }, {});
 
-  Organizator.associate = models => {
+  Organizer.associate = models => {
     // associations can be defined here
-    Organizator.belongsTo(models.Organization);
-    Organizator.belongsTo(models.User);
+    Organizer.belongsTo(models.Organization);
+    Organizer.belongsTo(models.User);
   };
-  return Organizator;
+  return Organizer;
 };

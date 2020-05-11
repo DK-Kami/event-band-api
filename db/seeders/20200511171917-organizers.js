@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Organizators', [
+    return queryInterface.bulkInsert('Organizers', [
       {
         uuid: '7f87847a-2eac-43fe-A119-cd9a3ac9fd51',
         status: 1,
@@ -49,6 +49,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Organizators', null, {});
+    return queryInterface.bulkDelete('Organizers', null, {});
   }
 };

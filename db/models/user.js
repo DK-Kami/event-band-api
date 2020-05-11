@@ -72,7 +72,7 @@ export default (sequelize, DataTypes) => {
   User.associate = models => {
     // associations can be defined here
     User.hasOne(models.AuthorizedUser);
-    User.hasMany(models.Organizator);
+    User.hasMany(models.Organizer);
     User.hasMany(models.Subscriber);
   };
   return User;
