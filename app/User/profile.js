@@ -68,7 +68,7 @@ passwordRouter.get('/request-password', async (req, res) => {
   // res.status(200).send({ message: 'All ok' });
   res.status(200).send({
     message: 'nice dick, awesome balls',
-    type: 'nice',
+    type: 'success',
   });
 });
 
