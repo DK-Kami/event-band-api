@@ -1,0 +1,96 @@
+'use strict';
+
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.bulkInsert('Tickets', [
+      {
+        uuid: '5f16723b-52ae-4bf0-85d3-287756475cc9',
+        name: 'Anime ticket',
+        description: 'Support us',
+        count: 1000,
+        price: 100,
+        datetimeTo: '2020-05-09',
+        datetimeFrom: '2020-05-12',
+        EventId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '50502b77-636d-4b5e-A956-b4c4f5d767b1',
+        name: 'Anime ticket',
+        description: 'Free now!!!',
+        count: 2000,
+        price: 0,
+        datetimeTo: '2020-05-12',
+        datetimeFrom: '2020-05-15',
+        EventId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '03b303f8-cff9-4e3d-a90f-4ba926188f53',
+        name: 'Welcome to MoscowJS 47',
+        description: '',
+        count: 250,
+        price: 0,
+        datetimeTo: '2020-05-10',
+        datetimeFrom: '2020-05-10',
+        EventId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '661cf8af-f6ea-4432-ad1b-30910df9880d',
+        name: 'Welcome to MoscowJS 48',
+        description: '',
+        count: 300,
+        price: 0,
+        datetimeTo: '2020-06-05',
+        datetimeFrom: '2020-06-05',
+        EventId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '72c1e079-6efe-4858-be2b-e898ab18957d',
+        name: '1 etap',
+        description: 'Ticket for 1 etap',
+        count: 500,
+        price: 1500,
+        datetimeTo: '2020-05-05',
+        datetimeFrom: '2020-05-10',
+        EventId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '29bd87f2-8f85-404a-ad1e-bdbf205e4822',
+        name: '1 etap',
+        description: 'Ticket for 1 etap',
+        count: 500,
+        price: 1500,
+        datetimeTo: '2020-05-10',
+        datetimeFrom: '2020-05-15',
+        EventId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '59145a2c-7f3a-40ed-bbb5-af91fdd14a28',
+        name: '3 etap',
+        description: 'Ticket for 3 etap',
+        count: 500,
+        price: 2500,
+        datetimeTo: '2020-05-15',
+        datetimeFrom: '2020-05-20',
+        EventId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ], {});
+  },
+
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('Tickets', null, {});
+  }
+};

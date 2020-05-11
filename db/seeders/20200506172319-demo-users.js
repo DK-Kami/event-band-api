@@ -19,6 +19,14 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        uuid: 'e28b8a28-8d67-4c31-9b52-aa9741f392ac',
+        email: 'js@js.com',
+        name: 'js',
+        surname: 'organizer',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ], {});
   },
 
