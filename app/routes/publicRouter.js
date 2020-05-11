@@ -3,6 +3,7 @@ import { authRouter } from '../User';
 import Router from '../Base/Router';
 const router = new Router();
 
+router.use('/api', passwordRouter);
 router.use('/', passwordRouter);
 router.use('/', authRouter);
 
