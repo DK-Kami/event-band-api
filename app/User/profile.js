@@ -52,6 +52,13 @@ passwordRouter.get('/request-password', async (req, res) => {
   const user = await User.getOne({
     where: { email },
   });
+  if (!user) {
+    res.status(400).send({
+      message: 'Email not found',
+      type: 'error',
+    });
+  }
+
   const authUser = await user.getAuthorizedUser();
 
   const refreshToken = crypto.randomBytes(32).toString('hex');
@@ -59,7 +66,10 @@ passwordRouter.get('/request-password', async (req, res) => {
   authUser.save();
 
   // res.status(200).send({ message: 'All ok' });
-  res.status(200).send({ refreshToken });
+  res.status(200).send({
+    message: 'nice dick, awesome balls',
+    type: 'nice',
+  });
 });
 
 passwordRouter.post('/change-password', async (req, res) => {
