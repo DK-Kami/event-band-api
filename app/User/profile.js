@@ -61,6 +61,7 @@ profileRouter.put('/', async (req, res) => {
     });
   }
   catch(message) {
+    console.log(message);
     res.status(400).send({ message });
   }
 });
