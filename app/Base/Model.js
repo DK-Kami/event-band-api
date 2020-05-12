@@ -61,10 +61,11 @@ class Model {
         updateModel[key] = updateData[key];
       });
 
-      updateModel.save();
+      await updateModel.save();
       return updateModel;
     }
     catch(error) {
+      console.log('here', error.name);
       const message = this.handleError(error);
       return Promise.reject(message);
     }
