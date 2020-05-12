@@ -48,6 +48,7 @@ export default (sequelize, DataTypes) => {
     Event.belongsTo(models.Organization);
     Event.hasMany(models.Ticket);
     Event.hasMany(models.Subscriber);
+    Event.hasMany(models.EventTag);
   };
   return Event;
 };

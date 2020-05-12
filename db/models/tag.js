@@ -23,6 +23,7 @@ export default (sequelize, DataTypes) => {
 
   Tag.associate = models => {
     // associations can be defined here
+    Tag.hasMany(models.EventTag);
   };
   return Tag;
 };
