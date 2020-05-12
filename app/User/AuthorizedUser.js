@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import crypto from 'crypto';
+import { Op } from 'sequelize';
 import Model from '../Base/Model';
 import models from '../../db/models';
+import Organization from '../Organization/Organization';
 
 const {
   AuthorizedUser: AuthorizedUserModel,
@@ -45,6 +47,31 @@ class AuthorizedUser extends Model {
       email: user.email,
       name: user.name,
       avatar,
+    };
+  }
+
+  async getProfile(uuid) {
+    const user = await User.getByUUID(uuid);
+    const authUser = await user.getAuthorizedUser();
+    const organizers = await user.getOrganizers();
+
+    const orgIds = organizers.map(o => o.OrganizationId);
+    const organizations = await Organization.getAll({
+      where: {
+        id: {
+          [Op.in]: orgIds,
+        },
+      },
+    });
+
+    return {
+      user: this.toAuthJSON(authUser, user),
+      organizations: organizations.map(organization => ({
+        uuid: organization.uuid,
+        name: organization.name,
+        reputation: organization.reputation,
+        logo: '/organizations/' + organization.logo,
+      })),
     };
   }
 };

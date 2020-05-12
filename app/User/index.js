@@ -34,7 +34,6 @@ authRouter.post('/login', (req, res, next) => {
     }
 
     if (user) {
-      console.log(user);
       user.token = AuthorizedUser.generateJWT(user.authUserUUID, user.userUUID);
 
       return res.status(200).json({ user });
