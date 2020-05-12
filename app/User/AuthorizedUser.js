@@ -36,7 +36,7 @@ class AuthorizedUser extends Model {
     const avatar = gravatar.url(user.email, { s: 200 });
 
     return {
-      authUserUUID: user.uuid,
+      authUserUUID: authUser.uuid,
       userUUID: user.uuid,
       uuid: user.uuid,
       nickname: authUser.nickname,
