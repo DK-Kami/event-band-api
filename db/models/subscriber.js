@@ -11,10 +11,10 @@ export default (sequelize, DataTypes) => {
     OrganizationId: {
       type: DataTypes.INTEGER,
     },
-    eventId: {
+    EventId: {
       type: DataTypes.INTEGER,
     },
-    userId: {
+    UserId: {
       type: DataTypes.INTEGER,
     },
   }, {});
