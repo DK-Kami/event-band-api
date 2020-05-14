@@ -16,7 +16,7 @@ module.exports = {
       OrganizationId: {
         type: Sequelize.INTEGER
       },
-      EventId: {
+      TicketId: {
         type: Sequelize.INTEGER
       },
       UserId: {
