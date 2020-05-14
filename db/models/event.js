@@ -47,7 +47,6 @@ export default (sequelize, DataTypes) => {
     // associations can be defined here
     Event.belongsTo(models.Organization);
     Event.hasMany(models.Ticket);
-    Event.hasMany(models.Subscriber);
     Event.hasMany(models.EventTag);
   };
   return Event;

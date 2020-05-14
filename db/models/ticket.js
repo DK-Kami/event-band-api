@@ -44,6 +44,7 @@ export default (sequelize, DataTypes) => {
   Ticket.associate = models => {
     // associations can be defined here
     Ticket.belongsTo(models.Event);
+    Ticket.hasMany(models.Subscriber);
   };
   return Ticket;
 };

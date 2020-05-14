@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
     OrganizationId: {
       type: DataTypes.INTEGER,
     },
-    EventId: {
+    TicketId: {
       type: DataTypes.INTEGER,
     },
     UserId: {
@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
   Subscriber.associate = models => {
     // associations can be defined here
     Subscriber.belongsTo(models.Organization);
-    Subscriber.belongsTo(models.Event);
+    Subscriber.belongsTo(models.Ticket);
     Subscriber.belongsTo(models.User);
   };
   return Subscriber;
