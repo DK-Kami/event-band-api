@@ -117,6 +117,44 @@ publicEventRouter.get('/event-list', async (req, res) => {
   // res.status(200).send({ events });
 });
 
+publicEventRouter.post('/subscribe', async (req, res) => {
+  const {
+    ticketUuid,
+    surname,
+    email,
+    name,
+  } = req.body;
+
+  Object.keys(req.body).forEach(key => {
+    if (!req.body[key]) {
+      res.status(400).send({
+        message: key + ' is required',
+      });
+    }
+  });
+
+  try {
+    const user = await User.getOrCreate({ surname, name, email });
+    const { id: UserId } = user;
+
+    const ticket = await Ticket.getByUUID(ticketUuid);
+    const { id: TicketId } = ticket;
+
+    const subscription = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
+    subscription.status = 1;
+    subscription.save();
+
+    res.status(200).send({
+      message: 'nice dick, awesome balls',
+      subscription,
+    });
+  }
+  catch(message) {
+    console.log(message);
+    res.status(400).send({ message });
+  }
+});
+
 eventRouter.get('/all', async (req, res) => {
   const events = await Event.getAll({
     attributes: ['uuid', 'name', 'description', 'datetimeTo', 'coords', 'datetimeFrom'],
@@ -153,13 +191,18 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
   const { id: TicketId } = await Ticket.getByUUID(ticketUuid);
 
   try {
-    await Subscriber.getOrCreate({
+    const subscription = await Subscriber.getOrCreate({
       TicketId,
-      UserId
+      UserId,
     });
+
+    console.log(subscription);
+    subscription.status = 1;
+    subscription.save();
 
     res.status(201).send({
       message: 'nice dick, awesome balls',
+      subscription,
     });
   }
   catch(message) {
@@ -167,7 +210,40 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
     res.status(400).send({ message });
   }
 });
-// eventRouter.get('/unsubscribe/:uuid')
+eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
+  const { ticketUuid } = req.params;
+  const { userUUID } = req.payload;
+
+  console.log(ticketUuid, userUUID);
+
+  const { id: UserId } = await User.getByUUID(userUUID);
+  const { id: TicketId } = await Ticket.getByUUID(ticketUuid);
+
+  try {
+    const subscription = await Subscriber.getOne({
+      where: {
+        TicketId,
+        UserId,
+      },
+    });
+
+    console.log(subscription);
+    if (!subscription) {
+      throw new Error('not found your subscription');
+    }
+
+    subscription.status = 0;
+    subscription.save();
+
+    res.status(200).send({
+      message: 'nice dick, awesome balls',
+      subscription,
+    });
+  }
+  catch(message) {
+    res.status(400).send({ message });
+  }
+});
 
 export {
   publicEventRouter,
