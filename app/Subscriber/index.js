@@ -13,7 +13,7 @@ const {
 
 subscriberRouter.get('/all', async (res, req) => {
   const subscribers = await Subscriber.getAll({
-    attributes: ['uuid'],
+    attributes: ['uuid', 'status'],
     include: [
       {
         model: OrganizationModel,
