@@ -1,13 +1,16 @@
-import { Op, BIGINT } from 'sequelize';
+import { Op } from 'sequelize';
 import Router from '../Base/Router';
 import Event from './Event';
 import models from '../../db/models';
+import Subscriber from '../Subscriber/Subscriber';
+import Ticket from '../Ticket/Ticket';
+import User from '../User/User';
 
 const {
-  Organization,
-  EventTag,
-  Ticket,
-  Tag,
+  Organization: OrganizationModel,
+  EventTag: EventTagModel,
+  Ticket: TicketModel,
+  Tag: TagModel,
 } = models;
 const eventRouter = new Router();
 const publicEventRouter = new Router();
@@ -45,7 +48,7 @@ publicEventRouter.get('/event-list', async (req, res) => {
     attributes: ['uuid', 'name', 'description', 'datetimeTo', 'coords', 'datetimeFrom'],
     include: [
       {
-        model: Organization,
+        model: OrganizationModel,
         attributes: ['uuid', 'name', 'reputation', 'logo'],
         where: {
           reputation: {
@@ -54,7 +57,7 @@ publicEventRouter.get('/event-list', async (req, res) => {
         },
       },
       {
-        model: Ticket,
+        model: TicketModel,
         attributes: ['uuid', 'count', 'price'],
         where: {
           count: {
@@ -66,11 +69,11 @@ publicEventRouter.get('/event-list', async (req, res) => {
         },
       },
       {
-        model: EventTag,
+        model: EventTagModel,
         attributes: ['TagId'],
         include: [
           {
-            model: Tag,
+            model: TagModel,
             attributes: ['name'],
           },
         ],
@@ -127,7 +130,6 @@ eventRouter.get('/all', async (req, res) => {
 
   res.status(200).send({ events });
 });
-
 eventRouter.get('/:uuid', async (req, res) => {
   const { uuid } = req.params;
   const event = await Event.getByUUID(uuid);
@@ -140,6 +142,32 @@ eventRouter.get('/:uuid', async (req, res) => {
     tickets,
   });
 });
+
+eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
+  const { ticketUuid } = req.params;
+  const { userUUID } = req.payload;
+
+  console.log(ticketUuid, userUUID);
+
+  const { id: UserId } = await User.getByUUID(userUUID);
+  const { id: TicketId } = await Ticket.getByUUID(ticketUuid);
+
+  try {
+    await Subscriber.getOrCreate({
+      TicketId,
+      UserId
+    });
+
+    res.status(201).send({
+      message: 'nice dick, awesome balls',
+    });
+  }
+  catch(message) {
+    console.error(message);
+    res.status(400).send({ message });
+  }
+});
+// eventRouter.get('/unsubscribe/:uuid')
 
 export {
   publicEventRouter,
