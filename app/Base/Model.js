@@ -82,6 +82,26 @@ class Model {
       return Promise.reject(message);
     }
   }
+
+  async getOrCreate(createData) {
+    const result = await this.getOne({
+      where: createData,
+      raw: false,
+    });
+
+    console.log(result);
+    if (result) return result;
+
+    createData.uuid = v4();
+    try {
+      const newModel = await this.Model.create(createData);
+      return newModel;
+    }
+    catch(error) {
+      const message = this.handleError(error);
+      return Promise.reject(message);
+    }
+  }
 };
 
 export default Model;
