@@ -114,6 +114,33 @@ publicEventRouter.get('/event-list', async (req, res) => {
   // res.status(200).send({ events });
 });
 
+eventRouter.get('/all', async (req, res) => {
+  const events = await Event.getAll({
+    attributes: ['uuid', 'name', 'description', 'datetimeTo', 'coords', 'datetimeFrom'],
+    include: [
+      {
+        model: Organization,
+        attributes: ['uuid', 'name', 'reputation', 'logo'],
+      },
+    ],
+  });
+
+  res.status(200).send({ events });
+});
+
+eventRouter.get('/:uuid', async (req, res) => {
+  const { uuid } = req.params;
+  const event = await Event.getByUUID(uuid);
+  const organization = await event.getOrganization();
+  const tickets = await event.getTickets();
+
+  res.status(200).send({
+    event,
+    organization,
+    tickets,
+  });
+});
+
 export {
   publicEventRouter,
   eventRouter,
