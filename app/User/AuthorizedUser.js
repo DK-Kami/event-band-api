@@ -5,10 +5,14 @@ import { Op } from 'sequelize';
 import Model from '../Base/Model';
 import models from '../../db/models';
 import Organization from '../Organization/Organization';
+import Subscriber from '../Subscriber/Subscriber';
 import User from './User';
 
 const {
   AuthorizedUser: AuthorizedUserModel,
+  Organization: OrganizationModel,
+  Ticket: TicketModel,
+  Event: EventModel,
 } = models;
 
 class AuthorizedUser extends Model {
@@ -58,6 +62,7 @@ class AuthorizedUser extends Model {
 
     const orgIds = organizers.map(o => o.OrganizationId);
     const organizations = await Organization.getAll({
+      attributes: ['uuid', 'name', 'reputation', 'logo'],
       where: {
         id: {
           [Op.in]: orgIds,
@@ -65,14 +70,32 @@ class AuthorizedUser extends Model {
       },
     });
 
+    const subscriptions = await Subscriber.getAll({
+      where: { UserId: user.id },
+      attributes: ['uuid'],
+      include: [
+        {
+          model: OrganizationModel,
+          attributes: ['uuid', 'name', 'reputation', 'logo'],
+        },
+        {
+          model: TicketModel,
+          attributes: ['uuid', 'name', 'description', 'count', 'price', 'datetimeTo', 'datetimeFrom'],
+          include: [
+            {
+              model: EventModel,
+              attributes: ['uuid', 'name', 'description', 'coords', 'datetimeTo', 'datetimeFrom'],
+            },
+          ],
+        },
+      ],
+    });
+
     return {
       user: this.toAuthJSON(authUser, user),
-      organizations: organizations.map(organization => ({
-        uuid: organization.uuid,
-        name: organization.name,
-        reputation: organization.reputation,
-        logo: '/organizations/' + organization.logo,
-      })),
+      subscriptions,
+      organizations,
+      da: 'da'
     };
   }
 };

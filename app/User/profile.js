@@ -10,12 +10,32 @@ profileRouter.get('/', async (req, res) => {
   const { uuid } = req.payload;
   const {
     organizations,
+    subscriptions,
     user,
   } = await AuthorizedUser.getProfile(uuid);
+
+  const subs = subscriptions.map(subscribe => {
+    let event;
+    const {
+      Ticket: ticket,
+      Organization: organization,
+    } = subscribe;
+
+    if (ticket) {
+      event = ticket.Event;
+    }
+
+    return {
+      organization,
+      // ticket,
+      event,
+    };
+  });
 
   res.status(200).send({
     user,
     organizations,
+    subscriptions: subs,
   });
 });
 
