@@ -91,9 +91,28 @@ class AuthorizedUser extends Model {
       ],
     });
 
+    const subOrgs = [];
+    const subEvents = [];
+    subscriptions.forEach(subscribe => {
+      const {
+        Ticket: ticket,
+        Organization: organization,
+      } = subscribe;
+  
+      if (organization) {
+        subOrgs.push(organization);
+      }
+      if (ticket) {
+        subEvents.push(ticket.Event);
+      }
+    });
+
     return {
       user: this.toAuthJSON(authUser, user),
-      subscriptions,
+      subscriptions: {
+        organizations: subOrgs,
+        events: subEvents,
+      },
       organizations,
       da: 'da'
     };
