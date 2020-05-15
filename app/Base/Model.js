@@ -52,7 +52,7 @@ class Model {
     return data;
   }
 
-  async update(updateData = [], where) {
+  async update(updateData = {}, where) {
     console.log(updateData, where);
     try {
       const updateModel = await this.getOne({ where });
@@ -83,18 +83,18 @@ class Model {
     }
   }
 
-  async getOrCreate(createData) {
-    const result = await this.getOne({
-      where: createData,
-      raw: false,
-    });
+  async getOrCreate(createData, defaults) {
+    const result = await this.getOne({ where: createData });
 
     console.log(result);
     if (result) return result;
 
     createData.uuid = v4();
     try {
-      const newModel = await this.Model.create(createData);
+      const newModel = await this.Model.findOrCreate({
+        where: createData,
+        defaults,
+      });
       return newModel;
     }
     catch(error) {
