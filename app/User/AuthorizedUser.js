@@ -5,6 +5,7 @@ import { Op } from 'sequelize';
 import Model from '../Base/Model';
 import models from '../../db/models';
 import Organization from '../Organization/Organization';
+import User from './User';
 
 const {
   AuthorizedUser: AuthorizedUserModel,

@@ -11,7 +11,7 @@ profileRouter.get('/', async (req, res) => {
   const {
     organizations,
     user,
-  } = AuthorizedUser.getProfile(uuid);
+  } = await AuthorizedUser.getProfile(uuid);
 
   res.status(200).send({
     user,
