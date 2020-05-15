@@ -5,9 +5,10 @@ import models from '../../db/models';
 const subscriberRouter = new Router();
 
 const {
-  Organization,
-  Ticket,
-  Event,
+  Organization: OrganizationModel,
+  Ticket: TicketModel,
+  Event: EventModel,
+  User: UserModel,
 } = models;
 
 subscriberRouter.get('/all', async (res, req) => {
@@ -15,15 +16,19 @@ subscriberRouter.get('/all', async (res, req) => {
     attributes: ['uuid'],
     include: [
       {
-        model: Organization,
+        model: OrganizationModel,
         attributes: ['uuid', 'name', 'reputation', 'logo'],
       },
       {
-        model: Ticket,
+        model: UserModel,
+        attributes: ['uuid', 'name', 'surname', 'email'],
+      },
+      {
+        model: TicketModel,
         attributes: ['uuid', 'name', 'description', 'count', 'price', 'datetimeTo', 'datetimeFrom'],
         include: [
           {
-            model: Event,
+            model: EventModel,
             attributes: ['uuid', 'name', 'description', 'coords', 'datetimeTo', 'datetimeFrom'],
           },
         ],
