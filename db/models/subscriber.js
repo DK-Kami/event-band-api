@@ -17,6 +17,11 @@ export default (sequelize, DataTypes) => {
     UserId: {
       type: DataTypes.INTEGER,
     },
+    status: {
+      type: DataTypes.INTEGER(11).UNSIGNED,
+      allowNull: false,
+      default: 1
+    },
   }, {});
 
   Subscriber.associate = models => {
