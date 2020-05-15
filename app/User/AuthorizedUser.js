@@ -71,7 +71,10 @@ class AuthorizedUser extends Model {
     });
 
     const subscriptions = await Subscriber.getAll({
-      where: { UserId: user.id },
+      where: {
+        UserId: user.id,
+        status: 1,
+      },
       attributes: ['uuid'],
       include: [
         {
