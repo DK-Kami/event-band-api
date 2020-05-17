@@ -220,6 +220,12 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        uuid: 'a33ac3eb-74ab-4ffa-a3d9-0c3b7477bb54',
+        name: 'Valorant',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
         uuid: '45dbd79d-36f8-4feb-9116-4ffe4a384ca7',
         name: 'Memes',
         createdAt: new Date(),
