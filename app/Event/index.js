@@ -225,11 +225,7 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
     const subscription = await Subscriber.getOrCreate({
       TicketId,
       UserId,
-    });
-
-    console.log(subscription);
-    subscription.status = 1;
-    subscription.save();
+    }, { status: 1 });
 
     res.status(201).send({
       message: 'nice dick, awesome balls',
