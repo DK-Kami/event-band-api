@@ -6,12 +6,18 @@ import User from './User';
 const userRouter = new Router();
 const authRouter = new Router();
 
+/**
+ * [DEBUG] Возвращение всех пользователей
+ */
 userRouter.get('/', async (req, res) => { 
   const users = await User.getAll();
   const authUsers = await AuthorizedUser.getAll();
   return res.status(200).send({ users, authUsers });
 });
 
+/**
+ * Авторизация пользователя
+ */
 authRouter.post('/login', (req, res, next) => {
   const { email, password } = req.body;
 
@@ -43,6 +49,9 @@ authRouter.post('/login', (req, res, next) => {
     return next(res.status(400));
   })(req, res, next);
 });
+/**
+ * Регистрация нового пользователя
+ */
 authRouter.post('/register', async (req, res, next) => {
   const data = req.body;
 

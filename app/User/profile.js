@@ -6,6 +6,9 @@ import User from './User';
 const profileRouter = new Router();
 const passwordRouter = new Router();
 
+/**
+ * Возвращение профиля пользователя по токену
+ */
 profileRouter.get('/', async (req, res) => {
   const { uuid } = req.payload;
   const {
@@ -20,7 +23,9 @@ profileRouter.get('/', async (req, res) => {
     subscriptions,
   });
 });
-
+/**
+ * Редактирование профиля пользователя
+ */
 profileRouter.put('/', async (req, res) => {
   const {
     authUserUUID,
@@ -53,6 +58,9 @@ profileRouter.put('/', async (req, res) => {
   }
 });
 
+/**
+ * Запрос на изменение пароля
+ */
 passwordRouter.get('/request-password', async (req, res) => {
   const { email } = req.query;
   const user = await User.getOne({
@@ -76,7 +84,9 @@ passwordRouter.get('/request-password', async (req, res) => {
     type: 'success',
   });
 });
-
+/**
+ * Изменение пароля по токену
+ */
 passwordRouter.post('/change-password', async (req, res) => {
   const {
     password,
