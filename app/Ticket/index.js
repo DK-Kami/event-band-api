@@ -9,6 +9,9 @@ const {
 
 const ticketRouter = new Router();
 
+/**
+ * [DEBUG] Получене всех билетов
+ */
 ticketRouter.get('/all', async (req, res) => {
   const tickets = await Ticket.getAll({
     attributes: ['uuid', 'name', 'description', 'count', 'price', 'datetimeTo', 'datetimeFrom'],

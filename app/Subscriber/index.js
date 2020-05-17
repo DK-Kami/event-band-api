@@ -11,6 +11,9 @@ const {
   User: UserModel,
 } = models;
 
+/**
+ * [DEBUG] Получене всех подписчиков
+ */
 subscriberRouter.get('/all', async (res, req) => {
   const subscribers = await Subscriber.getAll({
     attributes: ['uuid', 'status'],
