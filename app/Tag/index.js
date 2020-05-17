@@ -5,7 +5,9 @@ const tagRouter = new Router();
 const anonimTagRouter = new Router();
 
 async function getAllTagsRoute(req, res) {
-  const tags = await Tag.getAll();
+  const tags = await Tag.getAll({
+    order: [['name', 'ASC']],
+  });
   res.status(200).send({ tags });
 };
 
