@@ -44,6 +44,14 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        uuid: '44a9985d-167F-4985-8f77-bf18a2682768',
+        TicketId: 6,
+        UserId: 2,
+        status: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
         uuid: '990a1415-d569-4feb-9e7d-c7c23c4dad0f',
         TicketId: 5,
         UserId: 1,

@@ -65,8 +65,8 @@ module.exports = {
       },
       {
         uuid: '29bd87f2-8f85-404a-ad1e-bdbf205e4822',
-        name: '1 etap',
-        description: 'Ticket for 1 etap',
+        name: '2 etap',
+        description: 'Ticket for 2 etap',
         count: 500,
         price: 1500,
         datetimeFrom: '2020-05-10',
