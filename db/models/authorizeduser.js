@@ -33,7 +33,7 @@ export default (sequelize, DataTypes) => {
       validate: {
         len: {
           args: [6, 1024],
-          msg: 'The length of the name must be less than 30 and more than 6',
+          msg: 'The length of the password must be less than 30 and more than 6',
         },
       }
     },

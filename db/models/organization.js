@@ -43,6 +43,7 @@ export default (sequelize, DataTypes) => {
     Organization.hasMany(models.Organizer);
     Organization.hasMany(models.Subscriber);
     Organization.hasMany(models.Event);
+    Organization.hasMany(models.News);
   };
   return Organization;
 };

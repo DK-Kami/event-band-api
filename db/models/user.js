@@ -74,6 +74,7 @@ export default (sequelize, DataTypes) => {
     User.hasOne(models.AuthorizedUser);
     User.hasMany(models.Organizer);
     User.hasMany(models.Subscriber);
+    User.hasMany(models.News);
   };
   return User;
 };
