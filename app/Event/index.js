@@ -26,9 +26,11 @@ publicEventRouter.get('/event-list', async (req, res) => {
     tags,
   } = req.query;
 
-  const parseTags = Array.isArray(tags)
-    ? tags
-    : JSON.parse(tags);
+  const parseTags = (
+    !tags || Array.isArray(tags)
+      ? tags
+      : JSON.parse(tags)
+  ) || [];
 
   const where = {};
 
