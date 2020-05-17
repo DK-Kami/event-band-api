@@ -71,6 +71,7 @@ class AuthorizedUser extends Model {
     });
 
     const subscriptions = await Subscriber.getAll({
+      raw: true,
       where: {
         UserId: user.id,
         status: 1,
@@ -84,6 +85,7 @@ class AuthorizedUser extends Model {
         {
           model: TicketModel,
           attributes: ['uuid', 'name', 'description', 'count', 'price', 'datetimeTo', 'datetimeFrom'],
+          order: [['datetimeTo', 'DESC']],
           include: [
             {
               model: EventModel,
@@ -97,17 +99,64 @@ class AuthorizedUser extends Model {
     const subOrgs = [];
     const subEvents = [];
     subscriptions.forEach(subscribe => {
-      const {
-        Ticket: ticket,
-        Organization: organization,
-      } = subscribe;
+      if (subscribe['Organization.uuid']) {
+        subOrgs.push({
+          uuid: subscribe['Organization.uuid'],
+          name: subscribe['Organization.name'],
+          reputation: subscribe['Organization.reputation'],
+          logo: subscribe['Organization.logo'],
+        });
+      }
+
+      if (subscribe['Ticket.Event.uuid']) {
+        const event = {
+          uuid: subscribe['Ticket.Event.uuid'],
+          name: subscribe['Ticket.Event.name'],
+          description: subscribe['Ticket.Event.description'],
+          coords: subscribe['Ticket.Event.coords'],
+          datetimeTo: subscribe['Ticket.Event.datetimeTo'],
+          datetimeFrom: subscribe['Ticket.Event.datetimeFrom'],
+          tickets: [],
+        };
+        const ticket = {
+          uuid: subscribe['Ticket.uuid'],
+          name: subscribe['Ticket.name'],
+          description: subscribe['Ticket.description'],
+          count: subscribe['Ticket.count'],
+          price: subscribe['Ticket.price'],
+          datetimeTo: subscribe['Ticket.datetimeTo'],
+          datetimeFrom: subscribe['Ticket.datetimeFrom'],
+        };
+
+        if (!subEvents.map(e => e.uuid).includes(event.uuid)) {
+          event.tickets.push(ticket);
+          subEvents.push(event);
+        }
+        else {
+          subEvents.find(e => e.uuid === event.uuid).tickets.push(ticket);
+        }
+      }
+    });
+
+    subscriptions.forEach(subscribe => {
+      // const {
+      //   Ticket: ticket,
+      //   Organization: organization,
+      // } = subscribe;
   
-      if (organization) {
-        subOrgs.push(organization);
-      }
-      if (ticket) {
-        subEvents.push(ticket.Event);
-      }
+      // if (organization) {
+      //   subOrgs.push(organization);
+      // }
+      // if (ticket) {
+      //   const event = ticket.Event;
+      //   if (!subEvents.map(e => e.uuid).includes(event.uuid)) {
+      //     Object.defineProperty(event, 'tickets', {
+      //       value: [ticket],
+      //     });
+      //     // console.log(event);
+      //     subEvents.push(event);
+      //   }
+      // }
     });
 
     return {
