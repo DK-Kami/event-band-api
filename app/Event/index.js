@@ -12,10 +12,13 @@ const {
   Ticket: TicketModel,
   Tag: TagModel,
 } = models;
-const eventRouter = new Router();
 const publicEventRouter = new Router();
+const eventRouter = new Router();
 
-publicEventRouter.get('/event-list', async (req, res) => {
+/**
+ * Функция для получения отфильтрованных событий
+ */
+async function getFilteredEvents(req, res) {
   const {
     priceTo = 1000000000000000000000000000000000,
     priceFrom = 0,
@@ -116,9 +119,15 @@ publicEventRouter.get('/event-list', async (req, res) => {
   res.status(200).send({
     events: filterEvents,
   });
-  // res.status(200).send({ events });
-});
+};
 
+/**
+ * Путь для получения отфильтрованных событий неаторизованным пользователем
+ */
+publicEventRouter.get('/event-list', getFilteredEvents);
+/**
+ * Путь для подписки на событие неавторизованным пользователем
+ */
 publicEventRouter.post('/subscribe', async (req, res) => {
   const {
     ticketUuid,
@@ -157,6 +166,20 @@ publicEventRouter.post('/subscribe', async (req, res) => {
   }
 });
 
+/**
+ * 
+ */
+eventRouter.get('/event-feed', async (req, res) => {
+
+})
+
+/**
+ * Путь для получения отфильтрованных событий аторизованным пользователем
+ */
+eventRouter.get('/event-list', getFilteredEvents);
+/**
+ * Возвращение всех событий
+ */
 eventRouter.get('/all', async (req, res) => {
   const events = await Event.getAll({
     attributes: ['uuid', 'name', 'description', 'datetimeTo', 'coords', 'datetimeFrom'],
@@ -170,6 +193,9 @@ eventRouter.get('/all', async (req, res) => {
 
   res.status(200).send({ events });
 });
+/**
+ * Возвращение конкретного события для uuid
+ */
 eventRouter.get('/:uuid', async (req, res) => {
   const { uuid } = req.params;
   const event = await Event.getByUUID(uuid);
@@ -183,6 +209,9 @@ eventRouter.get('/:uuid', async (req, res) => {
   });
 });
 
+/**
+ * Подписка на событие авторизованным пользователем
+ */
 eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
   const { ticketUuid } = req.params;
   const { userUUID } = req.payload;
@@ -212,6 +241,9 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
     res.status(400).send({ message });
   }
 });
+/**
+ * Отписка от события авторизованным пользователем
+ */
 eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
   const { ticketUuid } = req.params;
   const { userUUID } = req.payload;
