@@ -2,11 +2,15 @@ import Router from '../Base/Router';
 import Tag from './Tag';
 
 const tagRouter = new Router();
+const anonimTagRouter = new Router();
 
-tagRouter.get('/all', async (req, res) => {
+async function getAllTagsRoute(req, res) {
   const tags = await Tag.getAll();
   res.status(200).send({ tags });
-});
+};
+
+tagRouter.get('/all', getAllTagsRoute);
+anonimTagRouter.get('/all', getAllTagsRoute);
 
 tagRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -16,5 +20,6 @@ tagRouter.get('/:id', async (req, res) => {
 });
 
 export {
+  anonimTagRouter,
   tagRouter,
 };
