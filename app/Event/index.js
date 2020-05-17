@@ -160,7 +160,7 @@ eventRouter.get('/all', async (req, res) => {
     attributes: ['uuid', 'name', 'description', 'datetimeTo', 'coords', 'datetimeFrom'],
     include: [
       {
-        model: Organization,
+        model: OrganizationModel,
         attributes: ['uuid', 'name', 'reputation', 'logo'],
       },
     ],
