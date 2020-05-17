@@ -5,11 +5,17 @@ import User from '../User/User';
 
 const organizationRouter = new Router();
 
+/**
+ * [DEBUG] Получене всех организаций
+ */
 organizationRouter.get('/all', async (req, res) => {
   const organizations = await Organization.getAll();
   return res.status(200).send({ organizations });
 });
 
+/**
+ * Путь для создания новой организации
+ */
 organizationRouter.post('/create', async (req, res) => {
   const {
     description,
