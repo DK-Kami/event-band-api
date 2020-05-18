@@ -65,7 +65,7 @@ async function getFilteredEvents(req, res) {
       },
       {
         model: TicketModel,
-        attributes: ['uuid', 'count', 'price'],
+        attributes: ['uuid', 'name', 'description', 'count', 'price'],
         where: {
           count: {
             [Op.lte]: people,
