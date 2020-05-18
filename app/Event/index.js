@@ -100,8 +100,8 @@ async function getFilteredEvents(req, res) {
     datetimeFrom: event.datetimeFrom,
     datetimeTo: event.datetimeTo,
 
-    count: event.Tickets.reduce((summ, t) => summ + t.count, 0),
-    price: event.Tickets.reduce((summ, t) => summ + t.price, 0),
+    count: event.Tickets.reduce((summ, tticket) => summ + tticket.count, 0),
+    price: event.Tickets.sort((n, p) => n.price > p.price ? 1 : -1)[0].price,
 
     organization: event.Organization,
     tickets: event.Tickets.map(ticket => ticket),
