@@ -6,11 +6,13 @@ import Subscriber from '../Subscriber/Subscriber';
 import Ticket from '../Ticket/Ticket';
 import User from '../User/User';
 import News from '../News/News';
+import Tag from '../Tag/Tag';
 
 const {
   Organization: OrganizationModel,
   EventTag: EventTagModel,
   Ticket: TicketModel,
+  Event: EventModel,
   News: NewsModel,
   Tag: TagModel,
 } = models;
@@ -204,12 +206,129 @@ eventRouter.get('/event-feed', async (req, res) => {
       {
         model: OrganizationModel,
         attributes: ['uuid', 'name', 'logo'],
-      }
-    ]
-  })
+      },
+    ],
+  });
 
   res.status(200).send({ news });
 });
+/**
+ * Получение рекомендованных организаций и событий
+ */
+eventRouter.get('/event-recommended', async (req, res) => {
+  const { userUUID } = req.payload;
+  const { id: userId } = await User.getByUUID(userUUID);
+  const userSubscription = await Subscriber.getAll({
+    where: {
+      UserId: userId,
+    },
+    attributes: ['uuid'],
+    include: [
+      {
+        model: OrganizationModel,
+        attributes: ['id'],
+      },
+      {
+        model: TicketModel,
+        attributes: ['id'],
+        include: [
+          {
+            model: EventModel,
+            attributes: ['id'],
+            include: [
+              {
+                model: EventTagModel,
+                attributes: ['id'],
+                include: [
+                  {
+                    model: TagModel,
+                    attributes: ['id'],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    raw: true,
+  });
+
+  const orgIds = [...new Set(userSubscription.map(sub => sub['Organization.id']).filter(orgId => !!orgId))];
+  const eventIds = [...new Set(userSubscription.map(sub => sub['Ticket.Event.id']).filter(eventId => !!eventId))];
+  const tagIds = [...new Set(userSubscription.map(sub => sub['Ticket.Event.EventTags.Tag.id']).filter(tagId => !!tagId))];
+
+  const filteredEvents = (await Event.getAll({
+    where: {
+      id: {
+        [Op.notIn]: eventIds,
+      },
+    },
+    attributes: ['id', 'uuid', 'name', 'description', 'coords', 'datetimeTo', 'datetimeFrom'],
+    include: [
+      {
+        model: OrganizationModel,
+        attributes: ['id', 'uuid', 'name', 'description', 'logo'],
+      },
+      {
+        model: EventTagModel,
+        attributes: ['id'],
+        include: [
+          {
+            model: TagModel,
+            attributes: ['id', 'uuid', 'name'],
+            where: {
+              id: {
+                [Op.in]: tagIds,
+              },
+            },
+          },
+        ],
+      },
+    ],
+  })).filter(e => e.EventTags.length);
+
+  const eventIdsToOrgs = [...eventIds, ...filteredEvents.map(event => event.id)];
+  const filteredOrgs = (await Event.getAll({
+    where: {
+      id: {
+        [Op.in]: eventIdsToOrgs,
+      },
+    },
+    include: [
+      {
+        model: OrganizationModel,
+        attributes: ['id', 'uuid', 'name', 'description', 'logo'],
+      },
+    ],
+  }))
+    .map(event => event.Organization)
+    .filter(org => !orgIds.includes(org.id));
+  const recommendedOrgs = filteredOrgs;
+
+  const recommendedEvents = filteredEvents.map(event => {
+    const tags = event.EventTags.map(eventTag => ({
+      id: eventTag.Tag.id,
+      uuid: eventTag.Tag.uuid,
+      name: eventTag.Tag.name,
+    }));
+
+    return {
+      uuid: event.uuid,
+      name: event.name,
+      description: event.description,
+      coords: event.coords,
+      datetimeTo: event.datetimeTo,
+      datetimeFrom: event.datetimeFrom,
+      tags,
+    };
+  });
+
+  res.status(200).send({
+    organizations: recommendedOrgs,
+    events: recommendedEvents,
+  });
+}),
 
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
@@ -239,11 +358,20 @@ eventRouter.get('/:uuid', async (req, res) => {
   const event = await Event.getByUUID(uuid);
   const organization = await event.getOrganization();
   const tickets = await event.getTickets();
+  const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
+  const tags = await Tag.getAll({
+    where: {
+      id: {
+        [Op.in]: tagIds,
+      },
+    },
+  });
 
   res.status(200).send({
     event,
     organization,
     tickets,
+    tags,
   });
 });
 
