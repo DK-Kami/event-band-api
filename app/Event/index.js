@@ -70,7 +70,7 @@ async function getFilteredEvents(req, res) {
         attributes: ['uuid', 'count', 'price'],
         where: {
           count: {
-            [Op.gte]: people,
+            [Op.lte]: people,
           },
           price: {
             [Op.between]: [priceFrom, priceTo],
