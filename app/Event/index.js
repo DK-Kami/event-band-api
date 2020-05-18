@@ -33,11 +33,9 @@ async function getFilteredEvents(req, res) {
     tags,
   } = req.query;
 
-  const parseTags = ( 
-    !tags || Array.isArray(tags)
-      ? tags.map(tag => Number(tag))
-      : JSON.parse(tags)
-  ) || [];
+  const parseTags = tags && Array.isArray(tags)
+    ? tags.map(tag => Number(tag))
+    : [];
 
   const where = {};
 
