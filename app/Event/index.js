@@ -5,11 +5,13 @@ import models from '../../db/models';
 import Subscriber from '../Subscriber/Subscriber';
 import Ticket from '../Ticket/Ticket';
 import User from '../User/User';
+import News from '../News/News';
 
 const {
   Organization: OrganizationModel,
   EventTag: EventTagModel,
   Ticket: TicketModel,
+  News: NewsModel,
   Tag: TagModel,
 } = models;
 const publicEventRouter = new Router();
@@ -167,11 +169,47 @@ publicEventRouter.post('/subscribe', async (req, res) => {
 });
 
 /**
- * 
+ * Получение новостей от организаций, на которые подписан пользователь
  */
 eventRouter.get('/event-feed', async (req, res) => {
+  const { userUUID } = req.payload;
+  const { id: userId } = await User.getByUUID(userUUID);
+  const userOrganizations = await Subscriber.getAll({
+    where: {
+      OrganizationId: {
+        [Op.gt]: 0,
+      },
+      UserId: userId,
+    },
+    attributes: ['uuid'],
+    include: [
+      {
+        model: OrganizationModel,
+        attributes: ['id'],
+      },
+    ],
+    raw: true,
+  });
+  const orgIds = userOrganizations.map(org => org['Organization.id']);
 
-})
+  const news = await News.getAll({
+    attributes: ['uuid', 'title', 'text', 'image', 'createdAt'],
+    order: [['createdAt', 'DESC']],
+    where: {
+      OrganizationId: {
+        [Op.in]: orgIds
+      },
+    },
+    include: [
+      {
+        model: OrganizationModel,
+        attributes: ['uuid', 'name', 'logo'],
+      }
+    ]
+  })
+
+  res.status(200).send({ news });
+});
 
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
