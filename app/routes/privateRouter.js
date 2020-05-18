@@ -5,6 +5,7 @@ import { profileRouter } from '../User/profile';
 import { ticketRouter } from '../Ticket';
 import { eventRouter } from '../Event';
 import { userRouter } from '../User';
+import { newsRouter } from '../News';
 import { tagRouter } from '../Tag';
 import Router from '../Base/Router';
 const router = new Router();
@@ -16,6 +17,7 @@ router.use('/profile', profileRouter);
 router.use('/ticket', ticketRouter);
 router.use('/event', eventRouter);
 router.use('/user', userRouter);
+router.use('/news', newsRouter);
 router.use('/tag', tagRouter);
 
 export default router;

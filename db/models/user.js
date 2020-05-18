@@ -64,9 +64,9 @@ export default (sequelize, DataTypes) => {
       },
     }
   }, {
-    getterMethods: {
-      fullName: () => this.name + ' ' + this.surname,
-    },
+    // getterMethods: {
+    //   fullName: () => this.name + ' ' + this.surname,
+    // },
   });
 
   User.associate = models => {
