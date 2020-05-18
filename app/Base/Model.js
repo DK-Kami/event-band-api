@@ -86,16 +86,22 @@ class Model {
   async getOrCreate(createData, defaults) {
     const result = await this.getOne({ where: createData });
 
-    console.log(result);
-    if (result) return result;
+    if (result) {
+      return {
+        isCreate: false,
+        isGet: true,
+        model: result,
+      }
+    }
 
     createData.uuid = v4();
     try {
-      const newModel = await this.Model.findOrCreate({
-        where: createData,
-        defaults,
-      });
-      return newModel;
+      const newModel = await this.Model.create(Object.assign({}, createData, defaults));
+      return {
+        isCreate: true,
+        isGet: false,
+        model: newModel,
+      };
     }
     catch(error) {
       const message = this.handleError(error);

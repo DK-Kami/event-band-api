@@ -149,20 +149,28 @@ publicEventRouter.post('/subscribe', async (req, res) => {
   });
 
   try {
-    const user = await User.getOrCreate({ surname, name, email });
+    const { model: user } = await User.getOrCreate({ surname, name, email });
     const { id: UserId } = user;
 
     const ticket = await Ticket.getByUUID(ticketUuid);
     const { id: TicketId } = ticket;
 
-    const subscription = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
-    subscription.status = 1;
-    subscription.save();
+    const {
+      model: subscription,
+      isCreate
+    } = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
 
-    res.status(200).send({
-      message: 'nice dick, awesome balls',
-      subscription,
-    });
+    if (isCreate) {
+      res.status(201).send({
+        message: 'nice dick, awesome balls',
+        subscription,
+      });
+    }
+    else {
+      res.status(400).send({
+        message: 'email address is already registered at the event',
+      });
+    }
   }
   catch(message) {
     console.log(message);
@@ -388,15 +396,22 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
   const { id: TicketId } = await Ticket.getByUUID(ticketUuid);
 
   try {
-    const subscription = await Subscriber.getOrCreate({
-      TicketId,
-      UserId,
-    }, { status: 1 });
+    const {
+      model: subscription,
+      isCreate
+    } = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
 
-    res.status(201).send({
-      message: 'nice dick, awesome balls',
-      subscription,
-    });
+    if (isCreate) {
+      res.status(201).send({
+        message: 'nice dick, awesome balls',
+        subscription,
+      });
+    }
+    else {
+      res.status(400).send({
+        message: 'email address is already registered at the event',
+      });
+    }
   }
   catch(message) {
     console.error(message);
