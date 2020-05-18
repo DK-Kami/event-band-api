@@ -158,7 +158,10 @@ publicEventRouter.post('/subscribe', async (req, res) => {
       isCreate
     } = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
 
-    if (isCreate) {
+    if (isCreate || !subscription.status) {
+      subscription.status = 1;
+      subscription.save();
+
       res.status(201).send({
         message: 'nice dick, awesome balls',
         subscription,
@@ -399,7 +402,10 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
       isCreate
     } = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
 
-    if (isCreate) {
+    if (isCreate || !subscription.status) {
+      subscription.status = 1;
+      subscription.save();
+
       res.status(201).send({
         message: 'nice dick, awesome balls',
         subscription,
