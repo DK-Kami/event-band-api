@@ -7,13 +7,23 @@ const anonimTagRouter = new Router();
 /**
  * Функция для получения всех тегов
  */
-async function getAllTagsRoute(req, res) {
-  const tags = await Tag.getAll({
+function getAllTagsRoute(req, res) {
+  Tag.getAll({
     order: [['name', 'ASC']],
     attributes: ['id', 'uuid', 'name'],
+  }, (message, tags) => {
+    if (message) res.status(400).send({ message });
+
+    res.status(200).send({ tags });
   });
-  res.status(200).send({ tags });
 };
+ // async function getAllTagsRoute(req, res) { 
+//   const tags = await Tag.getAll({
+//     order: [['name', 'ASC']],
+//     attributes: ['id', 'uuid', 'name'],
+//   });
+//   res.status(200).send({ tags });
+// };
 
 /**
  * Получене всез тегов для неавторизованного пользователя
