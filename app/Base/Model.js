@@ -1,13 +1,7 @@
 import { v4 } from 'uuid';
+import ModelError from './Error';
 
-/**
- * Базовый класс модели
- */
 class Model {
-  /**
-   * Конструктор класса
-   * @param {Sequelize.Model} Model Объект класса Sequelize
-   */
   constructor(Model) {
     this.Model = Model;
   }
@@ -19,26 +13,52 @@ class Model {
   handleError(error) {
     let message = 'very very bad request, but name: ' + error.name + ' and error: ' + error;
 
-    if (error.name === 'SequelizeValidationError') {
-      const errors = error.errors.map(e => e.message);
-      console.log('error', errors);
-      message = errors[0];
-    }
-    else if (error.name === 'SequelizeUniqueConstraintError') {
-      const {
-        constraint,
-        routine,
-      } = error.original;
+    switch(error.name) {
+      case 'SequelizeValidationError': {
+        const errors = error.errors.map(e => e.message);
+        console.log('error', errors);
+        message = errors[0];
+      } break;
 
-      switch(routine) {
-        case '_bt_check_unique':
+      case 'SequelizeUniqueConstraintError': {
+        const {
+          constraint,
+          routine,
+        } = error.original;
+  
+        if (routine === '_bt_check_unique') {
           const field = constraint.split('_')[1];
           message = field + ' is already taken';
-        break;
-      }
-    }
+        }
+      } break;
+
+      case 'ModelError':
+        message = error.message;
+      break;
+    };
 
     return message;
+  }
+
+  /**
+   * Метод для отловки исключений при раоте с базой данных
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
+   * @param {String} done.message Сообщение об ошибке
+   * @param {Object} done.model Модель, получения при выполнении запроса
+   * @param {Strung} methodName Имя, выполняемого метода
+   * @param  {...any} methodParams Параметры, передаваемые в метод
+   */
+  async errorCatching(done = () => {}, methodName, ...methodParams) {
+    try {
+      const data = await this.Model[methodName](...methodParams);
+      done(null, data);
+      return data;
+    }
+    catch(message) {
+      const error = this.handleError(message)
+      done(this.handleError(error));
+      return message;
+    }
   }
 
   /**
@@ -50,9 +70,10 @@ class Model {
    * @param {Array} queryObject.attributes Массив названия стролбцов, которые нужно получить
    * @param {Array} queryObject.order Массив сортировки
    * @param {Array} queryObject.include Массив подключения связаных моделей, связанных с текущей
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
-  async getAll(queryObject) {
-    const data = await this.Model.findAll(queryObject);
+  async getAll(queryObject, done) {
+    const data = await this.errorCatching(done, 'findAll', queryObject);
     return data;
   }
 
@@ -66,21 +87,10 @@ class Model {
    * @param {Array} queryObject.attributes Массив названия стролбцов, которые нужно получить
    * @param {Array} queryObject.order Массив сортировки
    * @param {Array} queryObject.include Массив подключения связаных моделей, связанных с текущей
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
-  async getById(id, queryObject) {
-    const data = await this.Model.findByPk(id, queryObject);
-    return data;
-  }
-
-  /**
-   * Возвращение записи по его UUID
-   * @param {String} uuid UUID записи
-   */
-  async getByUUID(uuid) {
-    const data = await this.Model.findOne({
-      where: { uuid },
-      raw,
-    });
+  async getById(id, queryObject, done) {
+    const data = await this.errorCatching(done, 'findByPk', id, queryObject);
     return data;
   }
 
@@ -93,9 +103,22 @@ class Model {
    * @param {Array} queryObject.attributes Массив названия стролбцов, которые нужно получить
    * @param {Array} queryObject.order Массив сортировки
    * @param {Array} queryObject.include Массив подключения связаных моделей, связанных с текущей
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
-  async getOne(queryObject) {
-    const data = await this.Model.findOne(queryObject);
+  async getOne(queryObject, done) {
+    const data = await this.errorCatching(done, 'findOne', queryObject);
+    return data;
+  }
+
+  /**
+   * Возвращение записи по его UUID
+   * @param {String} uuid UUID записи
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
+   */
+  async getByUUID(uuid, done) {
+    const data = await this.getOne({
+      where: { uuid },
+    }, done);
     return data;
   }
 
@@ -103,40 +126,38 @@ class Model {
    * Метод для изменения записи
    * @param {Object} updateData Объект, содержащий изменяемые поля с новыми значениями
    * @param {Object} where Объект, содержащий поля поиска
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
-  async update(updateData = {}, where) {
-    console.log(updateData, where);
-    try {
-      const updateModel = await this.getOne({ where });
+  async update(updateData = {}, where, done) {
+    const data = this.errorCatching(done, 'update', updateData, { where });
+    return data;
+    // try {
+    //   const updateModel = await this.getOne({ where });
 
-      Object.keys(updateData).forEach(key => {
-        updateModel[key] = updateData[key];
-      });
+    //   Object.keys(updateData).forEach(key => {
+    //     updateModel[key] = updateData[key];
+    //   });
 
-      await updateModel.save();
-      return updateModel;
-    }
-    catch(error) {
-      console.log('here', error.name);
-      const message = this.handleError(error);
-      return Promise.reject(message);
-    }
+    //   await updateModel.save();
+    //   done(null, updateModel);
+    //   return updateModel;
+    // }
+    // catch(error) {
+    //   const message = this.handleError(error);
+    //   done(message);
+    //   return message;
+    // }
   }
 
   /**
    * Метод для создания модели
    * @param {Object} createData Объект, содержащий поля, для создания записи
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
-  async create(createData) {
+  async create(createData, done) {
     createData.uuid = v4();
-    try {
-      const newModel = await this.Model.create(createData);
-      return newModel;
-    }
-    catch(error) {
-      const message = this.handleError(error);
-      return Promise.reject(message);
-    }
+    const data = await this.errorCatching(done, 'create', createData);
+    return data;
   }
 
   /**
@@ -153,22 +174,16 @@ class Model {
         isCreate: false,
         isGet: true,
         model: result,
-      }
+      };
     }
 
     createData.uuid = v4();
-    try {
-      const newModel = await this.Model.create(Object.assign({}, createData, defaults));
-      return {
-        isCreate: true,
-        isGet: false,
-        model: newModel,
-      };
-    }
-    catch(error) {
-      const message = this.handleError(error);
-      return Promise.reject(message);
-    }
+    const newModel = await this.Model.create(Object.assign({}, createData, defaults));
+    return {
+      isCreate: true,
+      isGet: false,
+      model: newModel,
+    };
   }
 };
 
