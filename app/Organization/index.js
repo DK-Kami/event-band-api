@@ -103,7 +103,7 @@ organizationRouter.post('/create', async (req, res) => {
     name,
     logo,
   } = req.body;
-  const { uuid } = req.payload
+  const { uuid } = req.payload;
 
   try {
     const user = await User.getByUUID(uuid);

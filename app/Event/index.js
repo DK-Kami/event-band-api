@@ -280,6 +280,10 @@ eventRouter.get('/event-recommended', async (req, res) => {
         attributes: ['id', 'uuid', 'name', 'description', 'logo'],
       },
       {
+        model: TicketModel,
+        attributes: ['uuid', 'name', 'description', 'count', 'price', 'datetimeTo', 'datetimeFrom'],
+      },
+      {
         model: EventTagModel,
         attributes: ['id'],
         include: [
@@ -322,6 +326,17 @@ eventRouter.get('/event-recommended', async (req, res) => {
       name: eventTag.Tag.name,
     }));
 
+    const tickets = event.Tickets.map(ticket => ({
+      uuid: ticket.uuid,
+      name: ticket.name,
+      description: ticket.description,
+      count: ticket.count,
+      priceFrom: ticket.priceFrom,
+      priceTo: ticket.priceTo,
+      datetimeFrom: ticket.datetimeFrom,
+      datetimeTo: ticket.datetimeTo,
+    }));
+
     return {
       uuid: event.uuid,
       name: event.name,
@@ -329,6 +344,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
       coords: event.coords,
       datetimeTo: event.datetimeTo,
       datetimeFrom: event.datetimeFrom,
+      tickets,
       tags,
     };
   });

@@ -8,6 +8,6 @@ class Organization extends Model {
   constructor() {
     super(OrganizationModel);
   }
-}
+};
 
 export default new Organization();
