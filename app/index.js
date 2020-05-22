@@ -4,7 +4,15 @@ import bodyParser from 'body-parser';
 import routes from './routes';
 import '../utils/passport';
 
-const app = express();
+const privateKey = fs.readFileSync('ssl/server.key');
+const certificate = fs.readFileSync('ssl/server.crt');
+
+const credentials = {
+  key: privateKey,
+  cert: certificate
+};
+const app = express.createServer(credentials);
+
 app.use(express.static(__dirname + '/public'));
 
 const allowCrossDomain = (req, res, next) => {
