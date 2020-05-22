@@ -29,8 +29,15 @@ organizationRouter.get('/subscribe/:uuid', async (req, res) => {
   const { uuid: OrganizationUUID } = req.params;
   const { userUUID } = req.payload;
 
+  const organization = await Organization.getByUUID(OrganizationUUID);
+  if (!organization) {
+    res.send(404).send({
+      message: 'organization not found',
+    });
+  }
+
+  const { id: OrganizationId } = organization;
   const { id: UserId } = await User.getByUUID(userUUID);
-  const { id: OrganizationId } = await Organization.getByUUID(OrganizationUUID);
 
   try {
     const {
@@ -65,8 +72,15 @@ organizationRouter.get('/unsubscribe/:uuid', async (req, res) => {
   const { uuid: OrganizationUUID } = req.params;
   const { userUUID } = req.payload;
 
+  const organization = await Organization.getByUUID(OrganizationUUID);
+  if (!organization) {
+    res.send(404).send({
+      message: 'organization not found',
+    });
+  }
+
+  const { id: OrganizationId } = organization;
   const { id: UserId } = await User.getByUUID(userUUID);
-  const { id: OrganizationId } = await Organization.getByUUID(OrganizationUUID);
 
   try {
     const subscription = await Subscriber.getOne({
