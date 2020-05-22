@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon --exec babel-node server.js",
-    "server-prod": "set NODE_ENV=production && pm2 start --interpreter babel-node server.js -i max"
+    "run-babel": "babel-node server.js",
+    "server-prod": "set NODE_ENV=production && pm2 start npm -- run run-babel -i max"
   },
   "repository": {
     "type": "git",
