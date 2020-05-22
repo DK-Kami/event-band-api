@@ -423,9 +423,15 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
   const { userUUID } = req.payload;
 
   console.log(ticketUuid, userUUID);
-
+  const ticket = await Ticket.getByUUID(ticketUuid);
+  if (!ticket) {
+    res.status(400).send({
+      message: 'ticket '
+    })
+  }
+  
+  const { id: TicketId } = ticket;
   const { id: UserId } = await User.getByUUID(userUUID);
-  const { id: TicketId } = await Ticket.getByUUID(ticketUuid);
 
   try {
     const {
@@ -461,9 +467,15 @@ eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
   const { userUUID } = req.payload;
 
   console.log(ticketUuid, userUUID);
-
+  const ticket = await Ticket.getByUUID(ticketUuid);
+  if (!ticket) {
+    res.status(400).send({
+      message: 'ticket '
+    })
+  }
+  
+  const { id: TicketId } = ticket;
   const { id: UserId } = await User.getByUUID(userUUID);
-  const { id: TicketId } = await Ticket.getByUUID(ticketUuid);
 
   try {
     const subscription = await Subscriber.getOne({
