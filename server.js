@@ -1,9 +1,11 @@
 import express from 'express';
 import https from 'https';
+import http from 'http';
 import app from './app';
 import fs from 'fs';
 
-const PORT = '5000';
+const HTTPS_PORT = '5000';
+const HTTP_PORT = '6000';
 const privateKey = fs.readFileSync('ssl/ssl.key', 'utf8');
 const certificate = fs.readFileSync('ssl/ssl.cert', 'utf8');
 
@@ -13,9 +15,14 @@ const credentials = {
 };
 
 app.use(express.static(__dirname + '/public'));
-var httpsServer = https.createServer(credentials, app);
+const httpsServer = https.createServer(credentials, app);
+const httpServer = http.createServer(app);
 
-httpsServer.listen(PORT, err => {
+httpsServer.listen(HTTPS_PORT, err => {
   if (err) throw err;
   console.log('Люди-люди, хуи на блюди');
+});
+httpServer.listen(HTTP_PORT, err => {
+  if (err) throw err;
+  console.log('Люди-люди, хуи на блюди, но на http');
 });
