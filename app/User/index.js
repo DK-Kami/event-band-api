@@ -19,20 +19,6 @@ userRouter.get('/', async (req, res) => {
  * Авторизация пользователя
  */
 authRouter.post('/login', (req, res, next) => {
-  const { email, password } = req.body;
-
-  if(!email) {
-    return res.status(400).send({
-      error: 'Email is a required field',
-    });
-  }
-
-  if(!password) {
-    return res.status(400).send({
-      error: 'Password is a required field',
-    });
-  }
-
   return passport.authenticate('local', { session: false }, (err, user) => {
     if (err) {
       console.log('error', err);
@@ -52,23 +38,26 @@ authRouter.post('/login', (req, res, next) => {
 /**
  * Регистрация нового пользователя
  */
-authRouter.post('/register', async (req, res, next) => {
+authRouter.post('/register', (req, res) => {
   const data = req.body;
 
-  try {
-    const user = await User.create(data);
+  User.create(data, (message, user) => {
+    if (message) {
+      return res.status(400).send({ message });
+    }
     data.UserId = user.id;
-    const authUser = await AuthorizedUser.create(data);
-    authUser.token = AuthorizedUser.generateJWT(user.uuid, authUser.uuid);
 
-    res.status(201).send({
-      user: AuthorizedUser.toAuthJSON(authUser, user),
+    AuthorizedUser.create(data, (message, authUser) => {
+      if (message) {
+        return res.status(400).send({ message });
+      }
+      authUser.token = AuthorizedUser.generateJWT(user.uuid, authUser.uuid);
+
+      return res.status(201).send({
+        user: AuthorizedUser.toAuthJSON(authUser, user),
+      });
     });
-  }
-  catch(message) {
-    console.log(message);
-    res.status(400).send({ message });
-  }
+  });
 });
 
 export {

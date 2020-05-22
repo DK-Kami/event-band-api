@@ -7,6 +7,7 @@ import models from '../../db/models';
 import Organization from '../Organization/Organization';
 import Subscriber from '../Subscriber/Subscriber';
 import User from './User';
+import { v4 } from 'uuid';
 
 const {
   AuthorizedUser: AuthorizedUserModel,
@@ -20,10 +21,12 @@ class AuthorizedUser extends Model {
     super(AuthorizedUserModel);
   }
 
-  async create(data) {
+  async create(data, done) {
     data.salt = crypto.randomBytes(16).toString('hex');
     data.password = this.cryptoPassword(data.password, data.salt);
-    const authUser = await this.Model.create(data);
+    data.uuid = v4();
+
+    const authUser = await this.errorCatching(done, 'create', data);
     return authUser;
   }
 

@@ -37,6 +37,10 @@ class Model {
       break;
     };
 
+    if (typeof error.name === 'undefined') {
+      return error;
+    }
+
     return message;
   }
 
