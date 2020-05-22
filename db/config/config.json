@@ -14,8 +14,8 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "postgres",
-    "password": "postgree",
+    "username": "Kamipostgree",
+    "password": "Pass2Postgree!",
     "database": "event_band",
     "host": "194.58.90.109",
     "dialect": "postgres"
