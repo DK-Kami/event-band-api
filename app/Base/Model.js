@@ -11,24 +11,30 @@ class Model {
    * @param {Error} error Ошибка, вызванная при работе с БД
    */
   handleError(error) {
-    let message = 'very very bad request, but name: ' + error.name + ' and error: ' + error;
+    const { name } = error;
+    let message = 'very very bad request, but name: ' + name + ' and error: ' + error;
 
-    switch(error.name) {
+    switch(name) {
       case 'SequelizeValidationError': {
         const errors = error.errors.map(e => e.message);
         console.log('error', errors);
         message = errors[0];
       } break;
 
+      case 'SequelizeDatabaseError':
       case 'SequelizeUniqueConstraintError': {
         const {
           constraint,
           routine,
+          column,
         } = error.original;
   
         if (routine === '_bt_check_unique') {
           const field = constraint.split('_')[1];
           message = field + ' is already taken';
+        }
+        else if (routine === 'ExecConstraints') {
+          message = column + ' must not be empty';
         }
       } break;
 
@@ -37,7 +43,7 @@ class Model {
       break;
     };
 
-    if (typeof error.name === 'undefined') {
+    if (typeof name === 'undefined') {
       return error;
     }
 
@@ -135,22 +141,6 @@ class Model {
   async update(updateData = {}, where, done) {
     const data = this.errorCatching(done, 'update', updateData, { where });
     return data;
-    // try {
-    //   const updateModel = await this.getOne({ where });
-
-    //   Object.keys(updateData).forEach(key => {
-    //     updateModel[key] = updateData[key];
-    //   });
-
-    //   await updateModel.save();
-    //   done(null, updateModel);
-    //   return updateModel;
-    // }
-    // catch(error) {
-    //   const message = this.handleError(error);
-    //   done(message);
-    //   return message;
-    // }
   }
 
   /**
