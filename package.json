@@ -4,7 +4,8 @@
   "description": "API for EventBand project",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon --exec babel-node server.js"
+    "server": "nodemon --exec babel-node server.js",
+    "server-prod": "set NODE_ENV=production && pm2 start --interpreter babel-node app.js -i max"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.0.3",
     "pg-hstore": "^2.3.3",
+    "pm2": "^4.4.0",
     "sequelize": "^5.21.7",
     "uuid": "^8.0.0"
   }
