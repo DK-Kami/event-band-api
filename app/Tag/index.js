@@ -12,37 +12,41 @@ function getAllTagsRoute(req, res) {
     order: [['name', 'ASC']],
     attributes: ['id', 'uuid', 'name'],
   }, (message, tags) => {
-    if (message) res.status(400).send({ message });
+    if (message) {
+      res.status(400).send({ message });
+    }
 
     res.status(200).send({ tags });
   });
 };
- // async function getAllTagsRoute(req, res) { 
-//   const tags = await Tag.getAll({
-//     order: [['name', 'ASC']],
-//     attributes: ['id', 'uuid', 'name'],
-//   });
-//   res.status(200).send({ tags });
-// };
+/**
+ * Функция для полкчения тега по его uuid
+ */
+async function getTagByUUID(req, res) {
+  const { uuid } = req.params;
+
+  const tag = await Tag.getByUUID(uuid);
+  res.status(200).send({ tag });
+};
+
 
 /**
- * Получене всез тегов для неавторизованного пользователя
+ * Получение всез тегов для неавторизованного пользователя
+ */
+anonimTagRouter.get('/all', getAllTagsRoute);
+/**
+ * Получение тега по его id для неавторизованного пользователя
+ */
+anonimTagRouter.get('/:uuid', getTagByUUID);
+
+/**
+ * Получение всез тегов для авторизованного пользователя
  */
 tagRouter.get('/all', getAllTagsRoute);
 /**
- * Получене всез тегов для авторизованного пользователя
+ * Получение тега по его id для авторизованного пользователя
  */
-anonimTagRouter.get('/all', getAllTagsRoute);
-
-/**
- * Получене тега по его id
- */
-tagRouter.get('/:id', async (req, res) => {
-  const { id } = req.params;
-
-  const tag = await Tag.getById(id);
-  res.status(200).send({ tag });
-});
+tagRouter.get('/:uuid', getTagByUUID);
 
 export {
   anonimTagRouter,
