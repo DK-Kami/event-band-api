@@ -128,6 +128,12 @@ async function getFilteredEvents(req, res) {
 async function getCurrentEvent(req, res) {
   const { uuid } = req.params;
   const event = await Event.getByUUID(uuid);
+  if (!event) {
+    res.status(200).send({
+      message: 'event not fount',
+    });
+  }
+
   const organization = await event.getOrganization();
   const tickets = await event.getTickets();
   const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
