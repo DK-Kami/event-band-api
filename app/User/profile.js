@@ -26,6 +26,7 @@ profileRouter.get('/', async (req, res) => {
     subscriptions,
   });
 });
+
 /**
  * Редактирование профиля пользователя
  */

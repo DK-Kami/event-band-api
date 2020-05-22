@@ -1,5 +1,5 @@
 import { publicEventRouter } from '../Event';
-import { passwordRouter } from '../User/profile';
+import { passwordRouter } from '../User/password';
 import { anonimTagRouter } from '../Tag';
 import { authRouter } from '../User';
 import Router from '../Base/Router';
