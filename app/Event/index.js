@@ -122,6 +122,30 @@ async function getFilteredEvents(req, res) {
     events: filterEvents,
   });
 };
+/**
+ * Функция, возвращающая конкретное событие по uuid
+ */
+async function getCurrentEvent(req, res) {
+  const { uuid } = req.params;
+  const event = await Event.getByUUID(uuid);
+  const organization = await event.getOrganization();
+  const tickets = await event.getTickets();
+  const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
+  const tags = await Tag.getAll({
+    where: {
+      id: {
+        [Op.in]: tagIds,
+      },
+    },
+  });
+
+  res.status(200).send({
+    event,
+    organization,
+    tickets,
+    tags,
+  });
+};
 
 /**
  * Путь для получения отфильтрованных событий неаторизованным пользователем
@@ -178,6 +202,10 @@ publicEventRouter.post('/subscribe', async (req, res) => {
     res.status(400).send({ message });
   }
 });
+/**
+ * Возвращение конкретного события для uuid
+ */
+publicEventRouter.get('/event/:uuid', getFilteredEvents);
 
 /**
  * Получение новостей от организаций, на которые подписан пользователь
@@ -378,27 +406,7 @@ eventRouter.get('/all', async (req, res) => {
 /**
  * Возвращение конкретного события для uuid
  */
-eventRouter.get('/:uuid', async (req, res) => {
-  const { uuid } = req.params;
-  const event = await Event.getByUUID(uuid);
-  const organization = await event.getOrganization();
-  const tickets = await event.getTickets();
-  const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
-  const tags = await Tag.getAll({
-    where: {
-      id: {
-        [Op.in]: tagIds,
-      },
-    },
-  });
-
-  res.status(200).send({
-    event,
-    organization,
-    tickets,
-    tags,
-  });
-});
+eventRouter.get('/:uuid', getCurrentEvent);
 
 /**
  * Подписка на событие авторизованным пользователем
