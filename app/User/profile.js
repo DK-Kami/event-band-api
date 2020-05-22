@@ -1,10 +1,8 @@
-import crypto from 'crypto';
 import Router from '../Base/Router';
 import AuthorizedUser from './AuthorizedUser';
 import User from './User';
 
 const profileRouter = new Router();
-const passwordRouter = new Router();
 
 /**
  * Возвращение профиля пользователя по токену
@@ -14,10 +12,15 @@ profileRouter.get('/', async (req, res) => {
   const {
     organizations,
     subscriptions,
+    message,
     user,
   } = await AuthorizedUser.getProfile(uuid);
 
-  res.status(200).send({
+  if (message) {
+    return res.status(400).send({ message });
+  }
+
+  return res.status(200).send({
     user,
     organizations,
     subscriptions,
@@ -38,18 +41,32 @@ profileRouter.put('/', async (req, res) => {
     name,
   } = req.body;
 
+
   try {
-    const user = await User.update(
+    await User.update(
       { surname, email, name },
       { uuid: userUUID },
     );
-    const authUser = await AuthorizedUser.update(
+    await AuthorizedUser.update(
       { nickname },
       { uuid: authUserUUID },
     );
   
-    res.status(200).send({
-      user: AuthorizedUser.toAuthJSON(authUser, user),
+    const {
+      organizations,
+      subscriptions,
+      message,
+      user,
+    } = await AuthorizedUser.getProfile(userUUID);
+
+    if (message) {
+      return res.status(400).send({ message });
+    }
+  
+    return res.status(200).send({
+      user,
+      organizations,
+      subscriptions,
     });
   }
   catch(message) {
@@ -58,69 +75,6 @@ profileRouter.put('/', async (req, res) => {
   }
 });
 
-/**
- * Запрос на изменение пароля
- */
-passwordRouter.get('/request-password', async (req, res) => {
-  const { email } = req.query;
-  const user = await User.getOne({
-    where: { email },
-  });
-  if (!user) {
-    res.status(400).send({
-      message: 'Email not found',
-      type: 'error',
-    });
-  }
-
-  const authUser = await user.getAuthorizedUser();
-  const refreshToken = crypto.randomBytes(32).toString('hex');
-  authUser.refreshToken = refreshToken;
-  authUser.save();
-
-  // res.status(200).send({ message: 'All ok' });
-  res.status(200).send({
-    message: 'Check your email',
-    type: 'success',
-  });
-});
-/**
- * Изменение пароля по токену
- */
-passwordRouter.post('/change-password', async (req, res) => {
-  const {
-    password,
-    token,
-  } = req.body;
-
-  console.log('password, token');
-  try {
-    console.log(password, token);
-    const authUser = await AuthorizedUser.getOne({
-      where: { refreshToken: token },
-    });
-
-    console.log(authUser);
-    if (!authUser) throw new Error;
-
-    authUser.salt = crypto.randomBytes(16).toString('hex');
-    authUser.password = AuthorizedUser.cryptoPassword(password, authUser.salt);
-    authUser.refreshToken = '';
-    await authUser.save();
-
-    res.status(200).send({
-      message: 'All ok',
-    });
-  }
-  catch(e) {
-    console.log(e);
-    res.status(400).send({
-      message: 'wrong token',
-    });
-  }
-});
-
 export {
   profileRouter,
-  passwordRouter,
 };

@@ -60,6 +60,9 @@ class AuthorizedUser extends Model {
 
   async getProfile(uuid) {
     const user = await User.getByUUID(uuid);
+    console.log(user);
+    if (!user) return { message: 'user not found' };
+  
     const authUser = await user.getAuthorizedUser();
     const organizers = await user.getOrganizers();
 
