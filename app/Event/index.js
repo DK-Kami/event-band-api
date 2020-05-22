@@ -131,6 +131,7 @@ async function getCurrentEvent(req, res) {
   const organization = await event.getOrganization();
   const tickets = await event.getTickets();
   const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
+
   const tags = await Tag.getAll({
     where: {
       id: {
@@ -205,7 +206,7 @@ publicEventRouter.post('/subscribe', async (req, res) => {
 /**
  * Возвращение конкретного события для uuid
  */
-publicEventRouter.get('/event/:uuid', getFilteredEvents);
+publicEventRouter.get('/event/:uuid', getCurrentEvent);
 
 /**
  * Получение новостей от организаций, на которые подписан пользователь
