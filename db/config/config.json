@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "Kamipostgree",
-    "password": "Pass2Postgree!",
+    "password": "Pass2Kamipostgree!",
     "database": "event_band",
     "host": "127.0.0.1",
     "dialect": "postgres"
