@@ -16,8 +16,8 @@
   "production": {
     "username": "postgres",
     "password": "postgree",
-    "database": "event_band_production",
-    "host": "127.0.0.1",
+    "database": "event_band",
+    "host": "194.58.90.109",
     "dialect": "postgres"
   }
 }
