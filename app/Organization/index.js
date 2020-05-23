@@ -10,6 +10,7 @@ const organizationRouter = new Router();
 
 const {
   EventTag: EventTagModel,
+  Ticket: TicketModel,
   User: UserModel,
   Tag: TagModel,
 } = models;
@@ -39,6 +40,7 @@ async function getOrganizationByUUID(req, res) {
 
   const events = (await organization.getEvents({
     include: [
+      { model: TicketModel },
       {
         model: EventTagModel,
         attributes: ['id'],
@@ -59,6 +61,7 @@ async function getOrganizationByUUID(req, res) {
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
       tags: event.EventTags.map(eventTag => eventTag.Tag.name),
+      tickets: event.Tickets,
     }));
 
   return res.status(200).send({
