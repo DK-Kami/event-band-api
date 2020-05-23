@@ -19,7 +19,7 @@ userRouter.get('/', async (req, res) => {
  * Авторизация пользователя
  */
 authRouter.post('/login', (req, res, next) => {
-  return passport.authenticate('local', { session: false }, (err, user) => {
+  return passport.authenticate('local', { session: false }, (err, user, next) => {
     if (err) {
       console.log('error', err);
       return res.status(400).send(err);
@@ -27,12 +27,13 @@ authRouter.post('/login', (req, res, next) => {
 
     if (user) {
       user.token = AuthorizedUser.generateJWT(user.authUserUUID, user.userUUID);
-
       return res.status(200).json({ user });
     }
 
     console.log(user);
-    return next(res.status(400));
+    return next(res.status(400).send({
+      message: 'ti eblan',
+    }));
   })(req, res, next);
 });
 /**
