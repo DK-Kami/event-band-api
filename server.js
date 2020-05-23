@@ -5,7 +5,7 @@ import app from './app';
 import fs from 'fs';
 
 const HTTPS_PORT = '5000';
-const HTTP_PORT = '6000';
+const HTTP_PORT = '5001';
 const privateKey = fs.readFileSync('ssl/ssl.key', 'utf8');
 const certificate = fs.readFileSync('ssl/ssl.cert', 'utf8');
 
