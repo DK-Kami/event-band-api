@@ -19,7 +19,7 @@ userRouter.get('/', async (req, res) => {
  * Авторизация пользователя
  */
 authRouter.post('/login', (req, res, next) => {
-  return passport.authenticate('local', { session: false }, (err, user, next) => {
+  return passport.authenticate('local', { session: false }, (err, user) => {
     if (err) {
       console.log('error', err);
       return res.status(400).send(err);
@@ -31,9 +31,9 @@ authRouter.post('/login', (req, res, next) => {
     }
 
     console.log(user);
-    return next(res.status(400).send({
+    return res.status(400).send({
       message: 'ti eblan',
-    }));
+    });
   })(req, res, next);
 });
 /**
