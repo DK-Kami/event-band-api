@@ -3,9 +3,16 @@ import Organizer from '../Organizer/Organizer';
 import Organization from './Organization';
 import User from '../User/User';
 import Subscriber from '../Subscriber/Subscriber';
+import models from '../../db/models';
 
 const publicOrganizationRouter = new Router();
 const organizationRouter = new Router();
+
+const {
+  EventTag: EventTagModel,
+  User: UserModel,
+  Tag: TagModel,
+} = models;
 
 /**
  * Функция для получения организации по его uuid
@@ -19,9 +26,56 @@ async function getOrganizationByUUID(req, res) {
     });
   }
 
-  return res.status(200).send({ organization });
+  const subscribers = await organization.getSubscribers({
+    attributes: ['id'],
+  });
+
+  const organizers = (await organization.getOrganizers({
+    attributes: ['id'],
+    include: [
+      { model: UserModel },
+    ],
+  })).map(organizer => organizer.User);
+
+  const events = (await organization.getEvents({
+    include: [
+      {
+        model: EventTagModel,
+        attributes: ['id'],
+        include: [
+          {
+            model: TagModel,
+            attributes: ['name'],
+          },
+        ],
+      },
+    ],
+  }))
+    .map(event => ({
+      uuid: event.uuid,
+      name: event.name,
+      description: event.description,
+      datetimeTo: event.datetimeTo,
+      coords: event.coords,
+      datetimeFrom: event.datetimeFrom,
+      tags: event.EventTags.map(eventTag => eventTag.Tag.name),
+    }));
+
+  return res.status(200).send({
+    subscribers: subscribers.length,
+    organization,
+    organizers,
+    events,
+  });
 };
 
+/**
+ * [DEBUG] Получение всех организаций
+ */
+organizationRouter.get('/all', async (req, res) => {
+  const organizations = await Organization.getAll();
+  return res.status(200).send({ organizations });
+});
 
 /**
  *  Получение конкретной организации по uuid для неавторизованных пользователей
@@ -31,14 +85,6 @@ publicOrganizationRouter.get('/:uuid', getOrganizationByUUID);
  *  Получение конкретной организации по uuid для авторизованных пользователей
  */
 organizationRouter.get('/:uuid', getOrganizationByUUID);
-
-/**
- * [DEBUG] Получение всех организаций
- */
-organizationRouter.get('/all', async (req, res) => {
-  const organizations = await Organization.getAll();
-  return res.status(200).send({ organizations });
-});
 
 /**
  * Подписка на организацию
