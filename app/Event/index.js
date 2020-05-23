@@ -174,7 +174,7 @@ publicEventRouter.post('/subscribe', (req, res) => {
     name,
   } = req.body;
 
-  User.getOrCreate({ surname, name, email }, {}, (message, userModel) => {
+  User.getOrCreate({ surname, name, email }, {}, async (message, userModel) => {
     if (message) {
       return res.status(400).send({ message });
     }
@@ -182,40 +182,39 @@ publicEventRouter.post('/subscribe', (req, res) => {
       model: user,
     } = userModel;
 
-    Ticket.getByUUID(ticketUuid, (message, ticket) => {
+    const ticket = await Ticket.getByUUID(ticketUuid);
+    if (!ticket) {
+      return res.status(400).send({
+        message: 'ticket not found',
+      });
+    }
+  
+    const { id: TicketId } = ticket;
+    const { id: UserId } = user;
+    Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriber) => {
       if (message) {
-        return res.status(400).send({
-          message: 'ticket not found',
+        return res.status(400).send({ message });
+      }
+
+      const {
+        model: subscription,
+        isCreate,
+      } = subscriber;
+  
+      if (isCreate || !subscription.status) {
+        subscription.status = 1;
+        subscription.save();
+  
+        return res.status(201).send({
+          message: 'nice dick, awesome balls',
+          subscription,
         });
       }
-  
-      const { id: TicketId } = ticket;
-      const { id: UserId } = user;
-      Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriber) => {
-        if (message) {
-          return res.status(400).send({ message });
-        }
-  
-        const {
-          model: subscription,
-          isCreate,
-        } = subscriber;
-    
-        if (isCreate || !subscription.status) {
-          subscription.status = 1;
-          subscription.save();
-    
-          return res.status(201).send({
-            message: 'nice dick, awesome balls',
-            subscription,
-          });
-        }
-        else {
-          return res.status(400).send({
-            message: 'email address is already registered at the event',
-          });
-        }
-      });
+      else {
+        return res.status(400).send({
+          message: 'email address is already registered at the event',
+        });
+      }
     });
   });
 });
@@ -428,42 +427,42 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
   const { ticketUuid } = req.params;
   const { userUUID } = req.payload;
 
-  console.log(ticketUuid, userUUID);
   const ticket = await Ticket.getByUUID(ticketUuid);
   if (!ticket) {
-    res.status(400).send({
-      message: 'ticket '
+    res.status(404).send({
+      message: 'ticket not found'
     })
   }
   
   const { id: TicketId } = ticket;
   const { id: UserId } = await User.getByUUID(userUUID);
 
-  try {
+  Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriberData) => {
+    if (message) {
+      console.error(message);
+      return res.status(400).send({ message });
+    }
+
     const {
       model: subscription,
       isCreate
-    } = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
+    } = subscriberData;
 
     if (isCreate || !subscription.status) {
       subscription.status = 1;
       subscription.save();
 
-      res.status(201).send({
+      return res.status(201).send({
         message: 'nice dick, awesome balls',
         subscription,
       });
     }
     else {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'email address is already registered at the event',
       });
     }
-  }
-  catch(message) {
-    console.error(message);
-    res.status(400).send({ message });
-  }
+  });
 });
 /**
  * Отписка от события авторизованным пользователем
@@ -474,39 +473,36 @@ eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
 
   console.log(ticketUuid, userUUID);
   const ticket = await Ticket.getByUUID(ticketUuid);
+  console.log(ticket);
   if (!ticket) {
-    res.status(400).send({
-      message: 'ticket '
-    })
+    return res.status(404).send({
+      message: 'ticket not found',
+    });
   }
   
   const { id: TicketId } = ticket;
   const { id: UserId } = await User.getByUUID(userUUID);
 
-  try {
-    const subscription = await Subscriber.getOne({
-      where: {
-        TicketId,
-        UserId,
-      },
-    });
+  const subscription = await Subscriber.getOne({
+    where: {
+      TicketId,
+      UserId,
+    },
+  });
 
-    console.log(subscription);
-    if (!subscription) {
-      throw new Error('not found your subscription');
-    }
-
-    subscription.status = 0;
-    subscription.save();
-
-    res.status(200).send({
-      message: 'nice dick, awesome balls',
-      subscription,
+  if (!subscription) {
+    return res.status(404).send({
+      message: 'not found your subscription',
     });
   }
-  catch(message) {
-    res.status(400).send({ message });
-  }
+
+  subscription.status = 0;
+  await subscription.save();
+
+  return res.status(200).send({
+    message: 'nice dick, awesome balls',
+    subscription,
+  });
 });
 
 export {
