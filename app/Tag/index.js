@@ -13,10 +13,10 @@ function getAllTagsRoute(req, res) {
     attributes: ['id', 'uuid', 'name'],
   }, (message, tags) => {
     if (message) {
-      res.status(400).send({ message });
+      return res.status(400).send({ message });
     }
 
-    res.status(200).send({ tags });
+    return res.status(200).send({ tags });
   });
 };
 /**
@@ -26,7 +26,7 @@ async function getTagByUUID(req, res) {
   const { uuid } = req.params;
 
   const tag = await Tag.getByUUID(uuid);
-  res.status(200).send({ tag });
+  return res.status(200).send({ tag });
 };
 
 
