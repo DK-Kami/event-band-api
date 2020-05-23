@@ -10,6 +10,7 @@ import Tag from '../Tag/Tag';
 
 const {
   Organization: OrganizationModel,
+  Subscriber: SubscriberModel,
   EventTag: EventTagModel,
   Ticket: TicketModel,
   Event: EventModel,
@@ -125,33 +126,60 @@ async function getFilteredEvents(req, res) {
 /**
  * Функция, возвращающая конкретное событие по uuid
  */
-function getCurrentEvent(req, res) {
-  const { uuid } = req.params;
-  Event.getByUUID(uuid, async (message, event) => {
-    if (message) {
-      return res.status(404).send({
-        message: 'event not fount',
-      });
-    }
-  
-    const organization = await event.getOrganization();
-    const tickets = await event.getTickets();
-    const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
-  
-    const tags = await Tag.getAll({
-      where: {
-        id: {
-          [Op.in]: tagIds,
-        },
+async function getCurrentEvent(req, res) {
+  const { uuid: eventUUID } = req.params;
+
+  let user;
+  if (req.payload) {
+    const { uuid } = req.payload;
+    user = await User.getByUUID(uuid);
+  }
+
+  const event = await Event.getByUUID(eventUUID);
+  if (!event) {
+    return res.status(404).send({
+      message: 'event not fount',
+    });
+  }
+
+  const organization = await event.getOrganization();
+  const tickets = await event.getTickets({
+    include: [
+      { model: SubscriberModel },
+    ]
+  })
+    .map(ticket => ({
+      uuid: ticket.uuid,
+      name: ticket.name,
+      description: ticket.description,
+      count: ticket.count,
+      price: ticket.price,
+      datetimeTo: ticket.datetimeTo,
+      datetimeFrom: ticket.datetimeFrom,
+      subscribers: ticket.Subscribers.length,
+      wasBuy: user && !!ticket.Subscribers.find(sub => sub.UserId === user.id)
+    }));
+  const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
+
+  const tags = await Tag.getAll({
+    where: {
+      id: {
+        [Op.in]: tagIds,
       },
-    });
-  
-    return res.status(200).send({
-      event,
-      organization,
-      tickets,
-      tags,
-    });
+    },
+  });
+
+  return res.status(200).send({
+    user,
+    eventMeta: {
+      subscribers: tickets.reduce((summ, ticket) => summ + ticket.subscribers, 0),
+      count: tickets.reduce((summ, ticket) => summ + ticket.count, 0),
+      minPrice: tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
+    },
+    event,
+    organization,
+    tickets,
+    tags,
   });
 };
 
