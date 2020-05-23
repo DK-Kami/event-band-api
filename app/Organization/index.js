@@ -19,7 +19,13 @@ organizationRouter.get('/all', async (req, res) => {
 organizationRouter.get('/:uuid', async (req, res) => {
   const { uuid } = req.params;
   const organization = await Organization.getByUUID(uuid);
-  res.status(200).send({ organization });
+  if (!organization) {
+    return res.status(404).send({
+      message: 'organization not found',
+    });
+  }
+
+  return res.status(200).send({ organization });
 });
 
 /**
@@ -31,7 +37,7 @@ organizationRouter.get('/subscribe/:uuid', async (req, res) => {
 
   const organization = await Organization.getByUUID(OrganizationUUID);
   if (!organization) {
-    res.send(404).send({
+    return res.status(404).send({
       message: 'organization not found',
     });
   }
@@ -39,31 +45,30 @@ organizationRouter.get('/subscribe/:uuid', async (req, res) => {
   const { id: OrganizationId } = organization;
   const { id: UserId } = await User.getByUUID(userUUID);
 
-  try {
+  Subscriber.getOrCreate({ OrganizationId, UserId }, { status: 1 }, (message, subscriptionData) => {
+    if (message) {
+      return res.status(400).send({ message });
+    }
     const {
       model: subscription,
       isCreate,
-    } = await Subscriber.getOrCreate({ OrganizationId, UserId }, { status: 1 });
+    } = subscriptionData;
 
     if (isCreate || !subscription.status) {
       subscription.status = 1;
       subscription.save();
-
-      res.status(201).send({
+  
+      return res.status(201).send({
         message: 'nice dick, awesome balls',
         subscription,
       });
     }
     else {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'email address is already in this organization',
       });
     }
-  }
-  catch(message) {
-    console.error(message);
-    res.status(400).send({ message });
-  }
+  });
 });
 /**
  * Подписка на организации
@@ -119,27 +124,31 @@ organizationRouter.post('/create', async (req, res) => {
   } = req.body;
   const { uuid } = req.payload;
 
-  try {
-    const user = await User.getByUUID(uuid);
-    const organization = await Organization.create({
-      reputation: 0,
-      description,
-      name,
-      logo,
-    });
+  const user = await User.getByUUID(uuid);
+  const createData = {
+    reputation: 0,
+    description,
+    name,
+    logo,
+  };
 
-    const organizer = await Organizer.create({
+  Organization.create(createData, (message, organization) => {
+    if (message) {
+      return res.status(400).send({ message });
+    }
+
+    Organizer.create({
       OrganizationId: organization.id,
       UserId: user.id,
       status: 1,
-    });
+    }, (message) => {
+      if (message) {
+        return res.status(400).send({ message });
+      }
 
-    res.status(201).send({ organization });
-  }
-  catch(message) {
-    console.log(message);
-    res.status(400).send({ message });
-  }
+      return res.status(201).send({ organization });
+    });
+  });
 });
 
 export {
