@@ -159,9 +159,13 @@ async function getCurrentEvent(req, res) {
  */
 publicEventRouter.get('/event-list', getFilteredEvents);
 /**
+ * Возвращение конкретного события для uuid
+ */
+publicEventRouter.get('/event/:uuid', getCurrentEvent);
+/**
  * Путь для подписки на событие неавторизованным пользователем
  */
-publicEventRouter.post('/subscribe', async (req, res) => {
+publicEventRouter.post('/subscribe', (req, res) => {
   const {
     ticketUuid,
     surname,
@@ -169,50 +173,51 @@ publicEventRouter.post('/subscribe', async (req, res) => {
     name,
   } = req.body;
 
-  Object.keys(req.body).forEach(key => {
-    if (!req.body[key]) {
-      res.status(400).send({
-        message: key + ' is required',
-      });
+  User.getOrCreate({ surname, name, email }, {}, (message, userModel) => {
+    if (message) {
+      return res.status(400).send({ message });
     }
-  });
-
-  try {
-    const { model: user } = await User.getOrCreate({ surname, name, email });
-    const { id: UserId } = user;
-
-    const ticket = await Ticket.getByUUID(ticketUuid);
-    const { id: TicketId } = ticket;
-
     const {
-      model: subscription,
-      isCreate
-    } = await Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 });
+      model: user,
+    } = userModel;
 
-    if (isCreate || !subscription.status) {
-      subscription.status = 1;
-      subscription.save();
-
-      res.status(201).send({
-        message: 'nice dick, awesome balls',
-        subscription,
+    Ticket.getByUUID(ticketUuid, (message, ticket) => {
+      if (message) {
+        return res.status(400).send({
+          message: 'ticket not found',
+        });
+      }
+  
+      const { id: TicketId } = ticket;
+      const { id: UserId } = user;
+      Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriber) => {
+        if (message) {
+          return res.status(400).send({ message });
+        }
+  
+        const {
+          model: subscription,
+          isCreate,
+        } = subscriber;
+    
+        if (isCreate || !subscription.status) {
+          subscription.status = 1;
+          subscription.save();
+    
+          return res.status(201).send({
+            message: 'nice dick, awesome balls',
+            subscription,
+          });
+        }
+        else {
+          return res.status(400).send({
+            message: 'email address is already registered at the event',
+          });
+        }
       });
-    }
-    else {
-      res.status(400).send({
-        message: 'email address is already registered at the event',
-      });
-    }
-  }
-  catch(message) {
-    console.log(message);
-    res.status(400).send({ message });
-  }
+    });
+  });
 });
-/**
- * Возвращение конкретного события для uuid
- */
-publicEventRouter.get('/event/:uuid', getCurrentEvent);
 
 /**
  * Получение новостей от организаций, на которые подписан пользователь

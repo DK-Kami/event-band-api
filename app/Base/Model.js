@@ -47,6 +47,7 @@ class Model {
       return error;
     }
 
+    console.log(message);
     return message;
   }
 
@@ -159,25 +160,44 @@ class Model {
    * либо создаст новую запись со значениями из полей первого и второго параметра
    * @param {Object} createData Объект, содержащий поля поиска
    * @param {Object} defaults Объект с полями сущности и их значениями
+   * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
-  async getOrCreate(createData, defaults) {
-    const result = await this.getOne({ where: createData });
+  async getOrCreate(createData, defaults, done = () => {}) {
+    this.getOne({
+      where: createData,
+    }, (message, result) => {
+      if (message) {
+        done(message);
+        console.log(message);
+        return { message, model: null };
+      }
 
-    if (result) {
-      return {
-        isCreate: false,
-        isGet: true,
-        model: result,
-      };
-    }
+      if (result) {
+        const returnData = {
+          isCreate: false,
+          isGet: true,
+          model: result,
+        };
+  
+        done(null, returnData);
+        return returnData;
+      }
 
-    createData.uuid = v4();
-    const newModel = await this.Model.create(Object.assign({}, createData, defaults));
-    return {
-      isCreate: true,
-      isGet: false,
-      model: newModel,
-    };
+      this.create(Object.assign({}, createData, defaults), (message, newModel) => {
+        if (message) {
+          done(message);
+          return { message, model: null };
+        }
+        const returnData = {
+          isCreate: true,
+          isGet: false,
+          model: newModel,
+        };
+    
+        done(null, returnData);
+        return returnData;
+      });
+    });
   }
 };
 
