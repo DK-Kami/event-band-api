@@ -4,19 +4,13 @@ import Organization from './Organization';
 import User from '../User/User';
 import Subscriber from '../Subscriber/Subscriber';
 
+const publicOrganizationRouter = new Router();
 const organizationRouter = new Router();
 
 /**
- * [DEBUG] Получение всех организаций
+ * Функция для получения организации по его uuid
  */
-organizationRouter.get('/all', async (req, res) => {
-  const organizations = await Organization.getAll();
-  return res.status(200).send({ organizations });
-});
-/**
- *  Получение конкретной организации по uuid
- */
-organizationRouter.get('/:uuid', async (req, res) => {
+async function getOrganizationByUUID(req, res) {
   const { uuid } = req.params;
   const organization = await Organization.getByUUID(uuid);
   if (!organization) {
@@ -26,6 +20,24 @@ organizationRouter.get('/:uuid', async (req, res) => {
   }
 
   return res.status(200).send({ organization });
+};
+
+
+/**
+ *  Получение конкретной организации по uuid для неавторизованных пользователей
+ */
+publicOrganizationRouter.get('/:uuid', getOrganizationByUUID);
+/**
+ *  Получение конкретной организации по uuid для авторизованных пользователей
+ */
+organizationRouter.get('/:uuid', getOrganizationByUUID);
+
+/**
+ * [DEBUG] Получение всех организаций
+ */
+organizationRouter.get('/all', async (req, res) => {
+  const organizations = await Organization.getAll();
+  return res.status(200).send({ organizations });
 });
 
 /**
@@ -152,5 +164,6 @@ organizationRouter.post('/create', async (req, res) => {
 });
 
 export {
+  publicOrganizationRouter,
   organizationRouter,
 };
