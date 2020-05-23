@@ -68,7 +68,7 @@ class Model {
     catch(message) {
       const error = this.handleError(message)
       done(this.handleError(error));
-      return message;
+      return null;
     }
   }
 
