@@ -125,32 +125,33 @@ async function getFilteredEvents(req, res) {
 /**
  * Функция, возвращающая конкретное событие по uuid
  */
-async function getCurrentEvent(req, res) {
+function getCurrentEvent(req, res) {
   const { uuid } = req.params;
-  const event = await Event.getByUUID(uuid);
-  if (!event) {
-    res.status(200).send({
-      message: 'event not fount',
-    });
-  }
-
-  const organization = await event.getOrganization();
-  const tickets = await event.getTickets();
-  const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
-
-  const tags = await Tag.getAll({
-    where: {
-      id: {
-        [Op.in]: tagIds,
+  Event.getByUUID(uuid, async (message, event) => {
+    if (message) {
+      return res.status(404).send({
+        message: 'event not fount',
+      });
+    }
+  
+    const organization = await event.getOrganization();
+    const tickets = await event.getTickets();
+    const tagIds = (await event.getEventTags()).map(eventTag => eventTag.TagId);
+  
+    const tags = await Tag.getAll({
+      where: {
+        id: {
+          [Op.in]: tagIds,
+        },
       },
-    },
-  });
-
-  res.status(200).send({
-    event,
-    organization,
-    tickets,
-    tags,
+    });
+  
+    return res.status(200).send({
+      event,
+      organization,
+      tickets,
+      tags,
+    });
   });
 };
 
