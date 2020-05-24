@@ -202,49 +202,53 @@ publicEventRouter.post('/subscribe', (req, res) => {
     name,
   } = req.body;
 
-  User.getOrCreate({ surname, name, email }, {}, async (message, userModel) => {
-    if (message) {
-      return res.status(400).send({ message });
-    }
-    const {
-      model: user,
-    } = userModel;
-
-    const ticket = await Ticket.getByUUID(ticketUuid);
-    if (!ticket) {
-      return res.status(400).send({
-        message: 'ticket not found',
-      });
-    }
-  
-    const { id: TicketId } = ticket;
-    const { id: UserId } = user;
-    Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriber) => {
+  User.getOrCreate(
+    { surname, name, email },
+    {},
+    async (message, userModel) => {
       if (message) {
         return res.status(400).send({ message });
       }
-
       const {
-        model: subscription,
-        isCreate,
-      } = subscriber;
-  
-      if (isCreate || !subscription.status) {
-        subscription.status = 1;
-        subscription.save();
-  
-        return res.status(201).send({
-          message: 'nice dick, awesome balls',
-          subscription,
-        });
-      }
-      else {
+        model: user,
+      } = userModel;
+
+      const ticket = await Ticket.getByUUID(ticketUuid);
+      if (!ticket) {
         return res.status(400).send({
-          message: 'email address is already registered at the event',
+          message: 'ticket not found',
         });
       }
-    });
-  });
+    
+      const { id: TicketId } = ticket;
+      const { id: UserId } = user;
+      Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriber) => {
+        if (message) {
+          return res.status(400).send({ message });
+        }
+
+        const {
+          model: subscription,
+          isCreate,
+        } = subscriber;
+    
+        if (isCreate || !subscription.status) {
+          subscription.status = 1;
+          subscription.save();
+    
+          return res.status(201).send({
+            message: 'nice dick, awesome balls',
+            subscription,
+          });
+        }
+        else {
+          return res.status(400).send({
+            message: 'email address is already registered at the event',
+          });
+        }
+      });
+    }
+  );
 });
 
 /**
