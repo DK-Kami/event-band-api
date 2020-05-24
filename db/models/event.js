@@ -30,7 +30,7 @@ export default (sequelize, DataTypes) => {
       },
     },
     coords: {
-      type: DataTypes.GEOMETRY('POINT'),
+      type: DataTypes.STRING,
       validation: {
         isValidCoordinates(value) {
           const validCoordinates = /^([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)$/;
