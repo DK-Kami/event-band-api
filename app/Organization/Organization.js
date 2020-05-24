@@ -10,7 +10,13 @@ class Organization extends Model {
     super(OrganizationModel);
   }
 
-  async loginAsOrganization(userUUID, organizationUUID) {
+  /**
+   * Функция, генерирующая токен для доступа к роутам организации
+   * @param {Object} loginData Данные для авторизации под организацией
+   * @param {Object} loginData.organizationUUID uuid организации
+   * @param {Object} loginData.userUUID uuid пользователя 
+   */
+  loginAsOrganization({ organizationUUID, userUUID }) {
     return jwt.sign({
       organizationUUID,
       userUUID,
