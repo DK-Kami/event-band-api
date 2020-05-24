@@ -13,6 +13,9 @@ const {
   Tag: TagModel,
 } = models;
 
+/**
+ * Получение всех событий организации
+ */
 organizationEvent.get('/all', async (req, res) => {
   const { organization } = req.payload;
   const events = (await organization.getEvents({
@@ -55,7 +58,9 @@ organizationEvent.get('/all', async (req, res) => {
 
   return res.status(200).send({ events });
 });
-
+/**
+ * Путь для создания события организация
+ */
 organizationEvent.post('/create', async (req, res) => {
   const { organization } = req.payload;
   const OrganizationId = organization.id;
