@@ -3,6 +3,7 @@ import Organization from "../Organization";
 import User from "../../User/User";
 import { someOrganizationRouter } from "./someOrganization";
 import { organizationEvent } from "./organizationEvent";
+import { organizationTicket } from "./organizationTicket";
 
 const myOrganizationRouter = new Router();
 
@@ -32,6 +33,7 @@ myOrganizationRouter.use(async (req, res, next) => {
 
 myOrganizationRouter.use(someOrganizationRouter);
 myOrganizationRouter.use('/event', organizationEvent);
+myOrganizationRouter.use('/ticket', organizationTicket);
 
 export {
   myOrganizationRouter,
