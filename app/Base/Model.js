@@ -144,6 +144,13 @@ class Model {
     return data;
   }
 
+  async delete(uuid, done) {
+    const data = await this.errorCatching(done, 'destroy', {
+      where: { uuid },
+    });
+    return data;
+  }
+
   /**
    * Метод для создания модели
    * @param {Object} createData Объект, содержащий поля, для создания записи
