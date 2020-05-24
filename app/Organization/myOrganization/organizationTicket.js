@@ -45,10 +45,24 @@ organizationTicket.put('/:uuid', async (req, res) => {
 /**
  * Удаление конкретного билета по его uuid
  */
-organizationTicket.delete('/:uuid', (req, res) => {
+organizationTicket.delete('/:uuid', async (req, res) => {
   const { uuid } = req.params;
+  const ticket = await Ticket.getByUUID(uuid);
+  if (!ticket) {
+    return res.status(404).send({
+      message: 'ticket not found',
+    });
+  }
 
-  res.status(200).send({ uuid });
+  Ticket.delete(uuid, message => {
+    if (message) {
+      return res.status(400).send({ message });
+    }
+
+    return res.status(200).send({
+      message: 'ya',
+    });
+  });
 });
 
 export {
