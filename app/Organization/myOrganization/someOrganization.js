@@ -1,8 +1,8 @@
-import Router from "../Base/Router";
-import Organization from "./Organization";
-import User from "../User/User";
-import models from '../../db/models';
+import models from '../../../db/models';
+import Router from '../../Base/Router';
+import Organization from '../Organization';
 
+const someOrganizationRouter = new Router();
 const {
   Subscriber: SubscriberModel,
   EventTag: EventTagModel,
@@ -11,33 +11,10 @@ const {
   Tag: TagModel,
 } = models;
 
-const myOrganizationRouter = new Router();
-
 /**
- * Middleware, обеспечивающий безопасность путей организации,
- * путём проверки, передаваемого токена и получения организации
+ * Путь для получения текущей организации
  */
-myOrganizationRouter.use(async (req, res, next) => {
-  const {
-    organizationUUID,
-    userUUID,
-  } = req.payload;
-
-  if (!organizationUUID) {
-    return res.status(403).send({
-      message: 'Permission denied! You have no power here, servant of Mordor.',
-    });
-  }
-
-  const organization = await Organization.getByUUID(organizationUUID);
-  const user = await User.getByUUID(userUUID);
-
-  req.payload.organization = organization;
-  req.payload.user = user;
-  return next();
-});
-
-myOrganizationRouter.get('/', async (req, res) => {
+someOrganizationRouter.get('/', async (req, res) => {
   const { organization } = req.payload;
 
   const subscribers = await organization.getSubscribers({
@@ -96,7 +73,31 @@ myOrganizationRouter.get('/', async (req, res) => {
     events,
   });
 });
+/**
+ * Путь для изменения текущей организации
+ */
+someOrganizationRouter.put('/', (req, res) => {
+  const { organizationUUID } = req.payload;
+  const {
+    description,
+    name,
+    logo,
+  } = req.body;
+
+  Organization.update(
+    { description, name, logo },
+    { uuid: organizationUUID },
+    async (message) => {
+      if (message) {
+        return res.status(400).send({ message });
+      }
+    
+      const organization = await Organization.getByUUID(organizationUUID);
+      return res.status(200).send({ organization });
+    },
+  );
+});
 
 export {
-  myOrganizationRouter,
+  someOrganizationRouter,
 };
