@@ -99,7 +99,7 @@ organizationEvent.post('/create', async (req, res) => {
         await EventTag.create({ TagId, EventId });
       }));
 
-      return res.status(200).send({
+      return res.status(201).send({
         event,
         tickets,
       });

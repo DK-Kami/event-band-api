@@ -12,7 +12,7 @@ organizationTicket.post('/create', (req, res) => {
       return res.status(400).send({ message });
     }
 
-    return res.status(200).send({ ticket });
+    return res.status(201).send({ ticket });
   });
 });
 
