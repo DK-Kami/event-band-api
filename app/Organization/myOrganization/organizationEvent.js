@@ -1,5 +1,9 @@
 import Router from "../../Base/Router";
 import models from '../../../db/models';
+import EventTag from '../../EventTag/EventTag';
+import Ticket from '../../Ticket/Ticket';
+import Event from '../../Event/Event';
+import { Op } from "sequelize";
 
 const organizationEvent = new Router();
 const {
@@ -50,6 +54,52 @@ organizationEvent.get('/all', async (req, res) => {
     }));
 
   return res.status(200).send({ events });
+});
+
+organizationEvent.post('/create', async (req, res) => {
+  const { organization } = req.payload;
+  const OrganizationId = organization.id;
+  const {
+    name,
+    description,
+    count,
+    coords,
+    datetimeTo,
+    datetimeFrom,
+    tickets: ticketIds,
+    tags: tagIds,
+  } = req.body;
+
+  Event.create(
+    { name, description, count, coords, datetimeTo, datetimeFrom, OrganizationId },
+    async (message, event) => {
+      if (message) {
+        return res.status(400).send({ message });
+      }
+
+      const { id: EventId } = event;
+      const tickets = await Ticket.getAll({
+        where: {
+          id: {
+            [Op.in]: ticketIds,
+          },
+        },
+      });
+
+      await Promise.all(tickets.map(async ticket => {
+        ticket.EventId = event.id;
+        await ticket.save();
+      }));      
+      await Promise.all(tagIds.map(async TagId => {
+        await EventTag.create({ TagId, EventId });
+      }));
+
+      return res.status(200).send({
+        event,
+        tickets,
+      });
+    }
+  );
 });
 
 export {
