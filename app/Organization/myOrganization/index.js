@@ -4,6 +4,7 @@ import User from "../../User/User";
 import { someOrganizationRouter } from "./someOrganization";
 import { organizationEvent } from "./organizationEvent";
 import { organizationTicket } from "./organizationTicket";
+import { organizationNews } from "./organizationNews";
 
 const myOrganizationRouter = new Router();
 
@@ -34,6 +35,7 @@ myOrganizationRouter.use(async (req, res, next) => {
 myOrganizationRouter.use(someOrganizationRouter);
 myOrganizationRouter.use('/event', organizationEvent);
 myOrganizationRouter.use('/ticket', organizationTicket);
+myOrganizationRouter.use('/news', organizationNews);
 
 export {
   myOrganizationRouter,
