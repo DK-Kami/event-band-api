@@ -140,7 +140,7 @@ class Model {
    * @param {Function} done Коллбэк-функция, вызываемая при волполнении запроса
    */
   async update(updateData = {}, where, done) {
-    const data = this.errorCatching(done, 'update', updateData, { where });
+    const data = await this.errorCatching(done, 'update', updateData, { where });
     return data;
   }
 
