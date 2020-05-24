@@ -48,9 +48,9 @@ organizationEvent.get('/all', async (req, res) => {
       datetimeTo: event.datetimeTo,
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
-      subscribers: event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
-      count: event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
-      minPrice: event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
+      subscribers: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
+      count: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
+      minPrice: event.Tickets.length && event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
 
       tags: event.EventTags.map(eventTag => eventTag.Tag.name),
       tickets: event.Tickets,
@@ -105,6 +105,30 @@ organizationEvent.post('/create', async (req, res) => {
       });
     }
   );
+});
+
+
+organizationEvent.put('/:uuid', async (req, res) => {
+  const { uuid } = req.params;
+  const event = await Event.getByUUID(uuid);
+  if (!event) {
+    return res.status(404).send({
+      message: 'event not found',
+    });
+  }
+
+  Event.update(
+    req.body,
+    { uuid },
+    async (message) => {
+      if (message) {
+        return res.status(400).send({ message });
+      }
+
+      const event = await Event.getByUUID(uuid);
+      return res.status(200).send({ event });
+    }
+  )
 });
 
 export {
