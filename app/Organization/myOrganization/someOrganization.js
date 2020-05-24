@@ -22,6 +22,9 @@ someOrganizationRouter.get('/', async (req, res) => {
   });
 
   const organizers = (await organization.getOrganizers({
+    where: {
+      status: 1,
+    },
     attributes: ['id'],
     include: [
       { model: UserModel },
