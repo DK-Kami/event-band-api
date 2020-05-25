@@ -14,6 +14,12 @@ const myOrganizationRouter = new Router();
  * путём проверки, передаваемого токена и получения организации
  */
 myOrganizationRouter.use(async (req, res, next) => {
+  if (!req.payload) {
+    return res.status(403).send({
+      message: 'Permission denied! You have no power here, servant of Mordor.',
+    });
+  }
+
   const {
     organizationUUID,
     userUUID,
