@@ -1,3 +1,6 @@
+// import "babel-core/register";
+// import "babel-polyfill";
+
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
