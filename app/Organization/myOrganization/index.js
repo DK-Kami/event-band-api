@@ -15,7 +15,7 @@ const myOrganizationRouter = new Router();
  */
 myOrganizationRouter.use(async (req, res, next) => {
   if (!req.payload) {
-    return res.status(403).send({
+    return res.status(400).send({
       message: 'Permission denied! You have no power here, servant of Mordor.',
     });
   }
@@ -26,7 +26,7 @@ myOrganizationRouter.use(async (req, res, next) => {
   } = req.payload;
 
   if (!organizationUUID) {
-    return res.status(403).send({
+    return res.status(400).send({
       message: 'Permission denied! You have no power here, servant of Mordor.',
     });
   }
