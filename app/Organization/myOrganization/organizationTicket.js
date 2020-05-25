@@ -7,11 +7,6 @@ const organizationTicket = new Router();
  * Путь для создания билета к события
  */
 organizationTicket.post('/create', (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
-
   Ticket.create(req.body, (message, ticket) => {
     if (message) {
       return res.status(400).send({ message });

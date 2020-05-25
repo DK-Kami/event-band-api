@@ -102,7 +102,7 @@ organizationRouter.post('/create', async (req, res) => {
 
   const user = await User.getByUUID(uuid);
   const createData = {
-    reputation: 0,
+    reputation: 1,
     description,
     name,
     logo,
