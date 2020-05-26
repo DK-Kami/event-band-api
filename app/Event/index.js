@@ -354,6 +354,12 @@ eventRouter.get('/event-recommended', async (req, res) => {
       {
         model: TicketModel,
         attributes: ['uuid', 'name', 'description', 'count', 'price', 'datetimeTo', 'datetimeFrom'],
+        include: [
+          {
+            model: SubscriberModel,
+            attributes: ['id'],
+          },
+        ],
       },
       {
         model: EventTagModel,
@@ -403,10 +409,10 @@ eventRouter.get('/event-recommended', async (req, res) => {
       name: ticket.name,
       description: ticket.description,
       count: ticket.count,
-      priceFrom: ticket.priceFrom,
-      priceTo: ticket.priceTo,
+      price: ticket.price,
       datetimeFrom: ticket.datetimeFrom,
       datetimeTo: ticket.datetimeTo,
+      subscribers: ticket.Subscribers.length,
     }));
 
     return {
@@ -416,6 +422,9 @@ eventRouter.get('/event-recommended', async (req, res) => {
       coords: event.coords,
       datetimeTo: event.datetimeTo,
       datetimeFrom: event.datetimeFrom,
+      subscribers: tickets.length && tickets.reduce((summ, ticket) => summ + ticket.subscribers, 0),
+      count: tickets.length && tickets.reduce((summ, ticket) => summ + ticket.count, 0),
+      minPrice: tickets.length && tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
       organization: event.Organization,
       tickets,
       tags,
