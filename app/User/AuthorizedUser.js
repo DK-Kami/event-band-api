@@ -121,6 +121,9 @@ class AuthorizedUser extends Model {
             {
               model: EventModel,
               attributes: ['uuid', 'name', 'description', 'coords', 'datetimeTo', 'datetimeFrom'],
+              include: [
+                { model: OrganizationModel },
+              ]
             },
           ],
         },
@@ -147,6 +150,12 @@ class AuthorizedUser extends Model {
           coords: subscribe['Ticket.Event.coords'],
           datetimeTo: subscribe['Ticket.Event.datetimeTo'],
           datetimeFrom: subscribe['Ticket.Event.datetimeFrom'],
+          organization: {
+            uuid: subscribe['Ticket.Event.Organization.uuid'],
+            name: subscribe['Ticket.Event.Organization.name'],
+            reputation: subscribe['Ticket.Event.Organization.reputation'],
+            logo: subscribe['Ticket.Event.Organization.logo'],
+          },
           tickets: [],
         };
         const ticket = {
@@ -180,6 +189,11 @@ class AuthorizedUser extends Model {
     };
   }
 
+  /**
+   * Метод для отправки сообщения на почту пользователя
+   * @param {String} email Электронная почта пользователя
+   * @param {String} refreshToken Токен для сброса пароля
+   */
   async sendEmail(email, refreshToken) {
     const message = {
       from: 'info.event.band@gmail.com',
