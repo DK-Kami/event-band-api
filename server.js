@@ -1,4 +1,3 @@
-import express from 'express';
 import https from 'https';
 import http from 'http';
 import app from './app';
@@ -14,7 +13,6 @@ const credentials = {
   cert: certificate
 };
 
-app.use(express.static(__dirname + '/public'));
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 

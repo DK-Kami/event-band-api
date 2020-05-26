@@ -5,9 +5,13 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import routes from './routes';
+import path from 'path';
 import '../utils/passport';
 
+const appDir = path.dirname(require.main.filename);
 const app = express();
+
+app.use('/static', express.static(appDir + '/public'));
 
 const allowCrossDomain = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
