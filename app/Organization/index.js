@@ -66,9 +66,9 @@ async function getOrganizationByUUID(req, res) {
       datetimeTo: event.datetimeTo,
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
-      subscribers: event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
-      count: event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
-      minPrice: event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
+      subscribers: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
+      count: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
+      minPrice: event.Tickets.length && event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
 
       tags: event.EventTags.map(eventTag => eventTag.Tag.name),
       tickets: event.Tickets,
