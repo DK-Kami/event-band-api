@@ -24,11 +24,10 @@ passwordRouter.get('/request-password', async (req, res) => {
   const authUser = await user.getAuthorizedUser();
   const refreshToken = crypto.randomBytes(32).toString('hex');
   authUser.refreshToken = refreshToken;
-  // const message = AuthorizedUser.sendEmail(email, refreshToken);
+  AuthorizedUser.sendEmail(email, refreshToken);
   authUser.save();
 
   res.status(200).send({
-    // message,
     message: 'Check your email',
     type: 'success',
   });

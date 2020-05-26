@@ -8,6 +8,7 @@ import Organization from '../Organization/Organization';
 import Subscriber from '../Subscriber/Subscriber';
 import User from './User';
 import { v4 } from 'uuid';
+import nodemailer from 'nodemailer';
 
 const {
   AuthorizedUser: AuthorizedUserModel,
@@ -21,6 +22,11 @@ class AuthorizedUser extends Model {
     super(AuthorizedUserModel);
   }
 
+  /**
+   * Метод для создания объекта модели
+   * @param {Object} data Данные для создания новой модели
+   * @param {Function} done Колбэк-функция
+   */
   async create(data, done) {
     data.salt = crypto.randomBytes(16).toString('hex');
     data.password = this.cryptoPassword(data.password, data.salt);
@@ -30,11 +36,21 @@ class AuthorizedUser extends Model {
     return authUser;
   }
 
+  /**
+   * Метод для шифрации пароля пользователя
+   * @param {String} password Паролья пользователя
+   * @param {String} salt Соль для шифрации пароля пользователя
+   */
   cryptoPassword(password, salt) {
     const hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
     return hash;
   }
 
+  /**
+   * Метод для генерации jwt-токена
+   * @param {String} authUserUUID UUID модели авторизованного пользователя
+   * @param {String} userUUID UUID модели пользователя
+   */
   generateJWT(authUserUUID, userUUID) {
     return jwt.sign({
       uuid: userUUID,
@@ -42,6 +58,11 @@ class AuthorizedUser extends Model {
       userUUID,
     }, 'secret');
   }
+  /**
+   * Модель, возвращающая данные при авторизации или регистрации
+   * @param {AuthorizedUser} authUser Модель авторизованного пользователя
+   * @param {User} user Модель пользователя
+   */
   toAuthJSON(authUser, user) {
     const avatar = gravatar.url(user.email, { s: 200 });
 
@@ -58,6 +79,10 @@ class AuthorizedUser extends Model {
     };
   }
 
+  /**
+   * Метод для получения полной информации о пользователе
+   * @param {String} uuid UUID модели пользователя
+   */
   async getProfile(uuid) {
     const user = await User.getByUUID(uuid);
     console.log(user);
@@ -144,27 +169,6 @@ class AuthorizedUser extends Model {
       }
     });
 
-    subscriptions.forEach(subscribe => {
-      // const {
-      //   Ticket: ticket,
-      //   Organization: organization,
-      // } = subscribe;
-  
-      // if (organization) {
-      //   subOrgs.push(organization);
-      // }
-      // if (ticket) {
-      //   const event = ticket.Event;
-      //   if (!subEvents.map(e => e.uuid).includes(event.uuid)) {
-      //     Object.defineProperty(event, 'tickets', {
-      //       value: [ticket],
-      //     });
-      //     // console.log(event);
-      //     subEvents.push(event);
-      //   }
-      // }
-    });
-
     return {
       user: this.toAuthJSON(authUser, user),
       subscriptions: {
@@ -174,6 +178,59 @@ class AuthorizedUser extends Model {
       organizations,
       da: 'da'
     };
+  }
+
+  async sendEmail(email, refreshToken) {
+    const message = {
+      from: 'info.event.band@gmail.com',
+      to: email,
+      subject: 'Смена пароля',
+      text: 'Перейдите по ссылке для смены пароля: https://event-band-api.ru/create-new-password/' + refreshToken,
+      html: `
+        <div>
+          <span>Перейдите по ссылке для смены пароля: </span>
+          <a link="https://event-band-api.ru/create-new-password/${refreshToken}">https://event-band-api.ru/create-new-password/${refreshToken}</a>
+        </div>
+      `
+    };
+    console.log(email);
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      // auth: {
+      //   user: "lukecmascript@gmail.com",
+      //   pass: "Osufucktrap3221488",
+      // },
+      // host: 'smtp.yandex.ru',
+      // port: 465,
+      // secure: true,
+      service: 'Gmail',
+      auth: {
+        user: "info.event.band.api@gmail.com",
+        pass: "Pass2EventBand!"
+      }
+    });
+    
+    transporter.sendMail(message, (err, info) => {
+      if (err) {
+        console.log(err);
+        return 'whaaaaat';
+      }
+
+      console.log('Message sent: %s', info.messageId);   
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      return 'all ok';
+    });
+    console.log(email);
+
+    // smtpTransport.sendMail(mailOptions, (error, info) => {
+    //   // console.log('Message sent: %s', info.messageId);
+    //   console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+    //   if (error) return error;
+    //   return 'Preview URL: %s', nodemailer.getTestMessageUrl(info);
+    // });
   }
 };
 
