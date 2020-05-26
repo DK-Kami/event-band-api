@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon --exec babel-node server.js",
-    "server-prod": "set NODE_ENV=production && pm2 start pm2.config.json",
+    "server-prod": "set NODE_ENV=production && pm2 start pm2.config.json --ignore-watch=\"public\"",
     "test": "set NODE_ENV=test && mocha"
   },
   "repository": {
