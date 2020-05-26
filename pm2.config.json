@@ -2,7 +2,8 @@
   "apps" : [{
     "name": "event-band-api",
     "script": "./server.js",
-    "watch": true,
+    "watch": ["app"],
+    "ignore_watch" : ["node_modules", "public/organizations"],
     "exec_interpreter": "./node_modules/.bin/babel-node",
     "exec_mode": "fork",
     "env_production" : {
