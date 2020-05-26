@@ -19,10 +19,9 @@ userRouter.get('/', async (req, res) => {
  * Авторизация пользователя
  */
 authRouter.post('/login', (req, res, next) => {
-  return passport.authenticate('local', { session: false }, (err, user) => {
-    if (err) {
-      console.log('error', err);
-      return res.status(400).send(err);
+  return passport.authenticate('local', { session: false }, (message, user) => {
+    if (message) {
+      return res.status(400).send(message);
     }
 
     if (user) {
@@ -30,9 +29,8 @@ authRouter.post('/login', (req, res, next) => {
       return res.status(200).json({ user });
     }
 
-    console.log(user);
     return res.status(400).send({
-      message: 'ti eblan',
+      message: 'The field must not be empty',
     });
   })(req, res, next);
 });
