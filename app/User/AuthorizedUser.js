@@ -189,7 +189,7 @@ class AuthorizedUser extends Model {
       html: `
         <div>
           <span>Перейдите по ссылке для смены пароля: </span>
-          <a link="https://event-band-api.ru/create-new-password/${refreshToken}">https://event-band-api.ru/create-new-password/${refreshToken}</a>
+          <a href="https://event-band-api.ru/create-new-password/${refreshToken}">https://event-band-api.ru/create-new-password/${refreshToken}</a>
         </div>
       `
     };
