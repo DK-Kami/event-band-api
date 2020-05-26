@@ -302,6 +302,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
   const userSubscription = await Subscriber.getAll({
     where: {
       UserId: userId,
+      status: 1,
     },
     attributes: ['uuid'],
     include: [
@@ -380,7 +381,9 @@ eventRouter.get('/event-recommended', async (req, res) => {
   })).filter(e => e.EventTags.length);
 
   const eventIdsToOrgs = [...eventIds, ...filteredEvents.map(event => event.id)];
-  const filteredOrgs = (await Event.getAll({
+
+  const recommendedOrgs = [];
+  (await Event.getAll({
     where: {
       id: {
         [Op.in]: eventIdsToOrgs,
@@ -394,8 +397,12 @@ eventRouter.get('/event-recommended', async (req, res) => {
     ],
   }))
     .map(event => event.Organization)
-    .filter(org => !orgIds.includes(org.id));
-  const recommendedOrgs = filteredOrgs;
+    .filter(org => !orgIds.includes(org.id))
+    .forEach(organization => {
+      if (!recommendedOrgs.map(org => org.id).includes(organization.id)) {
+        recommendedOrgs.push(organization);
+      }
+    });
 
   const recommendedEvents = filteredEvents.map(event => {
     const tags = event.EventTags.map(eventTag => ({
