@@ -416,6 +416,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
       coords: event.coords,
       datetimeTo: event.datetimeTo,
       datetimeFrom: event.datetimeFrom,
+      organization: event.Organization,
       tickets,
       tags,
     };
