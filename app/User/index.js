@@ -52,7 +52,7 @@ authRouter.post('/register', (req, res) => {
       if (message) {
         return res.status(400).send({ message });
       }
-      authUser.token = AuthorizedUser.generateJWT(user.uuid, authUser.uuid);
+      authUser.token = AuthorizedUser.generateJWT(authUser.uuid, user.uuid);
 
       return res.status(201).send({
         user: AuthorizedUser.toAuthJSON(authUser, user),
