@@ -4,6 +4,15 @@ import Organization from './Organization';
 import User from '../User/User';
 import Subscriber from '../Subscriber/Subscriber';
 import models from '../../db/models';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+const appDir = path.dirname(require.main.filename);
+const imageFolder = [appDir, 'public', 'organizations'].join('/');
+const upload = multer({
+  dest: imageFolder,
+});
 
 const publicOrganizationRouter = new Router();
 const organizationRouter = new Router();
@@ -92,37 +101,47 @@ organizationRouter.get('/all', async (req, res) => {
 /**
  * Путь для создания новой организации
  */
-organizationRouter.post('/create', async (req, res) => {
+organizationRouter.post('/create', upload.single('logo'), async (req, res) => {
   const {
     description,
-    name,
-    logo,
+    name = '',
   } = req.body;
   const { uuid } = req.payload;
-
+  const logo = req.file;
   const user = await User.getByUUID(uuid);
-  const createData = {
-    reputation: 1,
-    description,
-    name,
-    logo,
-  };
 
-  Organization.create(createData, (message, organization) => {
+  const oldpath = logo.path;
+  const type = logo.mimetype.split('/')[1];
+  const imageName = name.split(' ').join('_').toLowerCase() + '.' + type;
+  const newPath = [imageFolder, imageName].join('/');
+
+  fs.rename(oldpath, newPath, message => {
     if (message) {
       return res.status(400).send({ message });
     }
+    const createData = {
+      logo: imageName,
+      reputation: 1,
+      description,
+      name,
+    };
 
-    Organizer.create({
-      OrganizationId: organization.id,
-      UserId: user.id,
-      status: 1,
-    }, (message) => {
+    Organization.create(createData, (message, organization) => {
       if (message) {
         return res.status(400).send({ message });
       }
-
-      return res.status(201).send({ organization });
+  
+      Organizer.create({
+        OrganizationId: organization.id,
+        UserId: user.id,
+        status: 1,
+      }, (message) => {
+        if (message) {
+          return res.status(400).send({ message });
+        }
+  
+        return res.status(201).send({ organization });
+      });
     });
   });
 });
