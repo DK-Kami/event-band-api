@@ -14,7 +14,7 @@ const app = express();
 app.use('/static', express.static(appDir + '/public'));
 
 const allowCrossDomain = (req, res, next) => {
-  const currentUrl = proccess.env.NODE_ENV === 'production'
+  const currentUrl = process.env.NODE_ENV === 'production'
     ? 'https://event-band-api.ru'
     : 'http://localhost:8080';
 
