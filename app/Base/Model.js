@@ -7,6 +7,21 @@ class Model {
   }
 
   /**
+   * Метод разрешающий проблему с CORS политикой, посредством установления заголовков
+   * @param {Object} res Объект запроса
+   */
+  fixCORS(res) {
+    const currentUrl = process.env.NODE_ENV === 'production'
+    ? 'https://event-band-api.ru'
+    : 'http://localhost:8080';
+
+    res.header('Access-Control-Allow-Origin', currentUrl);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
+  }
+
+  /**
    * Метод для обработки ошибок валидации и базы данных
    * @param {Error} error Ошибка, вызванная при работе с БД
    */
@@ -61,6 +76,7 @@ class Model {
    */
   async errorCatching(done = () => {}, methodName, ...methodParams) {
     try {
+      this.fixCORS();
       const data = await this.Model[methodName](...methodParams);
       done(null, data);
       return data;
