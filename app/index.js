@@ -7,16 +7,25 @@ import bodyParser from 'body-parser';
 import routes from './routes';
 import path from 'path';
 import '../utils/passport';
-import { fixCors } from '../utils/CORS';
 
 const appDir = path.dirname(require.main.filename);
 const app = express();
 
 app.use('/static', express.static(appDir + '/public'));
-app.use((req, res, next) => {
-  res = fixCors(res);
+
+const allowCrossDomain = (req, res, next) => {
+  const currentUrl = process.env.NODE_ENV === 'production'
+    ? 'https://event-band-api.ru'
+    : 'http://localhost:8080';
+
+  res.header('Access-Control-Allow-Origin', currentUrl);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
+
   next();
-});
+};
+app.use(allowCrossDomain);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
