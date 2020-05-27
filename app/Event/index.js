@@ -448,11 +448,6 @@ eventRouter.get('/event-recommended', async (req, res) => {
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
  */
-// eventRouter.get('/event-list', cors(), getFilteredEvents);
-// eventRouter.options('/event-list', (res, req) => {
-//   console.log('hui v rot');
-//   req.sendStatus(204);
-// });
 eventRouter.get('/event-list', getFilteredEvents);
 /**
  * Возвращение всех событий
