@@ -13,12 +13,10 @@ const appDir = path.dirname(require.main.filename);
 const app = express();
 
 app.use('/static', express.static(appDir + '/public'));
-
-const allowCrossDomain = (req, res, next) => {
+app.use((req, res, next) => {
   fixCors(res);
   next();
-};
-app.use(allowCrossDomain);
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
