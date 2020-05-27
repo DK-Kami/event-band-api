@@ -7,6 +7,7 @@ import Ticket from '../Ticket/Ticket';
 import User from '../User/User';
 import News from '../News/News';
 import Tag from '../Tag/Tag';
+import cors from 'cors';
 
 const {
   Organization: OrganizationModel,
@@ -447,7 +448,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
  */
-eventRouter.get('/event-list', getFilteredEvents);
+eventRouter.get('/event-list', cors(), getFilteredEvents);
 /**
  * Возвращение всех событий
  */

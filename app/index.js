@@ -27,6 +27,7 @@ app.use('/static', express.static(appDir + '/public'));
 //   next();
 // };
 // app.use(allowCrossDomain);
+app.options('/api/event/event-list', cors());
 app.use(cors());
 
 app.use(logger('dev'));
