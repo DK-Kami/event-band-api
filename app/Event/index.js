@@ -445,11 +445,12 @@ eventRouter.get('/event-recommended', async (req, res) => {
   });
 }),
 
-eventRouter.options('/event-list', cors());
+// eventRouter.options('/event-list', cors());
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
  */
-eventRouter.get('/event-list', cors(), getFilteredEvents);
+// eventRouter.get('/event-list', cors(), getFilteredEvents);
+eventRouter.get('/event-list', getFilteredEvents);
 /**
  * Возвращение всех событий
  */
