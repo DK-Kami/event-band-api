@@ -22,7 +22,6 @@ myOrganizationRouter.use(async (req, res, next) => {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
-  next();
 
   if (!req.payload) {
     return res.status(400).send({
