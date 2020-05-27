@@ -445,6 +445,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
   });
 }),
 
+eventRouter.options('/event-list', cors());
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
  */
