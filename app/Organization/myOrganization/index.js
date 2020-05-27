@@ -15,7 +15,7 @@ const myOrganizationRouter = new Router();
  * путём проверки, передаваемого токена и получения организации
  */
 myOrganizationRouter.use(async (req, res, next) => {
-  fixCors(res);
+  res = fixCors(res);
 
   if (!req.payload) {
     return res.status(400).send({
