@@ -14,14 +14,14 @@ const myOrganizationRouter = new Router();
  * путём проверки, передаваемого токена и получения организации
  */
 myOrganizationRouter.use(async (req, res, next) => {
-  // const currentUrl = process.env.NODE_ENV === 'production'
-  //   ? 'https://event-band-api.ru'
-  //   : 'http://localhost:8080';
+  const currentUrl = process.env.NODE_ENV === 'production'
+    ? 'https://event-band-api.ru'
+    : 'http://localhost:8080';
 
-  // res.header('Access-Control-Allow-Origin', currentUrl);
-  // res.header('Access-Control-Allow-Credentials', true);
-  // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', currentUrl);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
 
   if (!req.payload) {
     return res.status(400).send({
