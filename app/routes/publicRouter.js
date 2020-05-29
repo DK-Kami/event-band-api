@@ -13,7 +13,7 @@ router.use('/api', passwordRouter);
 router.use('/', passwordRouter);
 router.use('/', authRouter);
 
-router.use('/ping', (req, res) => {
+router.get('/ping', (req, res) => {
   console.log('-------------------------------------------------------');
   console.log('logs from ping');
   console.log('-------------------------------------------------------');
