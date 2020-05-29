@@ -13,13 +13,4 @@ router.use('/api', passwordRouter);
 router.use('/', passwordRouter);
 router.use('/', authRouter);
 
-router.get('/api/ping', (req, res) => {
-  console.log('-------------------------------------------------------');
-  console.log('logs from ping');
-  console.log('-------------------------------------------------------');
-  console.log('req.headers', req.headers);
-  console.log('req.headers.authorization', req.headers.authorization);
-  console.log('-------------------------------------------------------');
-});
-
 export default router;
