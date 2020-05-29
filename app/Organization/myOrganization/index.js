@@ -14,42 +14,42 @@ const myOrganizationRouter = new Router();
  * Middleware, обеспечивающий безопасность путей организации,
  * путём проверки, передаваемого токена и получения организации
  */
-myOrganizationRouter.use(async (req, res, next) => {
-  console.log('req.headers', req.headers);
-  console.log('req.payload', req.payload);
+// myOrganizationRouter.use('/', async (req, res, next) => {
+//   console.log('req.headers', req.headers);
+//   console.log('req.payload', req.payload);
  
-  if (!req.payload) {
-    return res.status(400).send({
-      message: 'Permission denied! You have no power here, servant of Mordor.',
-    });
-  }
+//   if (!req.payload) {
+//     return res.status(400).send({
+//       message: 'Permission denied! You have no power here, servant of Mordor.',
+//     });
+//   }
 
-  const {
-    organizationUUID,
-    userUUID,
-  } = req.payload;
+//   const {
+//     organizationUUID,
+//     userUUID,
+//   } = req.payload;
 
-  console.log('are u clown?', organizationUUID, userUUID);
-  if (!organizationUUID) {
-    return res.status(400).send({
-      message: 'Permission denied! You have no power here, servant of Mordor.',
-    });
-  }
+//   console.log('are u clown?', organizationUUID, userUUID);
+//   if (!organizationUUID) {
+//     return res.status(400).send({
+//       message: 'Permission denied! You have no power here, servant of Mordor.',
+//     });
+//   }
 
-  // const organization = await Organization.getByUUID(organizationUUID);
-  const organization = await Organization.getByUUID('989713f3-2f0b-4a14-b863-d98b5c00f94e');
-  const user = await User.getByUUID(userUUID);
+//   // const organization = await Organization.getByUUID(organizationUUID);
+//   const organization = await Organization.getByUUID('989713f3-2f0b-4a14-b863-d98b5c00f94e');
+//   const user = await User.getByUUID(userUUID);
 
-  req.payload.organization = organization;
-  req.payload.user = user;
-  return next();
-});
+//   req.payload.organization = organization;
+//   req.payload.user = user;
+//   return next();
+// });
 
-myOrganizationRouter.use('/', auth.required, someOrganizationRouter);
-myOrganizationRouter.use('/event', auth.required, organizationEvent);
-myOrganizationRouter.use('/ticket', auth.required, organizationTicket);
-myOrganizationRouter.use('/news', auth.required, organizationNews);
-myOrganizationRouter.use('/organizers', auth.required, organizersRoter);
+myOrganizationRouter.use(someOrganizationRouter);
+myOrganizationRouter.use('/event', organizationEvent);
+myOrganizationRouter.use('/ticket', organizationTicket);
+myOrganizationRouter.use('/news', organizationNews);
+myOrganizationRouter.use('/organizers', organizersRoter);
 
 export {
   myOrganizationRouter,

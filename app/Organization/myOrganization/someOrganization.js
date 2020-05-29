@@ -1,6 +1,7 @@
 import models from '../../../db/models';
 import Router from '../../Base/Router';
 import Organization from '../Organization';
+import User from '../../User/User';
 
 const someOrganizationRouter = new Router();
 const {
@@ -11,10 +12,32 @@ const {
   Tag: TagModel,
 } = models;
 
+async function getOrganization(req, res) {
+  const {
+    organizationUUID,
+    userUUID,
+  } = req.payload;
+
+  console.log('are u clown?', organizationUUID, userUUID);
+  if (!organizationUUID) {
+    return res.status(400).send({
+      message: 'Permission denied! You have no power here, servant of Mordor.',
+    });
+  }
+
+  // const organization = await Organization.getByUUID(organizationUUID);
+  const organization = await Organization.getByUUID('989713f3-2f0b-4a14-b863-d98b5c00f94e');
+  const user = await User.getByUUID(userUUID);
+
+  req.payload.organization = organization;
+  req.payload.user = user;
+}
+
 /**
  * Путь для получения текущей организации
  */
 someOrganizationRouter.get('/', async (req, res) => {
+  await getOrganization(req, res);
   const { organization } = req.payload;
 
   const subscribers = await organization.getSubscribers({
