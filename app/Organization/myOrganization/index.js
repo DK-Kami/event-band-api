@@ -66,7 +66,7 @@ async function getOrganization(req, res) {
   next();
 }
 
-myOrganizationRouter.use(async (req, res) => {
+myOrganizationRouter.use(async (req, res, next) => {
   await getOrganization(req, res);
   next();
 });
