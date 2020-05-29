@@ -25,8 +25,8 @@ async function getOrganization(req, res) {
     });
   }
 
-  // const organization = await Organization.getByUUID(organizationUUID);
-  const organization = await Organization.getByUUID('989713f3-2f0b-4a14-b863-d98b5c00f94e');
+  const organization = await Organization.getByUUID(organizationUUID);
+  // const organization = await Organization.getByUUID('989713f3-2f0b-4a14-b863-d98b5c00f94e');
   const user = await User.getByUUID(userUUID);
 
   req.payload.organization = organization;
