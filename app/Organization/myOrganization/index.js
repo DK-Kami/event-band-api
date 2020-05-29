@@ -13,7 +13,7 @@ const myOrganizationRouter = new Router();
  * Middleware, обеспечивающий безопасность путей организации,
  * путём проверки, передаваемого токена и получения организации
  */
-myOrganizationRouter.use(async (req, res, next) => {
+// myOrganizationRouter.use(async (req, res, next) => {
   // const currentUrl = process.env.NODE_ENV === 'production'
   //   ? 'https://event-band-api.ru'
   //   : 'http://localhost:8080';
@@ -23,30 +23,30 @@ myOrganizationRouter.use(async (req, res, next) => {
   // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
 
-  if (!req.payload) {
-    return res.status(400).send({
-      message: 'Permission denied! You have no power here, servant of Mordor.',
-    });
-  }
+//   if (!req.payload) {
+//     return res.status(400).send({
+//       message: 'Permission denied! You have no power here, servant of Mordor.',
+//     });
+//   }
 
-  const {
-    organizationUUID,
-    userUUID,
-  } = req.payload;
+//   const {
+//     organizationUUID,
+//     userUUID,
+//   } = req.payload;
 
-  if (!organizationUUID) {
-    return res.status(400).send({
-      message: 'Permission denied! You have no power here, servant of Mordor.',
-    });
-  }
+//   if (!organizationUUID) {
+//     return res.status(400).send({
+//       message: 'Permission denied! You have no power here, servant of Mordor.',
+//     });
+//   }
 
-  const organization = await Organization.getByUUID(organizationUUID);
-  const user = await User.getByUUID(userUUID);
+//   const organization = await Organization.getByUUID(organizationUUID);
+//   const user = await User.getByUUID(userUUID);
 
-  req.payload.organization = organization;
-  req.payload.user = user;
-  return next();
-});
+//   req.payload.organization = organization;
+//   req.payload.user = user;
+//   return next();
+// });
 
 myOrganizationRouter.use(someOrganizationRouter);
 myOrganizationRouter.use('/event', organizationEvent);

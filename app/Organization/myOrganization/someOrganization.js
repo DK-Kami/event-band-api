@@ -15,7 +15,10 @@ const {
  * Путь для получения текущей организации
  */
 someOrganizationRouter.get('/', async (req, res) => {
-  const { organization } = req.payload;
+  const organization = await Organization.getByUUID('989713f3-2f0b-4a14-b863-d98b5c00f94e');
+  return res.status(200).send({ organization });
+
+  // const { organization } = req.payload;
 
   const subscribers = await organization.getSubscribers({
     attributes: ['id'],
