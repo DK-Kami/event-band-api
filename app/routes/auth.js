@@ -4,13 +4,16 @@ const getTokenFromHeaders = (req) => {
   if (!req.headers) return null;
 
   console.log('getTokenFromHeaders req.headers', req.headers);
+  console.log('getTokenFromHeaders req.headers.token', req.headers.token);
+  console.log('getTokenFromHeaders req.headers.organization', req.headers.organization);
+  console.log('getTokenFromHeaders req.headers.authorization', req.headers.authorization);
   const {
-    organization,
+    token,
     authorization,
   } = req.headers;
 
-  if (organization && organization.split(' ')[0] === 'Bearer') {
-    return organization.split(' ')[1];
+  if (token && token.split(' ')[0] === 'Bearer') {
+    return token.split(' ')[1];
   }
   if (authorization && authorization.split(' ')[0] === 'Bearer') {
     return authorization.split(' ')[1];

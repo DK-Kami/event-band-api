@@ -16,6 +16,7 @@ const myOrganizationRouter = new Router();
 myOrganizationRouter.use(async (req, res, next) => {
   console.log('req.headers', req.headers);
   console.log('req.payload', req.payload);
+ 
   if (!req.payload) {
     return res.status(400).send({
       message: 'Permission denied! You have no power here, servant of Mordor.',
