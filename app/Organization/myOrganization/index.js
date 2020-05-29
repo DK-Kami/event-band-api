@@ -45,7 +45,7 @@ const myOrganizationRouter = new Router();
 //   return next();
 // });
 
-async function getOrganization(req, res, next) {
+async function getOrganization(req, res) {
   const {
     organizationUUID,
     userUUID,
@@ -66,7 +66,11 @@ async function getOrganization(req, res, next) {
   next();
 }
 
-myOrganizationRouter.use(getOrganization);
+myOrganizationRouter.use(async (req, res) => {
+  await getOrganization(req, res);
+  next();
+});
+
 myOrganizationRouter.use(someOrganizationRouter);
 myOrganizationRouter.use('/event', organizationEvent);
 myOrganizationRouter.use('/ticket', organizationTicket);
