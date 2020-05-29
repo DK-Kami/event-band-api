@@ -45,6 +45,28 @@ const myOrganizationRouter = new Router();
 //   return next();
 // });
 
+async function getOrganization(req, res, next) {
+  const {
+    organizationUUID,
+    userUUID,
+  } = req.payload;
+
+  console.log('are u clown?', organizationUUID, userUUID);
+  if (!organizationUUID) {
+    return res.status(400).send({
+      message: 'Permission denied! You have no power here, servant of Mordor.',
+    });
+  }
+
+  const organization = await Organization.getByUUID(organizationUUID);
+  const user = await User.getByUUID(userUUID);
+
+  req.payload.organization = organization;
+  req.payload.user = user;
+  next();
+}
+
+myOrganizationRouter.use(getOrganization);
 myOrganizationRouter.use(someOrganizationRouter);
 myOrganizationRouter.use('/event', organizationEvent);
 myOrganizationRouter.use('/ticket', organizationTicket);
