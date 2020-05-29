@@ -1,12 +1,15 @@
 import Router from "../../Base/Router";
 import Ticket from '../../Ticket/Ticket';
+import { getOrganization } from "../../../utils/myOrganization";
 
 const organizationTicket = new Router();
 
 /**
  * Путь для создания билета к события
  */
-organizationTicket.post('/create', (req, res) => {
+organizationTicket.post('/create', async (req, res) => {
+  await getOrganization(req, res);
+
   Ticket.create(req.body, (message, ticket) => {
     if (message) {
       return res.status(400).send({ message });
@@ -20,6 +23,8 @@ organizationTicket.post('/create', (req, res) => {
  * Редактирование билета по его uuid
  */
 organizationTicket.put('/:uuid', async (req, res) => {
+  await getOrganization(req, res);
+
   const { uuid } = req.params;
   const ticket = await Ticket.getByUUID(uuid);
   if (!ticket) {
@@ -46,6 +51,8 @@ organizationTicket.put('/:uuid', async (req, res) => {
  * Удаление конкретного билета по его uuid
  */
 organizationTicket.delete('/:uuid', async (req, res) => {
+  await getOrganization(req, res);
+
   const { uuid } = req.params;
   const ticket = await Ticket.getByUUID(uuid);
   if (!ticket) {

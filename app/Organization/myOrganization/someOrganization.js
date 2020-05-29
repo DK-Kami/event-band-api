@@ -1,7 +1,7 @@
 import models from '../../../db/models';
 import Router from '../../Base/Router';
 import Organization from '../Organization';
-import User from '../../User/User';
+import { getOrganization } from '../../../utils/myOrganization';
 
 const someOrganizationRouter = new Router();
 const {
@@ -16,6 +16,8 @@ const {
  * Путь для получения текущей организации
  */
 someOrganizationRouter.get('/', async (req, res) => {
+  await getOrganization(req, res);
+
   const { organization } = req.payload;
 
   const subscribers = await organization.getSubscribers({
@@ -80,7 +82,9 @@ someOrganizationRouter.get('/', async (req, res) => {
 /**
  * Путь для изменения текущей организации
  */
-someOrganizationRouter.put('/', (req, res) => {
+someOrganizationRouter.put('/', async (req, res) => {
+  await getOrganization(req, res);
+
   const { organizationUUID } = req.payload;
   const {
     description,

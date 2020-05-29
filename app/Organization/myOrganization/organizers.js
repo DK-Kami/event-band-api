@@ -2,6 +2,7 @@ import Router from "../../Base/Router";
 import Organizer from '../../Organizer/Organizer';
 import models from '../../../db/models';
 import User from "../../User/User";
+import { getOrganization } from "../../../utils/myOrganization";
 
 const organizersRoter = new Router();
 const {
@@ -12,6 +13,8 @@ const {
  * Получение всех организаторов организации
  */
 organizersRoter.get('/all', async (req, res) => {
+  await getOrganization(req, res);
+
   const {
     organization: {
       id: OrganizationId,
@@ -32,6 +35,8 @@ organizersRoter.get('/all', async (req, res) => {
  * Отправка приглашения пользователю в команду организаторов
  */
 organizersRoter.post('/request', async (req, res) => {
+  await getOrganization(req, res);
+
   const { organization } = req.payload;
   const { email } = req.body;
 

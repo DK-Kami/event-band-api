@@ -4,6 +4,7 @@ import EventTag from '../../EventTag/EventTag';
 import Ticket from '../../Ticket/Ticket';
 import Event from '../../Event/Event';
 import { Op } from "sequelize";
+import { getOrganization } from "../../../utils/myOrganization";
 
 const organizationEvent = new Router();
 const {
@@ -17,6 +18,8 @@ const {
  * Получение всех событий организации
  */
 organizationEvent.get('/all', async (req, res) => {
+  await getOrganization(req, res);
+
   const { organization } = req.payload;
   const events = (await organization.getEvents({
     include: [
@@ -62,6 +65,8 @@ organizationEvent.get('/all', async (req, res) => {
  * Путь для создания события организация
  */
 organizationEvent.post('/create', async (req, res) => {
+  await getOrganization(req, res);
+
   const { organization } = req.payload;
   const OrganizationId = organization.id;
   const {
@@ -109,6 +114,8 @@ organizationEvent.post('/create', async (req, res) => {
 
 
 organizationEvent.put('/:uuid', async (req, res) => {
+  await getOrganization(req, res);
+
   const { uuid } = req.params;
   const event = await Event.getByUUID(uuid);
   if (!event) {

@@ -1,6 +1,7 @@
 import Router from "../../Base/Router";
 import News from '../../News/News';
 import models from '../../../db/models';
+import { getOrganization } from "../../../utils/myOrganization";
 
 const organizationNews = new Router();
 const {
@@ -11,6 +12,8 @@ const {
  * Получение всех новостей организации
  */
 organizationNews.get('/all', async (req, res) => {
+  await getOrganization(req, res);
+
   const {
     organization: {
       id: OrganizationId,
@@ -30,7 +33,9 @@ organizationNews.get('/all', async (req, res) => {
 /**
  * Создание новости организации
  */
-organizationNews.post('/create', (req, res) => {
+organizationNews.post('/create', async (req, res) => {
+  await getOrganization(req, res);
+
   const {
     organization: {
       id: OrganizationId,
@@ -67,6 +72,8 @@ organizationNews.post('/create', (req, res) => {
  * Удаление новости организации по его uuid
  */
 organizationNews.delete('/:uuid', async (req, res) => {
+  await getOrganization(req, res);
+
   const { uuid } = req.params;
   const news = await News.getByUUID(uuid);
   if (!news) {
