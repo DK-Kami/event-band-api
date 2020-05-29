@@ -6,6 +6,7 @@ import { organizationEvent } from "./organizationEvent";
 import { organizationTicket } from "./organizationTicket";
 import { organizationNews } from "./organizationNews";
 import { organizersRoter } from "./organizers";
+import auth from '../../routes/auth';
 
 const myOrganizationRouter = new Router();
 
@@ -13,7 +14,7 @@ const myOrganizationRouter = new Router();
  * Middleware, обеспечивающий безопасность путей организации,
  * путём проверки, передаваемого токена и получения организации
  */
-myOrganizationRouter.use(async (req, res, next) => {
+myOrganizationRouter.use(auth.required, async (req, res, next) => {
   console.log('req.headers', req.headers);
   console.log('req.payload', req.payload);
  

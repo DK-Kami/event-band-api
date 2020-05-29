@@ -5,6 +5,7 @@ let oldToken;
 const getTokenFromHeaders = (req) => {
   if (!req.headers) return null;
   
+  console.log('--------------------------------------------------------------------------------------------------------------------------------');
   console.log('getTokenFromHeaders req.headers', req.headers);
   console.log('getTokenFromHeaders req.headers.token', req.headers.token);
   console.log('getTokenFromHeaders req.headers.organization', req.headers.organization);
