@@ -14,7 +14,7 @@ const myOrganizationRouter = new Router();
  * Middleware, обеспечивающий безопасность путей организации,
  * путём проверки, передаваемого токена и получения организации
  */
-myOrganizationRouter.use(auth.required, async (req, res, next) => {
+myOrganizationRouter.use(async (req, res, next) => {
   console.log('req.headers', req.headers);
   console.log('req.payload', req.payload);
  
@@ -45,11 +45,11 @@ myOrganizationRouter.use(auth.required, async (req, res, next) => {
   return next();
 });
 
-myOrganizationRouter.use(someOrganizationRouter);
-myOrganizationRouter.use('/event', organizationEvent);
-myOrganizationRouter.use('/ticket', organizationTicket);
-myOrganizationRouter.use('/news', organizationNews);
-myOrganizationRouter.use('/organizers', organizersRoter);
+myOrganizationRouter.use('/', auth.required, someOrganizationRouter);
+myOrganizationRouter.use('/event', auth.required, organizationEvent);
+myOrganizationRouter.use('/ticket', auth.required, organizationTicket);
+myOrganizationRouter.use('/news', auth.required, organizationNews);
+myOrganizationRouter.use('/organizers', auth.required, organizersRoter);
 
 export {
   myOrganizationRouter,
