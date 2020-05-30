@@ -1,5 +1,5 @@
-import Router from "../Base/Router";
-import Subscriber from "./Subscriber";
+import Router from '../Base/Router';
+import Subscriber from './Subscriber';
 import models from '../../db/models';
 
 const subscriberRouter = new Router();

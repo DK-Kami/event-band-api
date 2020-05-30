@@ -5,7 +5,6 @@ import models from '../../db/models';
 const {
   Organization: OrganizationModel,
   User: UserModel,
-  News: NewsModel,
 } = models;
 const newsRouter = new Router();
 

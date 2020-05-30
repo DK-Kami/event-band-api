@@ -1,5 +1,6 @@
 import Model from '../Base/Model';
 import models from '../../db/models';
+
 const {
   Organizer: OrganizerModel,
 } = models;
