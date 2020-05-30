@@ -1,4 +1,4 @@
-import Router from "../Base/Router";
+import Router from '../Base/Router';
 import Ticket from './Ticket';
 import models from '../../db/models';
 
@@ -26,8 +26,8 @@ ticketRouter.get('/all', async (req, res) => {
           },
         ],
       },
-    ]
-  })
+    ],
+  });
 
   res.status(200).send({ tickets });
 });
