@@ -1,7 +1,7 @@
 import https from 'https';
 import http from 'http';
-import app from './app';
 import fs from 'fs';
+import app from './app';
 
 const HTTPS_PORT = '5000';
 const HTTP_PORT = '5001';
@@ -10,7 +10,7 @@ const certificate = fs.readFileSync('ssl/ssl.cert', 'utf8');
 
 const credentials = {
   key: privateKey,
-  cert: certificate
+  cert: certificate,
 };
 
 const httpsServer = https.createServer(credentials, app);
