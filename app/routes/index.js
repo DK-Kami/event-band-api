@@ -4,13 +4,7 @@ import Router from '../Base/Router';
 import auth from './auth';
 const mainRouter = new Router();
 
-mainRouter.get('/api/ping', (req, res) => {
-  console.log('-------------------------------------------------------');
-  console.log('logs from ping');
-  console.log('-------------------------------------------------------');
-  console.log('req.headers', req.headers);
-  console.log('req.headers.authorization', req.headers.authorization);
-  console.log('-------------------------------------------------------');
+mainRouter.get('/ping', (req, res) => {
   res.status(200).send({
     message: 'all ok',
   });
