@@ -9,7 +9,7 @@
   "test": {
     "username": "postgres",
     "password": "postgree",
-    "database": "event_band",
+    "database": "event_band_test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
