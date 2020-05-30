@@ -1,14 +1,15 @@
-import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import gravatar from 'gravatar';
-import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
-import Model from '../Base/Model';
-import models from '../../db/models';
+import crypto from 'crypto';
+import { v4 } from 'uuid';
+
 import Organization from '../Organization/Organization';
 import Subscriber from '../Subscriber/Subscriber';
+import models from '../../db/models';
+import Model from '../Base/Model';
 import User from './User';
-import { v4 } from 'uuid';
-import nodemailer from 'nodemailer';
 
 const {
   AuthorizedUser: AuthorizedUserModel,
@@ -86,7 +87,7 @@ class AuthorizedUser extends Model {
   async getProfile(uuid) {
     const user = await User.getByUUID(uuid);
     if (!user) return { message: 'user not found' };
-  
+
     const authUser = await user.getAuthorizedUser();
     const organizers = await user.getOrganizers();
 
@@ -122,7 +123,7 @@ class AuthorizedUser extends Model {
               attributes: ['uuid', 'name', 'description', 'coords', 'datetimeTo', 'datetimeFrom'],
               include: [
                 { model: OrganizationModel },
-              ]
+              ],
             },
           ],
         },
@@ -193,7 +194,7 @@ class AuthorizedUser extends Model {
    * @param {String} email Электронная почта пользователя
    * @param {String} refreshToken Токен для сброса пароля
    */
-  async sendEmail(email, refreshToken) {
+  async sendEmail(email, refreshToken = '') {
     const message = {
       from: 'info.event.band@gmail.com',
       to: email,
@@ -204,7 +205,7 @@ class AuthorizedUser extends Model {
           <span>Перейдите по ссылке для смены пароля: </span>
           <a href="https://event-band-api.ru/create-new-password/${refreshToken}">https://event-band-api.ru/create-new-password/${refreshToken}</a>
         </div>
-      `
+      `,
     };
     console.log(email);
 
