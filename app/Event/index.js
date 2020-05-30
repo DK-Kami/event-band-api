@@ -1,11 +1,11 @@
 import { Op } from 'sequelize';
-import Router from '../Base/Router';
-import Event from './Event';
-import models from '../../db/models';
 import Subscriber from '../Subscriber/Subscriber';
 import Ticket from '../Ticket/Ticket';
+import models from '../../db/models';
+import Router from '../Base/Router';
 import User from '../User/User';
 import News from '../News/News';
+import Event from './Event';
 
 const {
   Organization: OrganizationModel,
@@ -15,75 +15,7 @@ const {
   Event: EventModel,
   Tag: TagModel,
 } = models;
-const publicEventRouter = new Router();
 const eventRouter = new Router();
-
-/**
- * Путь для получения отфильтрованных событий неаторизованным пользователем
- */
-publicEventRouter.get('/event-list', Event.getFilteredEvents);
-/**
- * Возвращение конкретного события для uuid
- */
-publicEventRouter.get('/event/:uuid', Event.getCurrentEvent);
-/**
- * Путь для подписки на событие неавторизованным пользователем
- */
-publicEventRouter.post('/subscribe', (req, res) => {
-  const {
-    ticketUuid,
-    surname,
-    email,
-    name,
-  } = req.body;
-
-  User.getOrCreate(
-    { surname, name, email },
-    {},
-    async (message, userModel) => {
-      if (message) {
-        return res.status(400).send({ message });
-      }
-      const {
-        model: user,
-      } = userModel;
-
-      const ticket = await Ticket.getByUUID(ticketUuid);
-      if (!ticket) {
-        return res.status(400).send({
-          message: 'ticket not found',
-        });
-      }
-
-      const { id: TicketId } = ticket;
-      const { id: UserId } = user;
-      Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (subMessage, subscriber) => {
-        if (subMessage) {
-          return res.status(400).send({ subMessage });
-        }
-
-        const {
-          model: subscription,
-          isCreate,
-        } = subscriber;
-
-        if (isCreate || !subscription.status) {
-          subscription.status = 1;
-          subscription.save();
-
-          return res.status(201).send({
-            message: 'nice dick, awesome balls',
-            subscription,
-          });
-        }
-
-        return res.status(400).send({
-          message: 'email address is already registered at the event',
-        });
-      });
-    },
-  );
-});
 
 /**
  * Получение новостей от организаций, на которые подписан пользователь
@@ -312,7 +244,7 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
 
   const ticket = await Ticket.getByUUID(ticketUuid);
   if (!ticket) {
-    res.status(404).send({
+    return res.status(404).send({
       message: 'ticket not found',
     });
   }
@@ -336,8 +268,7 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
       subscription.save();
 
       return res.status(201).send({
-        message: 'nice dick, awesome balls',
-        subscription,
+        message: 'all ok',
       });
     }
 
@@ -353,9 +284,7 @@ eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
   const { ticketUuid } = req.params;
   const { userUUID } = req.payload;
 
-  console.log(ticketUuid, userUUID);
   const ticket = await Ticket.getByUUID(ticketUuid);
-  console.log(ticket);
   if (!ticket) {
     return res.status(404).send({
       message: 'ticket not found',
@@ -378,16 +307,20 @@ eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
     });
   }
 
-  subscription.status = 0;
-  await subscription.save();
+  if (subscription.status) {
+    subscription.status = 0;
+    await subscription.save();
 
-  return res.status(200).send({
-    message: 'nice dick, awesome balls',
-    subscription,
+    return res.status(200).send({
+      message: 'all ok',
+    });
+  }
+
+  return res.status(400).send({
+    message: 'you are already unsubscribing from this event',
   });
 });
 
 export {
-  publicEventRouter,
   eventRouter,
 };
