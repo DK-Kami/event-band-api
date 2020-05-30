@@ -15,7 +15,7 @@ passwordRouter.get('/request-password', async (req, res) => {
   });
 
   if (!user) {
-    res.status(400).send({
+    return res.status(400).send({
       message: 'Email not found',
       type: 'error',
     });
@@ -27,7 +27,7 @@ passwordRouter.get('/request-password', async (req, res) => {
   AuthorizedUser.sendEmail(email, refreshToken);
   authUser.save();
 
-  res.status(200).send({
+  return res.status(200).send({
     message: 'Check your email',
     type: 'success',
     refreshToken,

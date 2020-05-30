@@ -9,7 +9,7 @@ const authRouter = new Router();
 /**
  * [DEBUG] Возвращение всех пользователей
  */
-userRouter.get('/', async (req, res) => { 
+userRouter.get('/', async (req, res) => {
   const users = await User.getAll();
   const authUsers = await AuthorizedUser.getAll();
   return res.status(200).send({ users, authUsers });
