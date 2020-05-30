@@ -30,6 +30,7 @@ passwordRouter.get('/request-password', async (req, res) => {
   res.status(200).send({
     message: 'Check your email',
     type: 'success',
+    refreshToken,
   });
 });
 
@@ -47,7 +48,7 @@ passwordRouter.post('/change-password', async (req, res) => {
       where: { refreshToken: token },
     });
 
-    if (!authUser) throw new Error;
+    if (!authUser) throw new Error();
 
     authUser.salt = crypto.randomBytes(16).toString('hex');
     authUser.password = AuthorizedUser.cryptoPassword(password, authUser.salt);
@@ -57,8 +58,7 @@ passwordRouter.post('/change-password', async (req, res) => {
     return res.status(200).send({
       message: 'All ok',
     });
-  }
-  catch(e) {
+  } catch (e) {
     return res.status(400).send({
       message: 'wrong token',
     });

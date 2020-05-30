@@ -1,5 +1,5 @@
-import Organization from "../app/Organization/Organization";
-import User from "../app/User/User";
+import Organization from '../app/Organization/Organization';
+import User from '../app/User/User';
 
 /**
  * Middleware, обеспечивающий безопасность путей организации,
@@ -23,6 +23,7 @@ async function getOrganization(req, res) {
 
   req.payload.organization = organization;
   req.payload.user = user;
+  return true;
 }
 
 export {

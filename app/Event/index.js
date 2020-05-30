@@ -54,35 +54,34 @@ publicEventRouter.post('/subscribe', (req, res) => {
           message: 'ticket not found',
         });
       }
-    
+
       const { id: TicketId } = ticket;
       const { id: UserId } = user;
-      Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (message, subscriber) => {
-        if (message) {
-          return res.status(400).send({ message });
+      Subscriber.getOrCreate({ TicketId, UserId }, { status: 1 }, (subMessage, subscriber) => {
+        if (subMessage) {
+          return res.status(400).send({ subMessage });
         }
 
         const {
           model: subscription,
           isCreate,
         } = subscriber;
-    
+
         if (isCreate || !subscription.status) {
           subscription.status = 1;
           subscription.save();
-    
+
           return res.status(201).send({
             message: 'nice dick, awesome balls',
             subscription,
           });
         }
-        else {
-          return res.status(400).send({
-            message: 'email address is already registered at the event',
-          });
-        }
+
+        return res.status(400).send({
+          message: 'email address is already registered at the event',
+        });
       });
-    }
+    },
   );
 });
 
@@ -115,7 +114,7 @@ eventRouter.get('/event-feed', async (req, res) => {
     order: [['createdAt', 'DESC']],
     where: {
       OrganizationId: {
-        [Op.in]: orgIds
+        [Op.in]: orgIds,
       },
     },
     include: [
@@ -266,7 +265,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
       datetimeFrom: event.datetimeFrom,
       subscribers: tickets.length && tickets.reduce((summ, ticket) => summ + ticket.subscribers, 0),
       count: tickets.length && tickets.reduce((summ, ticket) => summ + ticket.count, 0),
-      minPrice: tickets.length && tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
+      minPrice: tickets.length && tickets.filter((p, n) => (p.price > n.price ? 1 : -1))[0].price,
       organization: event.Organization,
       tickets,
       tags,
@@ -277,7 +276,7 @@ eventRouter.get('/event-recommended', async (req, res) => {
     organizations: recommendedOrgs,
     events: recommendedEvents,
   });
-}),
+});
 
 /**
  * Путь для получения отфильтрованных событий аторизованным пользователем
@@ -314,10 +313,10 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
   const ticket = await Ticket.getByUUID(ticketUuid);
   if (!ticket) {
     res.status(404).send({
-      message: 'ticket not found'
-    })
+      message: 'ticket not found',
+    });
   }
-  
+
   const { id: TicketId } = ticket;
   const { id: UserId } = await User.getByUUID(userUUID);
 
@@ -329,7 +328,7 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
 
     const {
       model: subscription,
-      isCreate
+      isCreate,
     } = subscriberData;
 
     if (isCreate || !subscription.status) {
@@ -341,11 +340,10 @@ eventRouter.get('/subscribe/:ticketUuid', async (req, res) => {
         subscription,
       });
     }
-    else {
-      return res.status(400).send({
-        message: 'email address is already registered at the event',
-      });
-    }
+
+    return res.status(400).send({
+      message: 'email address is already registered at the event',
+    });
   });
 });
 /**
@@ -363,7 +361,7 @@ eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
       message: 'ticket not found',
     });
   }
-  
+
   const { id: TicketId } = ticket;
   const { id: UserId } = await User.getByUUID(userUUID);
 
@@ -392,4 +390,4 @@ eventRouter.get('/unsubscribe/:ticketUuid', async (req, res) => {
 export {
   publicEventRouter,
   eventRouter,
-}
+};
