@@ -42,7 +42,7 @@ profileRouter.put('/', async (req, res) => {
     name,
   } = req.body;
 
-  const realUser = User.getOne({
+  const realUser = await User.getOne({
     where: { email },
   });
   if (realUser) {
