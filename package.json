@@ -8,7 +8,9 @@
     "start:server": "babel-node -- server.js",
     "debug": "node --inspect --exec babel-node server.js",
     "server-prod": "set NODE_ENV=production && pm2 start pm2.config.json",
-    "test": "jest",
+    "db:reset": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
+    "test": "npm run db:reset && jest",
+    "jest": "jest",
     "eslint": "eslint ."
   },
   "repository": {
