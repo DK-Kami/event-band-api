@@ -7,8 +7,9 @@ import { ticketRouter } from '../Ticket';
 import { eventRouter } from '../Event';
 import { userRouter } from '../User';
 import { newsRouter } from '../News';
-import { tagRouter } from '../Tag';
+import { tagRouter } from '../Tag/tagRouter';
 import Router from '../Base/Router';
+
 const router = new Router();
 
 router.use('/my-organization', myOrganizationRouter);
