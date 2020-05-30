@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         uuid: '67d534cb-f185-442b-9b23-ffe9e5a50d7f',
-        name: 'Gay',
+        name: 'Creative',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -137,7 +137,7 @@ module.exports = {
       },
       {
         uuid: '5e082336-4d77-45e3-af8f-cc75943a661d',
-        name: 'Lesbian',
+        name: 'Parkour',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -149,13 +149,13 @@ module.exports = {
       },
       {
         uuid: 'b2e30848-ea90-4307-8398-df3830a05a1d',
-        name: 'Milf',
+        name: 'Farming',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         uuid: '75527a13-de42-459f-9162-315e9109b01d',
-        name: 'Exhibeo',
+        name: 'English',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -167,7 +167,7 @@ module.exports = {
       },
       {
         uuid: 'c9b82b02-e1ac-4036-bc8d-5fa44d227ed7',
-        name: 'Mind control',
+        name: 'Illusion',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

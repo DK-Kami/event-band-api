@@ -29,11 +29,10 @@ module.exports = {
       },
       {
         uuid: '2d742eb2-cd96-47f2-a43c-d382ab46476d',
-        name: 'Huilan',
+        name: 'Rock battle',
         reputation: 2,
         description: `
-          Hey, motherfucker, and Ah quickly subscribed to the channel, and not the I your anal fucked.
-          Round.
+          Roooooooooooooooooooooooooooooock!!!!!!!
         `,
         logo: 'huilan.jpg',
         createdAt: new Date(),

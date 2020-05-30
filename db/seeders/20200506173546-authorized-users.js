@@ -16,7 +16,7 @@ module.exports = {
       },
       {
         uuid: 'b1eb1f90-e330-4a10-9a65-5d2a61886d51',
-        nickname: 'suka blyat',
+        nickname: 'Main Admin',
         refreshToken: '',
         UserId: 2,
         token: '',

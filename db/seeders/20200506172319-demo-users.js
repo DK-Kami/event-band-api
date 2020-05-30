@@ -13,9 +13,9 @@ module.exports = {
       },
       {
         uuid: '7d1730f7-ca87-43c2-80af-fa70c9fa89ff',
-        email: 'suka@blyat.com',
-        name: 'suka',
-        surname: 'blyat',
+        email: 'main@admin.com',
+        name: 'Admin',
+        surname: 'Main',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

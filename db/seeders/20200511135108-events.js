@@ -49,7 +49,7 @@ module.exports = {
       },
       {
         uuid: 'e9c976b2-a77c-442A-8ffd-ff2a3ff4ee6a',
-        name: 'Huila event',
+        name: 'Rock battle event',
         description: 'huila here',
         datetimeFrom: '2020-05-05',
         datetimeTo: '2020-05-20',
