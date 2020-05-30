@@ -7,7 +7,8 @@
     "server": "nodemon --exec babel-node server.js",
     "debug": "node --inspect --exec babel-node server.js",
     "server-prod": "set NODE_ENV=production && pm2 start pm2.config.json",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "eslint ."
   },
   "repository": {
     "type": "git",
