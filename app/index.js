@@ -4,15 +4,14 @@
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
-import routes from './routes';
 import path from 'path';
-import cors from 'cors';
+import routes from './routes';
 import '../utils/passport';
 
 const appDir = path.dirname(require.main.filename);
 const app = express();
 
-app.use('/static', express.static(appDir + '/public'));
+app.use('/static', express.static(`${appDir}/public`));
 
 const allowCrossDomain = (req, res, next) => {
   const currentUrl = process.env.NODE_ENV === 'production'
@@ -22,15 +21,15 @@ const allowCrossDomain = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', currentUrl);
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept, Organization, token");
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Authorization, Content-Type, Accept, Organization, token');
 
   next();
 };
 app.use(allowCrossDomain);
 
-// app.use(cors());
-
-app.use(logger('dev'));
+if (process.env.NODE_ENV !== 'production') {
+  app.use(logger('dev'));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
