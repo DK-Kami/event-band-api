@@ -12,7 +12,6 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
 }, async (email, password, done) => {
   const user = await User.getOne({ where: { email } });
-  console.log('passport', user);
   if (!user) return done(IncorrectError);
 
   const authUser = await user.getAuthorizedUser();
