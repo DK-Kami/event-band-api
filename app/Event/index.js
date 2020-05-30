@@ -6,8 +6,6 @@ import Subscriber from '../Subscriber/Subscriber';
 import Ticket from '../Ticket/Ticket';
 import User from '../User/User';
 import News from '../News/News';
-import Tag from '../Tag/Tag';
-import cors from 'cors';
 
 const {
   Organization: OrganizationModel,
@@ -15,7 +13,6 @@ const {
   EventTag: EventTagModel,
   Ticket: TicketModel,
   Event: EventModel,
-  News: NewsModel,
   Tag: TagModel,
 } = models;
 const publicEventRouter = new Router();
