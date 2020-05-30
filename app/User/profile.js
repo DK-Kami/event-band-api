@@ -42,6 +42,14 @@ profileRouter.put('/', async (req, res) => {
     name,
   } = req.body;
 
+  const realUser = User.getOne({
+    where: { email },
+  });
+  if (realUser) {
+    return res.status(400).send({
+      message: 'email is already taken',
+    });
+  }
 
   try {
     await User.update(
@@ -52,7 +60,7 @@ profileRouter.put('/', async (req, res) => {
       { nickname },
       { uuid: authUserUUID },
     );
-  
+
     const {
       organizations,
       subscriptions,
@@ -63,14 +71,13 @@ profileRouter.put('/', async (req, res) => {
     if (message) {
       return res.status(400).send({ message });
     }
-  
+
     return res.status(200).send({
       user,
       organizations,
       subscriptions,
     });
-  }
-  catch(message) {
+  } catch (message) {
     console.log(message);
     res.status(400).send({ message });
   }
