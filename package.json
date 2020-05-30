@@ -7,7 +7,7 @@
     "server": "nodemon --exec babel-node server.js",
     "debug": "node --inspect --exec babel-node server.js",
     "server-prod": "set NODE_ENV=production && pm2 start pm2.config.json",
-    "test": "set NODE_ENV=test && mocha"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -22,9 +22,11 @@
   "homepage": "https://github.com/KamiMeow/event-band-api#readme",
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.10.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -32,7 +34,11 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.20.2",
-    "nodemon": "^2.0.3"
+    "eslint-plugin-jest": "^23.13.2",
+    "jest": "^26.0.1",
+    "jest-cli": "^26.0.1",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
