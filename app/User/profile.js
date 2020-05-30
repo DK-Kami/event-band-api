@@ -45,7 +45,7 @@ profileRouter.put('/', async (req, res) => {
   const realUser = await User.getOne({
     where: { email },
   });
-  if (realUser) {
+  if (realUser && realUser.uuid !== userUUID) {
     return res.status(400).send({
       message: 'email is already taken',
     });
