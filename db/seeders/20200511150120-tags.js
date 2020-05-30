@@ -77,7 +77,7 @@ module.exports = {
       },
       {
         uuid: '1df20420-76c8-4373-b7c5-61a55d76f7a7',
-        name: 'Furry',
+        name: 'Desctop',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -119,7 +119,7 @@ module.exports = {
       },
       {
         uuid: '4aff7ced-045a-497c-838A-647622308336',
-        name: 'Fisting',
+        name: 'Animal',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
