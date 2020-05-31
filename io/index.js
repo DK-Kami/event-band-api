@@ -1,7 +1,10 @@
+import gravatar from 'gravatar';
 import soketIo from 'socket.io';
 import jwt from 'jsonwebtoken';
-import Chat from '../app/Chat/Chat/Chat';
 import User from '../app/User/User';
+import ChatMessage from '../app/Chat/ChatMessage/ChatMessage';
+
+const getConnectionsCount = io => Object(io.sockets.connected).length;
 
 export default server => {
   const io = soketIo(server, {
@@ -20,38 +23,53 @@ export default server => {
     },
   });
 
-  let authUser;
-  let user;
-  let token;
+  let currentUser;
 
   io.use((socket, next) => {
-    const authToken = socket.handshake.headers.authorization;
-    console.log(authToken);
-    token = authToken;
+    const token = socket.handshake.headers.authorization;
+    if (!token) next();
 
     jwt.verify(token, 'secret', async (err, authorizedData) => {
-      console.log(authorizedData);
-      authUser = authorizedData;
-      // const {
-      //   authUserUUID,
-      //   userUUID,
-      // } = authorizedData;
+      const {
+        authUserUUID,
+        userUUID,
+      } = authorizedData;
 
-      // authUser = await User.getByUUID(authUserUUID);
-      // user = await User.getByUUID(userUUID);
+      const authUser = await User.getByUUID(authUserUUID);
+      const user = await User.getByUUID(userUUID);
+
+      currentUser = {
+        authUuid: authUserUUID,
+        userUuid: userUUID,
+        email: user.email,
+        nickname: authUser.nickname,
+        avatar: gravatar.url(user.email, { s: 200 }),
+      };
       next();
     });
   });
 
   io.on('connection', async (socket) => {
-    socket.emit('joined', {
-      token,
-      authUser,
-      user,
+    if (!currentUser) return;
+
+    socket.broadcast.emit('joined', {
+      connections: getConnectionsCount(io),
+      user: currentUser,
     });
 
-    socket.on('disconnect', () => {
-      console.log('A user disconnected');
+    socket.emit('connections', getConnectionsCount(io));
+
+    socket.on('send', async (message) => {
+      // const chatMessage = await ChatMessage.create({
+      //   message,
+      // })
+    });
+
+    socket.on('disconnect', async () => {
+      io.sockets.emit('user-leave', {
+        connections: getConnectionsCount(io),
+        user: currentUser,
+      });
     });
   });
 };

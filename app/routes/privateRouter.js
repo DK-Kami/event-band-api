@@ -3,6 +3,7 @@ import { organizationRouter } from '../Organization';
 import { subscriberRouter } from '../Subscriber';
 import { organizerRouter } from '../Organizer';
 import { profileRouter } from '../User/profile';
+import { chatRouter } from '../Chat/Chat';
 import { ticketRouter } from '../Ticket';
 import { eventRouter } from '../Event';
 import { userRouter } from '../User';
@@ -21,6 +22,7 @@ router.use('/ticket', ticketRouter);
 router.use('/event', eventRouter);
 router.use('/user', userRouter);
 router.use('/news', newsRouter);
+router.use('/chat', chatRouter);
 router.use('/tag', tagRouter);
 
 export default router;

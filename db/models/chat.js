@@ -13,7 +13,6 @@ export default (sequelize, DataTypes) => {
   Chat.associate = models => {
     // associations can be defined here
     Chat.hasMany(models.ChatMessage);
-    Chat.hasMany(models.ChatUser);
     Chat.belongsTo(models.Event);
   };
   return Chat;
