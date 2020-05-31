@@ -25,6 +25,7 @@ export default server => {
 
   io.use((socket, next) => {
     const token = socket.handshake.headers.authorization;
+    return next();
 
     jwt.verify(token, 'secret', async (err, authorizedData) => {
       console.log(authorizedData);
@@ -41,6 +42,7 @@ export default server => {
 
   io.on('connection', async (socket) => {
     socket.emit('joined', {
+      token,
       authUser,
       user,
     });
