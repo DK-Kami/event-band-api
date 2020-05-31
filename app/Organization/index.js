@@ -1,12 +1,11 @@
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 import Router from '../Base/Router';
 import Organizer from '../Organizer/Organizer';
 import Organization from './Organization';
 import User from '../User/User';
 import Subscriber from '../Subscriber/Subscriber';
-import models from '../../db/models';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
 
 const appDir = path.dirname(require.main.filename);
 const imageFolder = [appDir, 'public', 'organizations'].join('/');
@@ -17,79 +16,6 @@ const upload = multer({
 const publicOrganizationRouter = new Router();
 const organizationRouter = new Router();
 
-const {
-  Subscriber: SubscriberModel,
-  EventTag: EventTagModel,
-  Ticket: TicketModel,
-  User: UserModel,
-  Tag: TagModel,
-} = models;
-
-/**
- * Функция для получения организации по его uuid
- */
-async function getOrganizationByUUID(req, res) {
-  const { uuid } = req.params;
-  const organization = await Organization.getByUUID(uuid);
-  if (!organization) {
-    return res.status(404).send({
-      message: 'organization not found',
-    });
-  }
-
-  const subscribers = await organization.getSubscribers({
-    attributes: ['id'],
-  });
-
-  const organizers = (await organization.getOrganizers({
-    attributes: ['id'],
-    include: [
-      { model: UserModel },
-    ],
-  })).map(organizer => organizer.User);
-
-  const events = (await organization.getEvents({
-    include: [
-      {
-        model: TicketModel,
-        include: [
-          { model: SubscriberModel },
-        ],
-      },
-      {
-        model: EventTagModel,
-        attributes: ['id'],
-        include: [
-          {
-            model: TagModel,
-            attributes: ['name'],
-          },
-        ],
-      },
-    ],
-  }))
-    .map(event => ({
-      uuid: event.uuid,
-      name: event.name,
-      description: event.description,
-      datetimeTo: event.datetimeTo,
-      coords: event.coords,
-      datetimeFrom: event.datetimeFrom,
-      subscribers: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
-      count: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
-      minPrice: event.Tickets.length && event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
-
-      tags: event.EventTags.map(eventTag => eventTag.Tag.name),
-      tickets: event.Tickets,
-    }));
-
-  return res.status(200).send({
-    subscribers: subscribers.length,
-    organization,
-    organizers,
-    events,
-  });
-};
 
 /**
  * [DEBUG] Получение всех организаций
@@ -112,7 +38,7 @@ organizationRouter.post('/create', upload.single('logo'), async (req, res) => {
 
   const oldpath = logo.path;
   const type = logo.mimetype.split('/')[1];
-  const imageName = name.split(' ').join('_').toLowerCase() + '.' + type;
+  const imageName = `${name.split(' ').join('_').toLowerCase()}.${type}`;
   const newPath = [imageFolder, imageName].join('/');
 
   fs.rename(oldpath, newPath, message => {
@@ -126,20 +52,22 @@ organizationRouter.post('/create', upload.single('logo'), async (req, res) => {
       name,
     };
 
-    Organization.create(createData, (message, organization) => {
-      if (message) {
-        return res.status(400).send({ message });
+    Organization.create(createData, (orgMessage, organization) => {
+      if (orgMessage) {
+        return res.status(400).send({ message: orgMessage });
       }
-  
+
       Organizer.create({
         OrganizationId: organization.id,
         UserId: user.id,
         status: 1,
-      }, (message) => {
-        if (message) {
-          return res.status(400).send({ message });
+      }, (organizerMessage) => {
+        if (organizerMessage) {
+          return res.status(400).send({
+            message: organizerMessage,
+          });
         }
-  
+
         return res.status(201).send({ organization });
       });
     });
@@ -149,11 +77,11 @@ organizationRouter.post('/create', upload.single('logo'), async (req, res) => {
 /**
  *  Получение конкретной организации по uuid для неавторизованных пользователей
  */
-publicOrganizationRouter.get('/:uuid', getOrganizationByUUID);
+publicOrganizationRouter.get('/:uuid', Organization.getOrganizationByUUID);
 /**
  *  Получение конкретной организации по uuid для авторизованных пользователей
  */
-organizationRouter.get('/:uuid', getOrganizationByUUID);
+organizationRouter.get('/:uuid', Organization.getOrganizationByUUID);
 
 /**
  * Подписка на организацию
@@ -184,17 +112,15 @@ organizationRouter.get('/subscribe/:uuid', async (req, res) => {
     if (isCreate || !subscription.status) {
       subscription.status = 1;
       subscription.save();
-  
+
       return res.status(201).send({
-        message: 'nice dick, awesome balls',
-        subscription,
+        message: 'all ok',
       });
     }
-    else {
-      return res.status(400).send({
-        message: 'email address is already in this organization',
-      });
-    }
+
+    return res.status(400).send({
+      message: 'email address is already in this organization',
+    });
   });
 });
 /**
@@ -223,20 +149,16 @@ organizationRouter.get('/unsubscribe/:uuid', async (req, res) => {
       subscription.status = 0;
       subscription.save();
 
-      res.status(201).send({
-        message: 'nice dick, awesome balls',
-        subscription,
+      return res.status(201).send({
+        message: 'all ok',
       });
     }
-    else {
-      res.status(400).send({
-        message: 'you are already out of this organization',
-      });
-    }
-  }
-  catch(message) {
+    return res.status(400).send({
+      message: 'you are already out of this organization',
+    });
+  } catch (message) {
     console.error(message);
-    res.status(400).send({ message });
+    return res.status(400).send({ message });
   }
 });
 
@@ -259,7 +181,7 @@ organizationRouter.get('/login/:organizationUUID', async (req, res) => {
     where: {
       OrganizationId: organization.id,
       UserId: user.id,
-    }
+    },
   });
   if (!organizer) {
     return res.status(403).send({
