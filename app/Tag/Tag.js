@@ -35,6 +35,12 @@ tagModel.getTagByUUID = async (req, res) => {
   const { uuid } = req.params;
 
   const tag = await tagModel.getByUUID(uuid);
+  if (!tag) {
+    return res.status(404).send({
+      message: 'tag not found',
+    });
+  }
+
   return res.status(200).send({ tag });
 };
 
