@@ -2,6 +2,9 @@ import https from 'https';
 import http from 'http';
 import fs from 'fs';
 import app from './app';
+import io from './io';
+
+io(http);
 
 const HTTPS_PORT = '5000';
 const HTTP_PORT = '5001';
@@ -12,6 +15,7 @@ const credentials = {
   key: privateKey,
   cert: certificate,
 };
+
 
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
