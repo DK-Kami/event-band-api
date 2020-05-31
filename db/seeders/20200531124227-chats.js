@@ -5,13 +5,13 @@ module.exports = {
     queryInterface.bulkInsert('Chats', [
       {
         uuid: '1df29884-bf9b-453b-8434-ddf3537d0b05',
-        Event: 1,
+        EventId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         uuid: '40f934ca-35cb-4707-b3dd-c53c6c0538dc',
-        Event: 2,
+        EventId: 2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -137,7 +137,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    queryInterface.bulkDelete('ChatUsers', null, {});
     queryInterface.bulkDelete('ChatMessages', null, {});
     return queryInterface.bulkDelete('Chats', null, {});
   }
