@@ -30,6 +30,7 @@ chatRouter.get('/all', async (req, res) => {
  * Получение сообщений конкретного чата
  */
 chatRouter.get('/:uuid', async (req, res) => {
+  const { userUUID } = req.payload;
   const { uuid } = req.params;
 
   const chat = await Chat.getByUUID(uuid);
@@ -45,7 +46,7 @@ chatRouter.get('/:uuid', async (req, res) => {
     include: [
       {
         model: UserModel,
-        attributes: ['email'],
+        attributes: ['email', 'uuid'],
         include: {
           model: AuthorizedUserModel,
           attributes: ['nickname'],
@@ -60,6 +61,7 @@ chatRouter.get('/:uuid', async (req, res) => {
       message: message.message,
       createdAt: message.createdAt,
       user: {
+        isOwn: message.User.uuid === userUUID,
         email: message.User.email,
         nickname: message.User.AuthorizedUser.nickname,
         avatar: gravatar.url(message.User.email, { s: 200 }),
