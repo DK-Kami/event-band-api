@@ -51,7 +51,7 @@ module.exports = {
         uuid: 'e9c976b2-a77c-442A-8ffd-ff2a3ff4ee6a',
         name: 'Rock battle event',
         description: 'Rock battle here',
-        datetimeFrom: '2020-06-00',
+        datetimeFrom: '2020-06-01',
         datetimeTo: '2020-06-15',
         coords: '55.7822200, 37.5855600',
         OrganizationId: 3,

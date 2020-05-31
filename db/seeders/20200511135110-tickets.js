@@ -57,7 +57,7 @@ module.exports = {
         description: 'Ticket for 1 etap',
         count: 500,
         price: 1500,
-        datetimeFrom: '2020-06-00',
+        datetimeFrom: '2020-06-01',
         datetimeTo: '2020-06-05',
         EventId: 5,
         createdAt: new Date(),
