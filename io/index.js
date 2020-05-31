@@ -8,6 +8,37 @@ import Chat from '../app/Chat/Chat/Chat';
 
 const getConnectionsCount = io => Object.keys(io.sockets.connected).length;
 
+function getCurrentUser(socket) {
+  const token = socket.handshake.headers.authorization;
+  if (!token) {
+    return { error };
+  };
+
+  jwt.verify(token, 'secret', async (err, authorizedData) => {
+    const {
+      authUserUUID,
+      userUUID,
+    } = authorizedData;
+
+    const authUser = await AuthorizedUser.getByUUID(authUserUUID);
+    const user = await User.getByUUID(userUUID);
+    const UserId = user.id;
+
+    const currentUser = {
+      authUuid: authUserUUID,
+      userUuid: userUUID,
+      email: user.email,
+      nickname: authUser.nickname,
+      avatar: gravatar.url(user.email, { s: 200 }),
+    };
+
+    return {
+      currentUser,
+      UserId,
+    };
+  });
+}
+
 export default server => {
   const io = soketIo(server, {
     handlePreflightRequest: (req, res) => {
@@ -25,42 +56,23 @@ export default server => {
     },
   });
 
-  let currentUser;
-  let UserId;
-
-  io.use((socket, next) => {
-    const token = socket.handshake.headers.authorization;
-    if (!token) next();
-
-    jwt.verify(token, 'secret', async (err, authorizedData) => {
-      const {
-        authUserUUID,
-        userUUID,
-      } = authorizedData;
-
-      const authUser = await AuthorizedUser.getByUUID(authUserUUID);
-      const user = await User.getByUUID(userUUID);
-      UserId = user.id;
-
-      currentUser = {
-        authUuid: authUserUUID,
-        userUuid: userUUID,
-        email: user.email,
-        nickname: authUser.nickname,
-        avatar: gravatar.url(user.email, { s: 200 }),
-      };
-      next();
-    });
-  });
-
   io.on('connection', async (socket) => {
     const { chatUuid } = socket.handshake.query;
+    const {
+      currentUser,
+      UserId,
+      error,
+    } = getCurrentUser(socket);
+
     const chat = await Chat.getByUUID(chatUuid);
+    if (error) {
+      return socket.emit('error', error);
+    }
     if (!chat) {
-      socket.emit('error', 'chat not found');
+      return socket.emit('error', 'chat not found');
     }
     if (!currentUser) {
-      socket.emit('error', 'user not found');
+      return socket.emit('error', 'user not found');
     }
 
     socket.broadcast.emit('joined', {
