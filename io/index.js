@@ -22,20 +22,23 @@ export default server => {
 
   let authUser;
   let user;
+  let token;
 
   io.use((socket, next) => {
-    const token = socket.handshake.headers.authorization;
-    return next();
+    const authToken = socket.handshake.headers.authorization;
+    console.log(authToken);
+    token = authToken;
 
     jwt.verify(token, 'secret', async (err, authorizedData) => {
       console.log(authorizedData);
-      const {
-        authUserUUID,
-        userUUID,
-      } = authorizedData;
+      authUser = authorizedData;
+      // const {
+      //   authUserUUID,
+      //   userUUID,
+      // } = authorizedData;
 
-      authUser = await User.getByUUID(authUserUUID);
-      user = await User.getByUUID(userUUID);
+      // authUser = await User.getByUUID(authUserUUID);
+      // user = await User.getByUUID(userUUID);
       next();
     });
   });
