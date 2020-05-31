@@ -64,9 +64,12 @@ someOrganizationRouter.get('/', async (req, res) => {
       datetimeTo: event.datetimeTo,
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
-      subscribers: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
-      count: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
-      minPrice: event.Tickets.length && event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
+      subscribers: event.Tickets.length
+        && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
+      count: event.Tickets.length
+        && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
+      minPrice: event.Tickets.length
+        && event.Tickets.filter((p, n) => (p.price > n.price ? 1 : -1))[0].price,
 
       tags: event.EventTags.map(eventTag => eventTag.Tag.name),
       tickets: event.Tickets.length && event.Tickets,
@@ -99,7 +102,7 @@ someOrganizationRouter.put('/', async (req, res) => {
       if (message) {
         return res.status(400).send({ message });
       }
-    
+
       const organization = await Organization.getByUUID(organizationUUID);
       return res.status(200).send({ organization });
     },

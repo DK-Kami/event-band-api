@@ -7,6 +7,10 @@ import {
   subscribeOnNotRealOrganizationRoute,
   subscribeOnOrganizationRoute,
   unSubscribeFromOrganizationRoute,
+  loginForElsesOrganization,
+  loginForOwnOrganization,
+  createOrganizationRoute,
+  createOrganizationData,
 } from '../../__test__data/organization';
 import { authorizationToken } from '../../__test__data/main';
 
@@ -92,4 +96,47 @@ describe('organization routes', () => {
         expect(body).toHaveProperty('message', 'you are already out of this organization');
       });
   });
+
+  it('login to elses organization', async () => {
+    await supertest(app)
+      .get(loginForElsesOrganization)
+      .set('authorization', authorizationToken)
+      .expect(403)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('message', 'Permission denied! You have no power here, servant of Mordor.');
+      });
+  });
+  it('login to own organization', async () => {
+    await supertest(app)
+      .get(loginForOwnOrganization)
+      .set('authorization', authorizationToken)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('organizationToken');
+      });
+  });
+
+  // it('create organization', async () => {
+  //   await supertest(app)
+  //     .post(createOrganizationRoute)
+  //     .send(createOrganizationData)
+  //     .set('authorization', authorizationToken)
+  //     .expect(200)
+  //     .expect(({ body }) => {
+  //       expect(body).toHaveProperty('organization');
+
+  //       const { organization } = body;
+  //       expect(organization).toHaveProperty('name', createOrganizationData.name);
+  //     });
+  // });
+  // it('repeat create organization', async () => {
+  //   await supertest(app)
+  //     .post(createOrganizationRoute)
+  //     .send(createOrganizationData)
+  //     .set('authorization', authorizationToken)
+  //     .expect(400)
+  //     .expect(({ body }) => {
+  //       expect(body).toHaveProperty('message', 'name is already taken');
+  //     });
+  // });
 });
