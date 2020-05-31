@@ -42,7 +42,7 @@ chatRouter.get('/:uuid', async (req, res) => {
 
   const messages = await chat.getChatMessages({
     attributes: ['uuid', 'message', 'createdAt'],
-    order: [['createdAt', 'DESC']],
+    order: [['createdAt', 'ASC']],
     include: [
       {
         model: UserModel,
