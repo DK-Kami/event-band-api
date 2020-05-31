@@ -6,7 +6,7 @@ import AuthorizedUser from '../app/User/AuthorizedUser';
 import ChatMessage from '../app/Chat/ChatMessage/ChatMessage';
 import Chat from '../app/Chat/Chat/Chat';
 
-const getConnectionsCount = io => Object(io.sockets.connected).length;
+const getConnectionsCount = io => Object.keys(io.sockets.connected).length;
 
 export default server => {
   const io = soketIo(server, {
@@ -65,8 +65,6 @@ export default server => {
       user: currentUser,
     });
 
-    console.log('getConnectionsCount', getConnectionsCount(io));
-    console.log('Object(io.sockets.connected).length', Object(io.sockets.connected).length);
     socket.emit('connections', getConnectionsCount(io));
 
     socket.on('send', async (message) => {
