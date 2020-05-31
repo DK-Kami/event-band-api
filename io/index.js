@@ -6,9 +6,11 @@ export default http => {
   io.on('connection', async (socket, data) => {
     console.log('connection', socket, data);
 
-    const chats = Chat.getAll();
+    const chats = await Chat.getAll();
     socket.emit('huivrot', { chats });
-    socket.emit('soisipisos', (message) => message);
+    socket.emit('soisipisos', {
+      mesasge: 'nigga, you gay'
+    });
 
     socket.on('disconnect', () => {
       console.log('A user disconnected');
