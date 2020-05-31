@@ -1,8 +1,8 @@
-import Router from "../../Base/Router";
+import Router from '../../Base/Router';
 import Organizer from '../../Organizer/Organizer';
 import models from '../../../db/models';
-import User from "../../User/User";
-import { getOrganization } from "../../../utils/myOrganization";
+import User from '../../User/User';
+import { getOrganization } from '../../../utils/myOrganization';
 
 const organizersRoter = new Router();
 const {
@@ -58,10 +58,7 @@ organizersRoter.post('/request', async (req, res) => {
       if (message) {
         return res.status(400).send({ message });
       }
-      const {
-        organizer,
-        isGet,
-      } = organizerModel;
+      const { isGet } = organizerModel;
 
       if (isGet) {
         return res.status(400).send({
@@ -69,9 +66,11 @@ organizersRoter.post('/request', async (req, res) => {
         });
       }
 
-      return res.status(201).send({ organizer });
-    }
-  )
+      return res.status(201).send({
+        mesage: 'all ok',
+      });
+    },
+  );
 });
 
 export {

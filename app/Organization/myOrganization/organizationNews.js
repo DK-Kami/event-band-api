@@ -1,7 +1,7 @@
-import Router from "../../Base/Router";
+import Router from '../../Base/Router';
 import News from '../../News/News';
 import models from '../../../db/models';
-import { getOrganization } from "../../../utils/myOrganization";
+import { getOrganization } from '../../../utils/myOrganization';
 
 const organizationNews = new Router();
 const {
@@ -57,14 +57,16 @@ organizationNews.post('/create', async (req, res) => {
   }
 
   News.create(
-    { title, text, image, OrganizationId, UserId },
+    {
+      title, text, image, OrganizationId, UserId,
+    },
     (message, news) => {
       if (message) {
         return res.status(400).send({ message });
       }
 
       return res.status(200).send({ news });
-    }
+    },
   );
 });
 
@@ -88,7 +90,7 @@ organizationNews.delete('/:uuid', async (req, res) => {
     }
 
     return res.status(200).send({
-      message: 'ya',
+      message: 'all ok',
     });
   });
 });

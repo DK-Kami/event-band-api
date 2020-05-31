@@ -1,6 +1,6 @@
-import Router from "../../Base/Router";
+import Router from '../../Base/Router';
 import Ticket from '../../Ticket/Ticket';
-import { getOrganization } from "../../../utils/myOrganization";
+import { getOrganization } from '../../../utils/myOrganization';
 
 const organizationTicket = new Router();
 
@@ -41,9 +41,9 @@ organizationTicket.put('/:uuid', async (req, res) => {
         return res.status(400).send({ message });
       }
 
-      const ticket = await Ticket.getByUUID(uuid);
-      return res.status(200).send({ ticket });
-    }
+      const newTicket = await Ticket.getByUUID(uuid);
+      return res.status(200).send({ ticket: newTicket });
+    },
   );
 });
 
@@ -67,7 +67,7 @@ organizationTicket.delete('/:uuid', async (req, res) => {
     }
 
     return res.status(200).send({
-      message: 'ya',
+      message: 'all ok',
     });
   });
 });

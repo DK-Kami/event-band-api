@@ -1,10 +1,10 @@
-import Router from "../../Base/Router";
+import { Op } from 'sequelize';
+import Router from '../../Base/Router';
 import models from '../../../db/models';
 import EventTag from '../../EventTag/EventTag';
 import Ticket from '../../Ticket/Ticket';
 import Event from '../../Event/Event';
-import { Op } from "sequelize";
-import { getOrganization } from "../../../utils/myOrganization";
+import { getOrganization } from '../../../utils/myOrganization';
 
 const organizationEvent = new Router();
 const {
@@ -51,9 +51,12 @@ organizationEvent.get('/all', async (req, res) => {
       datetimeTo: event.datetimeTo,
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
-      subscribers: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
-      count: event.Tickets.length && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
-      minPrice: event.Tickets.length && event.Tickets.filter((p, n) => p.price > n.price ? 1 : -1)[0].price,
+      subscribers: event.Tickets.length
+        && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
+      count: event.Tickets.length
+        && event.Tickets.reduce((summ, ticket) => summ + ticket.count, 0),
+      minPrice: event.Tickets.length
+        && event.Tickets.filter((p, n) => (p.price > n.price ? 1 : -1))[0].price,
 
       tags: event.EventTags.map(eventTag => eventTag.Tag.name),
       tickets: event.Tickets,
@@ -81,7 +84,9 @@ organizationEvent.post('/create', async (req, res) => {
   } = req.body;
 
   Event.create(
-    { name, description, count, coords, datetimeTo, datetimeFrom, OrganizationId },
+    {
+      name, description, count, coords, datetimeTo, datetimeFrom, OrganizationId,
+    },
     async (message, event) => {
       if (message) {
         return res.status(400).send({ message });
@@ -99,7 +104,7 @@ organizationEvent.post('/create', async (req, res) => {
       await Promise.all(tickets.map(async ticket => {
         ticket.EventId = event.id;
         await ticket.save();
-      }));      
+      }));
       await Promise.all(tagIds.map(async TagId => {
         await EventTag.create({ TagId, EventId });
       }));
@@ -108,7 +113,7 @@ organizationEvent.post('/create', async (req, res) => {
         event,
         tickets,
       });
-    }
+    },
   );
 });
 
@@ -132,10 +137,10 @@ organizationEvent.put('/:uuid', async (req, res) => {
         return res.status(400).send({ message });
       }
 
-      const event = await Event.getByUUID(uuid);
-      return res.status(200).send({ event });
-    }
-  )
+      const newEvent = await Event.getByUUID(uuid);
+      return res.status(200).send({ event: newEvent });
+    },
+  );
 });
 
 export {
