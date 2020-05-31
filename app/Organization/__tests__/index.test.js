@@ -9,8 +9,8 @@ import {
   unSubscribeFromOrganizationRoute,
   loginForElsesOrganization,
   loginForOwnOrganization,
-  createOrganizationRoute,
-  createOrganizationData,
+  // createOrganizationRoute,
+  // createOrganizationData,
 } from '../../__test__data/organization';
 import { authorizationToken } from '../../__test__data/main';
 

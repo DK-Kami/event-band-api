@@ -18,9 +18,9 @@ const httpServer = http.createServer(app);
 
 httpsServer.listen(HTTPS_PORT, err => {
   if (err) throw err;
-  console.log('Люди-люди, хуи на блюди');
+  console.log('Запуск сервера');
 });
 httpServer.listen(HTTP_PORT, err => {
   if (err) throw err;
-  console.log('Люди-люди, хуи на блюди, но на http');
+  console.log('Запуск сервера, но на http');
 });
