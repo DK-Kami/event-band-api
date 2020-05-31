@@ -77,8 +77,18 @@ export default server => {
         UserId,
       });
 
-      socket.broadcast.emit('send', {
-        user: currentUser,
+      console.log('inbox', {
+        ...currentUser,
+        createdAt: new Date(),
+        isOwn: false,
+      }, message);
+
+      socket.broadcast.emit('inbox', {
+        user: {
+          ...currentUser,
+          createdAt: new Date(),
+          isOwn: false,
+        },
         message,
       });
     });
