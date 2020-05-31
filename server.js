@@ -4,8 +4,6 @@ import fs from 'fs';
 import app from './app';
 import io from './io';
 
-io(http);
-
 const HTTPS_PORT = '5000';
 const HTTP_PORT = '5001';
 const privateKey = fs.readFileSync('ssl/ssl.key', 'utf8');
@@ -16,9 +14,9 @@ const credentials = {
   cert: certificate,
 };
 
-
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
+io(httpServer);
 
 httpsServer.listen(HTTPS_PORT, err => {
   if (err) throw err;
