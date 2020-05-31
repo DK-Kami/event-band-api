@@ -3,8 +3,19 @@ import jwt from 'express-jwt';
 import Chat from '../app/Chat/Chat/Chat';
 import User from '../app/User/User';
 
-export default http => {
-  const io = soketIo(http);
+export default server => {
+  const io = soketIo(server, {
+    handlePreflightRequest: (req, res) => {
+      const headers = {
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      };
+      res.writeHead(200, headers);
+      res.end();
+    },
+  });
+
   let authUser;
   let user;
 
