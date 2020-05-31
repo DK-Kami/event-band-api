@@ -163,6 +163,10 @@ eventModel.getCurrentEvent = async (req, res) => {
   }
 
   const organization = await event.getOrganization();
+  const chat = await event.getChat({
+    attributes: ['uuid'],
+  });
+
   const tickets = await event.getTickets({
     include: [
       { model: SubscriberModel },
@@ -190,6 +194,7 @@ eventModel.getCurrentEvent = async (req, res) => {
   });
 
   return res.status(200).send({
+    chatUuid: chat && chat.uuid,
     user,
     eventMeta: {
       subscribers: tickets.reduce((summ, ticket) => summ + ticket.subscribers, 0),
