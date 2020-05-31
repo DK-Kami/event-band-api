@@ -56,9 +56,12 @@ export default server => {
   io.on('connection', async (socket) => {
     const { chatUuid } = socket.handshake.query;
     const chat = await Chat.getByUUID(chatUuid);
-    if (!chat) return;
-
-    if (!currentUser) return;
+    if (!chat) {
+      socket.emit('error', 'chat not found');
+    }
+    if (!currentUser) {
+      socket.emit('error', 'user not found');
+    }
 
     socket.broadcast.emit('joined', {
       connections: getConnectionsCount(io),
