@@ -6,7 +6,7 @@ module.exports = {
       {
         uuid: '7595d0f1-9836-4c9f-8002-5e310eed883d',
         name: 'Anime party',
-        description: 'ANIME!!! Ha-ha niBBa, u gay',
+        description: 'ANIME!!! Ha-ha welvome to us',
         datetimeFrom: '2020-05-09',
         datetimeTo: '2020-05-12',
         coords: '55.7822200, 37.5255600',
