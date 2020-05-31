@@ -34,7 +34,7 @@ module.exports = {
         description: `
           Roooooooooooooooooooooooooooooock!!!!!!!
         `,
-        logo: 'huilan.jpg',
+        logo: 'rock_battle.jpg',
         createdAt: new Date(),
         updatedAt: new Date(),
       }
