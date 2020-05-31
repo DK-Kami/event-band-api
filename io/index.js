@@ -1,5 +1,5 @@
 import soketIo from 'socket.io';
-import jwt from 'express-jwt';
+import jwt from 'jsonwebtoken';
 import Chat from '../app/Chat/Chat/Chat';
 import User from '../app/User/User';
 
