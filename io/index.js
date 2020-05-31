@@ -6,9 +6,13 @@ import User from '../app/User/User';
 export default server => {
   const io = soketIo(server, {
     handlePreflightRequest: (req, res) => {
+      const currentUrl = process.env.NODE_ENV === 'production'
+        ? 'https://event-band-api.ru'
+        : 'http://localhost:8080';
+
       const headers = {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': currentUrl,
         'Access-Control-Allow-Credentials': true,
       };
       res.writeHead(200, headers);
