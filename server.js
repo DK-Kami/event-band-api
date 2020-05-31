@@ -16,7 +16,7 @@ const credentials = {
 
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
-io(httpServer);
+io(httpsServer);
 
 httpsServer.listen(HTTPS_PORT, err => {
   if (err) throw err;

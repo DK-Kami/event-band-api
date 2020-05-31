@@ -5,6 +5,7 @@ import EventTag from '../../EventTag/EventTag';
 import Ticket from '../../Ticket/Ticket';
 import Event from '../../Event/Event';
 import { getOrganization } from '../../../utils/myOrganization';
+import Chat from '../../Chat/Chat/Chat';
 
 const organizationEvent = new Router();
 const {
@@ -93,6 +94,7 @@ organizationEvent.post('/create', async (req, res) => {
       }
 
       const { id: EventId } = event;
+      const chat = await Chat.create({ EventId });
       const tickets = await Ticket.getAll({
         where: {
           id: {
@@ -110,6 +112,7 @@ organizationEvent.post('/create', async (req, res) => {
       }));
 
       return res.status(201).send({
+        chat: chat && chat.uuid,
         event,
         tickets,
       });
