@@ -8,11 +8,17 @@ import Chat from '../app/Chat/Chat/Chat';
 
 const getConnectionsCount = io => Object.keys(io.sockets.connected).length;
 
-function getCurrentUser(socket) {
+async function getCurrentUser(socket, done) {
   const token = socket.handshake.headers.authorization;
   if (!token) {
-    return { error };
-  };
+    return done({ error: 'token not found' });
+  }
+
+  const { chatUuid } = socket.handshake.query;
+  const chat = await Chat.getByUUID(chatUuid);
+  if (!chat) {
+    return done({ error: 'chat not found' });
+  }
 
   jwt.verify(token, 'secret', async (err, authorizedData) => {
     const {
@@ -32,10 +38,11 @@ function getCurrentUser(socket) {
       avatar: gravatar.url(user.email, { s: 200 }),
     };
 
-    return {
+    return done(null, {
       currentUser,
       UserId,
-    };
+      chat,
+    });
   });
 }
 
@@ -57,33 +64,19 @@ export default server => {
   });
 
   io.on('connection', async (socket) => {
-    const { chatUuid } = socket.handshake.query;
-    const {
-      currentUser,
-      UserId,
-      error,
-    } = getCurrentUser(socket);
+    await getCurrentUser(socket, (error, { chat, currentUser, UserId }) => {
+      if (error) {
+        return socket.emit('error', error);
+      }
 
-    const chat = await Chat.getByUUID(chatUuid);
-    if (error) {
-      return socket.emit('error', error);
-    }
-    if (!chat) {
-      return socket.emit('error', 'chat not found');
-    }
-    if (!currentUser) {
-      return socket.emit('error', 'user not found');
-    }
+      socket.broadcast.emit('joined', {
+        connections: getConnectionsCount(io),
+        user: currentUser,
+      });
 
-    socket.broadcast.emit('joined', {
-      connections: getConnectionsCount(io),
-      user: currentUser,
-    });
+      socket.emit('connections', getConnectionsCount(io));
 
-    socket.emit('connections', getConnectionsCount(io));
-
-    socket.on('send', async (message) => {
-      try {
+      socket.on('send', async (message) => {
         console.log('message', message, UserId, chat.id);
         await ChatMessage.create({
           ChatId: chat.id,
@@ -105,30 +98,17 @@ export default server => {
           },
           message,
         });
-      } catch (error) {
-        console.error(error);
-        socket.emit('error', error);
-      }
-    });
+      });
 
-    socket.on('leave-chat', async () => {
-      socket.disconnect(true);
+      socket.on('leave-chat', async () => {
+        socket.disconnect(true);
 
-      io.sockets.emit('connections', getConnectionsCount(io));
-      io.sockets.emit('user-leave', {
-        connections: getConnectionsCount(io),
-        user: currentUser,
+        io.sockets.emit('connections', getConnectionsCount(io));
+        io.sockets.emit('user-leave', {
+          connections: getConnectionsCount(io),
+          user: currentUser,
+        });
       });
     });
-
-    // socket.on('disconnect', async () => {
-    //   socket.emit('connections', getConnectionsCount(io));
-    //   socket.disconnect(true);
-
-    //   io.sockets.emit('user-leave', {
-    //     connections: getConnectionsCount(io),
-    //     user: currentUser,
-    //   });
-    // });
   });
 };
