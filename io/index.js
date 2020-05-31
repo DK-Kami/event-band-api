@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../app/User/User';
 import AuthorizedUser from '../app/User/AuthorizedUser';
 import ChatMessage from '../app/Chat/ChatMessage/ChatMessage';
+import Chat from '../app/Chat/Chat/Chat';
 
 const getConnectionsCount = io => Object(io.sockets.connected).length;
 
@@ -25,6 +26,7 @@ export default server => {
   });
 
   let currentUser;
+  let UserId;
 
   io.use((socket, next) => {
     const token = socket.handshake.headers.authorization;
@@ -38,6 +40,7 @@ export default server => {
 
       const authUser = await AuthorizedUser.getByUUID(authUserUUID);
       const user = await User.getByUUID(userUUID);
+      UserId = user.id;
 
       currentUser = {
         authUuid: authUserUUID,
@@ -51,6 +54,10 @@ export default server => {
   });
 
   io.on('connection', async (socket) => {
+    const { chatUuid } = socket.handshake.query;
+    const chat = await Chat.getByUUID(chatUuid);
+    if (!chat) return;
+
     if (!currentUser) return;
 
     socket.broadcast.emit('joined', {
@@ -58,12 +65,22 @@ export default server => {
       user: currentUser,
     });
 
+    console.log('getConnectionsCount', getConnectionsCount(io));
+    console.log('Object(io.sockets.connected).length', Object(io.sockets.connected).length);
     socket.emit('connections', getConnectionsCount(io));
 
     socket.on('send', async (message) => {
-      // const chatMessage = await ChatMessage.create({
-      //   message,
-      // })
+      console.log('message', message, UserId, chat.id);
+      await ChatMessage.create({
+        ChatId: chat.id,
+        message,
+        UserId,
+      });
+
+      socket.broadcast.emit('send', {
+        user: currentUser,
+        message,
+      });
     });
 
     socket.on('disconnect', async () => {
