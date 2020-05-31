@@ -33,6 +33,9 @@ module.exports = {
       OrganizationId: {
         type: Sequelize.INTEGER,
       },
+      ChatId: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

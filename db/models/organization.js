@@ -40,11 +40,10 @@ export default (sequelize, DataTypes) => {
 
   Organization.associate = models => {
     // associations can be defined here
-    Organization.hasMany(models.Organizer);
     Organization.hasMany(models.Subscriber);
+    Organization.hasMany(models.Organizer);
     Organization.hasMany(models.Event);
     Organization.hasMany(models.News);
-    Organization.belongsTo(models.Chat);
   };
   return Organization;
 };
