@@ -9,7 +9,7 @@ module.exports = {
         description: 'ANIME!!! Ha-ha niBBa, u gay',
         datetimeFrom: '2020-05-09',
         datetimeTo: '2020-05-12',
-        coords: '55.7522200, 37.5155600',
+        coords: '55.7822200, 37.5255600',
         OrganizationId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
