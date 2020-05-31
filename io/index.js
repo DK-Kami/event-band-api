@@ -68,27 +68,32 @@ export default server => {
     socket.emit('connections', getConnectionsCount(io));
 
     socket.on('send', async (message) => {
-      console.log('message', message, UserId, chat.id);
-      await ChatMessage.create({
-        ChatId: chat.id,
-        message,
-        UserId,
-      });
+      try {
+        console.log('message', message, UserId, chat.id);
+        await ChatMessage.create({
+          ChatId: chat.id,
+          message,
+          UserId,
+        });
 
-      console.log('inbox', {
-        ...currentUser,
-        createdAt: new Date(),
-        isOwn: false,
-      }, message);
-
-      socket.broadcast.emit('inbox', {
-        user: {
+        console.log('inbox', {
           ...currentUser,
           createdAt: new Date(),
           isOwn: false,
-        },
-        message,
-      });
+        }, message);
+
+        socket.broadcast.emit('inbox', {
+          user: {
+            ...currentUser,
+            createdAt: new Date(),
+            isOwn: false,
+          },
+          message,
+        });
+      } catch (error) {
+        console.error(error);
+        socket.emit('error', error);
+      }
     });
 
     socket.on('disconnect', async () => {
