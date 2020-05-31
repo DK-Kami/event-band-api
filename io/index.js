@@ -99,6 +99,16 @@ export default server => {
       }
     });
 
+    socket.on('leave-chat', async () => {
+      socket.emit('connections', getConnectionsCount(io));
+      socket.disconnect(true);
+
+      io.sockets.emit('user-leave', {
+        connections: getConnectionsCount(io),
+        user: currentUser,
+      });
+    });
+
     socket.on('disconnect', async () => {
       socket.emit('connections', getConnectionsCount(io));
       socket.disconnect(true);
