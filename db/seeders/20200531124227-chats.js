@@ -3,18 +3,18 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     queryInterface.bulkInsert('Chats', [
-      {
-        uuid: '1df29884-bf9b-453b-8434-ddf3537d0b05',
-        OrganizationId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        uuid: '40f934ca-35cb-4707-b3dd-c53c6c0538dc',
-        OrganizationId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      // {
+      //   uuid: '1df29884-bf9b-453b-8434-ddf3537d0b05',
+      //   OrganizationId: 1,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   uuid: '40f934ca-35cb-4707-b3dd-c53c6c0538dc',
+      //   OrganizationId: 2,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
       {
         uuid: '10b170d0-d174-48d2-9f52-730ff174b5e5',
         EventId: 1,
@@ -29,14 +29,12 @@ module.exports = {
       },
       {
         uuid: '48953cd2-1547-4754-b43b-94fa584a63f3',
-        OrganizationId: 1,
         EventId: 4,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         uuid: 'eb340324-d45b-4e96-a885-1b8eb7aa6adf',
-        OrganizationId: 1,
         EventId: 5,
         createdAt: new Date(),
         updatedAt: new Date(),

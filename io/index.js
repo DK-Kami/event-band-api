@@ -9,7 +9,7 @@ export default http => {
     const chats = await Chat.getAll();
     socket.emit('huivrot', { chats });
     socket.emit('soisipisos', {
-      mesasge: 'nigga, you gay'
+      mesasge: 'nigga, you gay',
     });
 
     socket.on('disconnect', () => {

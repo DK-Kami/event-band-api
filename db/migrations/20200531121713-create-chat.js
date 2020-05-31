@@ -13,9 +13,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      OrganizationId: {
-        type: Sequelize.INTEGER,
-      },
       EventId: {
         type: Sequelize.INTEGER,
       },

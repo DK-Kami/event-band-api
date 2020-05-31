@@ -8,7 +8,6 @@ export default (sequelize, DataTypes) => {
         isUUID: 4,
       },
     },
-    OrganizationId: DataTypes.INTEGER,
     EventId: DataTypes.INTEGER,
   }, {});
   Chat.associate = models => {
