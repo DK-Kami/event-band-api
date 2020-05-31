@@ -2,6 +2,7 @@ import gravatar from 'gravatar';
 import soketIo from 'socket.io';
 import jwt from 'jsonwebtoken';
 import User from '../app/User/User';
+import AuthorizedUser from '../app/User/AuthorizedUser';
 import ChatMessage from '../app/Chat/ChatMessage/ChatMessage';
 
 const getConnectionsCount = io => Object(io.sockets.connected).length;
@@ -35,7 +36,7 @@ export default server => {
         userUUID,
       } = authorizedData;
 
-      const authUser = await User.getByUUID(authUserUUID);
+      const authUser = await AuthorizedUser.getByUUID(authUserUUID);
       const user = await User.getByUUID(userUUID);
 
       currentUser = {
