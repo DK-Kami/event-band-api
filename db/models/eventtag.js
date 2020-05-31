@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     EventId: DataTypes.INTEGER,
-    TagId: DataTypes.INTEGER
+    TagId: DataTypes.INTEGER,
   }, {});
   EventTag.associate = function(models) {
     // associations can be defined here

@@ -44,6 +44,7 @@ export default (sequelize, DataTypes) => {
     Organization.hasMany(models.Subscriber);
     Organization.hasMany(models.Event);
     Organization.hasMany(models.News);
+    Organization.belongsTo(models.Chat);
   };
   return Organization;
 };
