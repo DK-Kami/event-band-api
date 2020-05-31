@@ -101,6 +101,8 @@ export default server => {
 
     socket.on('disconnect', async () => {
       socket.emit('connections', getConnectionsCount(io));
+      socket.disconnect(true);
+
       io.sockets.emit('user-leave', {
         connections: getConnectionsCount(io),
         user: currentUser,
