@@ -10,14 +10,23 @@ mainRouter.get('/ping', (req, res) => {
     message: 'all ok',
   });
 });
+/**
+ * Приватные пути API
+ */
 mainRouter.use('/api', auth.required, privateRouter);
+/**
+ * Публичные пути API
+ */
 mainRouter.use('/', auth.optional, publicRouter);
 
+/**
+ * Обработка отсутствующего пути
+ */
 mainRouter.use('*', (req, res, next) => {
   res.status(500).send({
     message: 'method not implemented',
   });
-  next();
+  return next();
 });
 
 export default mainRouter;

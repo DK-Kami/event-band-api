@@ -11,7 +11,6 @@ async function getOrganization(req, res) {
     userUUID,
   } = req.payload;
 
-  console.log('are u clown?', organizationUUID, userUUID);
   if (!organizationUUID) {
     return res.status(400).send({
       message: 'Permission denied! You have no power here, servant of Mordor.',
