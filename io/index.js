@@ -6,8 +6,16 @@ import AuthorizedUser from '../app/User/AuthorizedUser';
 import ChatMessage from '../app/Chat/ChatMessage/ChatMessage';
 import Chat from '../app/Chat/Chat/Chat';
 
+/**
+ * Получение количества текущих соединений
+ * @param {io} io Экземляр iо
+ */
 const getConnectionsCount = io => Object.keys(io.sockets.connected).length;
-
+/**
+ * Возвращение данных текущего пользователя по его сокету
+ * @param {Socket} socket текущий сокет
+ * @param {Function} done функция обратного вызова
+ */
 async function getCurrentUser(socket, done) {
   const token = socket.handshake.headers.authorization;
   if (!token) {
@@ -63,19 +71,31 @@ export default server => {
     },
   });
 
+  /**
+   * Подключение к текущему сокету
+   */
   io.on('connection', async (socket) => {
     await getCurrentUser(socket, (error, { chat, currentUser, UserId }) => {
       if (error) {
         return socket.emit('error', error);
       }
 
+      /**
+       * Отправка события подключения пользователя
+       */
       socket.broadcast.emit('joined', {
         connections: getConnectionsCount(io),
         user: currentUser,
       });
 
+      /**
+       * Отправка события изменения числа подключений
+       */
       socket.emit('connections', getConnectionsCount(io));
 
+      /**
+       * Прослушивание события отправки сообщения
+       */
       socket.on('send', async (message) => {
         console.log('message', message, UserId, chat.id);
         await ChatMessage.create({
@@ -100,6 +120,9 @@ export default server => {
         });
       });
 
+      /**
+       * Прослушивание события выхода из чата
+       */
       socket.on('leave-chat', async () => {
         socket.disconnect(true);
 

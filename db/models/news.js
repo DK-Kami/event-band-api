@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
           args: [0, 100],
           msg: 'The length of the event title must be less than 100 symbols',
         },
-      }
+      },
     },
     text: DataTypes.TEXT,
     image: DataTypes.STRING,

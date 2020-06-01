@@ -23,7 +23,7 @@ export default (sequelize, DataTypes) => {
           args: [0, 100],
           msg: 'The length of the name must be less than 100',
         },
-      }
+      },
     },
     reputation: {
       type: DataTypes.REAL,
