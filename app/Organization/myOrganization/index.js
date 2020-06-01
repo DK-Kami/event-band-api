@@ -1,9 +1,9 @@
-import Router from "../../Base/Router";
-import { someOrganizationRouter } from "./someOrganization";
-import { organizationEvent } from "./organizationEvent";
-import { organizationTicket } from "./organizationTicket";
-import { organizationNews } from "./organizationNews";
-import { organizersRoter } from "./organizers";
+import Router from '../../Base/Router';
+import { someOrganizationRouter } from './someOrganization';
+import { organizationEvent } from './organizationEvent';
+import { organizationTicket } from './organizationTicket';
+import { organizationNews } from './organizationNews';
+import { organizersRoter } from './organizers';
 
 const myOrganizationRouter = new Router();
 
