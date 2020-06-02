@@ -37,8 +37,8 @@ export default (sequelize, DataTypes) => {
           if (!value.match(validCoordinates)) {
             throw new Error('Invalid coordinate format');
           }
-        }
-      }
+        },
+      },
     },
     datetimeFrom: DataTypes.DATE,
   }, {});
