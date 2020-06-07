@@ -51,7 +51,7 @@ someOrganizationRouter.get('/', async (req, res) => {
         include: [
           {
             model: TagModel,
-            attributes: ['name'],
+            attributes: ['id', 'name'],
           },
         ],
       },
@@ -71,7 +71,7 @@ someOrganizationRouter.get('/', async (req, res) => {
       minPrice: event.Tickets.length
         && event.Tickets.filter((p, n) => (p.price > n.price ? 1 : -1))[0].price,
 
-      tags: event.EventTags.map(eventTag => eventTag.Tag.name),
+      tags: event.EventTags.map(eventTag => eventTag.Tag),
       tickets: event.Tickets.length && event.Tickets,
     }));
 
