@@ -3,12 +3,12 @@ import { organizationRouter } from '../Organization';
 import { subscriberRouter } from '../Subscriber';
 import { organizerRouter } from '../Organizer';
 import { profileRouter } from '../User/profile';
-import { chatRouter } from '../Chat/Chat';
+import { tagRouter } from '../Tag/tagRouter';
 import { ticketRouter } from '../Ticket';
 import { eventRouter } from '../Event';
 import { userRouter } from '../User';
 import { newsRouter } from '../News';
-import { tagRouter } from '../Tag/tagRouter';
+import { chatRouter } from '../Chat';
 import Router from '../Base/Router';
 
 const router = new Router();

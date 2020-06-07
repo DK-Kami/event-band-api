@@ -1,7 +1,8 @@
 import gravatar from 'gravatar';
-import Router from '../../Base/Router';
-import models from '../../../db/models';
-import Chat from './Chat';
+import Router from '../Base/Router';
+import models from '../../db/models';
+import ChatMessage from './ChatMessage/ChatMessage';
+import Chat from './Chat/Chat';
 
 const {
   AuthorizedUser: AuthorizedUserModel,
@@ -67,6 +68,40 @@ chatRouter.get('/:uuid', async (req, res) => {
         avatar: gravatar.url(message.User.email, { s: 200 }),
       },
     })),
+  });
+});
+
+/**
+ * Удаление конкретного сообщения в чате
+ */
+chatRouter.delete('/:chatUuid/message/:messageUuid', async (req, res) => {
+  const {
+    messageUuid,
+    chatUuid,
+  } = req.params;
+
+  const chat = await Chat.getByUUID(chatUuid);
+  if (!chat) {
+    return res.status(404).send({
+      message: 'chat not found',
+    });
+  }
+
+  const message = await ChatMessage.getByUUID(messageUuid);
+  if (!message) {
+    return res.status(404).send({
+      message: 'message not found',
+    });
+  }
+
+  ChatMessage.delete(messageUuid, error => {
+    if (error) {
+      return res.status(400).send({ message: error });
+    }
+
+    return res.status(200).send({
+      message: 'all ok',
+    });
   });
 });
 
