@@ -27,6 +27,14 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        uuid: '41d31c07-a95a-46f3-a095-e2e1eb1b4e94',
+        email: 'daihaotea@gmail.com',
+        name: '731L',
+        surname: 'daihaotea',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ], {});
   },
 

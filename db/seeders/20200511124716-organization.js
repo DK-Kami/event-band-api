@@ -37,6 +37,15 @@ module.exports = {
         logo: 'rock_battle.jpg',
         createdAt: new Date(),
         updatedAt: new Date(),
+      },
+      {
+        uuid: '27b6d56d-53cd-4b41-b3c1-b76b13175ffc',
+        name: 'VDOOH',
+        reputation: 10,
+        description: `Advertising network for running DOOH campaigns: Digital Outdoor and Indoor screens. Fast launch, flexible managing and media planning, budget control and online stats – all inside a single account`,
+        logo: 'vdooh.jpg',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       }
     ], {});
   },

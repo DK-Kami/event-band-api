@@ -36,12 +36,27 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-
       {
         uuid: 'c56bdd3d-1ebd-4e88-ac1a-b6fd20e1039b',
         status: 1,
         UserId: 3,
         OrganizationId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'b5c80f0b-44c9-4003-8fc0-f29778fdc491',
+        status: 1,
+        UserId: 2,
+        OrganizationId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '17f300fb-9097-45f7-8a10-f06df4726322',
+        status: 1,
+        UserId: 4,
+        OrganizationId: 4,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
