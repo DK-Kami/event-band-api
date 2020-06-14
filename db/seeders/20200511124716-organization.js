@@ -40,7 +40,7 @@ module.exports = {
         uuid: '0084f28d-b41c-4e3f-a8ad-4551d4b2f767',
         name: 'VDOOH',
         reputation: 10,
-        description: 'Advertising network for running DOOH campaigns: Digital Outdoor and Indoor screens. Fast launch, flexible managing and media planning, budget control and online stats – all inside a single account',
+        description: 'Advertising network for running DOOH campaigns: Digital Outdoor and Indoor screens. Fast launch, flexible managing and media planning, budget control and online stats all inside a single account',
         logo: 'vdooh.jpg',
         createdAt: new Date(),
         updatedAt: new Date(),
