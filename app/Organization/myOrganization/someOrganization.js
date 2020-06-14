@@ -9,6 +9,7 @@ const {
   EventTag: EventTagModel,
   Ticket: TicketModel,
   User: UserModel,
+  Chat: ChatModel,
   Tag: TagModel,
 } = models;
 
@@ -37,6 +38,10 @@ someOrganizationRouter.get('/', async (req, res) => {
   const events = (await organization.getEvents({
     include: [
       {
+        model: ChatModel,
+        attributes: ['uuid'],
+      },
+      {
         model: TicketModel,
         include: [
           {
@@ -64,6 +69,7 @@ someOrganizationRouter.get('/', async (req, res) => {
       datetimeTo: event.datetimeTo,
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
+      chatUuid: event.Chat.uuid,
       subscribers: event.Tickets.length
         && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
       count: event.Tickets.length
