@@ -75,7 +75,7 @@ module.exports = {
        */
       {
         uuid: 'eaf2261d-a885-4c50-b0f7-36aadda12478',
-        name: 'VDOOH Party № 1',
+        name: 'VDOOH Party No.1',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-09',
         datetimeTo: '2020-06-09',
@@ -85,7 +85,7 @@ module.exports = {
       },
       {
         uuid: 'c27ce1cd-8afd-43fb-9932-dbe830f452dd',
-        name: 'VDOOH Party № 2',
+        name: 'VDOOH Party No.2',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-12',
         datetimeTo: '2020-06-12',
@@ -96,7 +96,7 @@ module.exports = {
       },
       {
         uuid: '6c884980-23cf-4150-aec1-a9bf89be5f78',
-        name: 'VDOOH Party № 3',
+        name: 'VDOOH Party No.3',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-15',
         datetimeTo: '2020-06-15',
@@ -107,7 +107,7 @@ module.exports = {
       },
       {
         uuid: '80ea8dcb-4e92-4aee-9181-01c70e5c0f96',
-        name: 'VDOOH Party № 4',
+        name: 'VDOOH Party No.4',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-18',
         datetimeTo: '2020-06-18',
@@ -118,7 +118,7 @@ module.exports = {
       },
       {
         uuid: '0961a533-7d80-4638-914d-29f4a77d6c04',
-        name: 'VDOOH Party № 5',
+        name: 'VDOOH Party No.5',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-21',
         datetimeTo: '2020-06-21',
@@ -129,7 +129,7 @@ module.exports = {
       },
       {
         uuid: '6fe63fc4-3dcb-447c-ba59-644f7e3199ad',
-        name: 'VDOOH Party № 6',
+        name: 'VDOOH Party No.6',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-24',
         datetimeTo: '2020-06-24',
@@ -140,7 +140,7 @@ module.exports = {
       },
       {
         uuid: '867c5dd7-c419-4948-919f-0699eaed9eea',
-        name: 'VDOOH Party № 7',
+        name: 'VDOOH Party No.7',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-27',
         datetimeTo: '2020-06-27',
@@ -151,7 +151,7 @@ module.exports = {
       },
       {
         uuid: 'dcfbd026-b16e-496d-9895-b1303df5b9fe',
-        name: 'VDOOH Party № 8',
+        name: 'VDOOH Party No.8',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-07-01',
         datetimeTo: '2020-07-01',
@@ -162,7 +162,7 @@ module.exports = {
       },
       {
         uuid: 'f21ab991-915a-440c-ae89-fce4fa4c70fc',
-        name: 'VDOOH Party № 9',
+        name: 'VDOOH Party No.9',
         description: 'Our company organizes events of a new level',
         datetimeFrom: '2020-06-04',
         datetimeTo: '2020-06-04',
