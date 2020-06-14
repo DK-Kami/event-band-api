@@ -4,14 +4,18 @@ import models from '../../../db/models';
 import EventTag from '../../EventTag/EventTag';
 import Ticket from '../../Ticket/Ticket';
 import Event from '../../Event/Event';
-import { getOrganization } from '../../../utils/myOrganization';
 import Chat from '../../Chat/Chat/Chat';
+import {
+  getOrganization,
+} from '../../../utils/myOrganization';
+
 
 const organizationEvent = new Router();
 const {
   Subscriber: SubscriberModel,
   EventTag: EventTagModel,
   Ticket: TicketModel,
+  Chat: ChatModel,
   Tag: TagModel,
 } = models;
 
@@ -20,10 +24,14 @@ const {
  */
 organizationEvent.get('/all', async (req, res) => {
   await getOrganization(req, res);
-
   const { organization } = req.payload;
+
   const events = (await organization.getEvents({
     include: [
+      {
+        model: ChatModel,
+        attributes: ['uuid'],
+      },
       {
         model: TicketModel,
         include: [
@@ -52,6 +60,7 @@ organizationEvent.get('/all', async (req, res) => {
       datetimeTo: event.datetimeTo,
       coords: event.coords,
       datetimeFrom: event.datetimeFrom,
+      chatUuid: event.Chat.uuid,
       subscribers: event.Tickets.length
         && event.Tickets.reduce((summ, ticket) => summ + ticket.Subscribers.length, 0),
       count: event.Tickets.length
@@ -70,8 +79,8 @@ organizationEvent.get('/all', async (req, res) => {
  */
 organizationEvent.post('/create', async (req, res) => {
   await getOrganization(req, res);
-
   const { organization } = req.payload;
+
   const OrganizationId = organization.id;
   const {
     name,
@@ -123,8 +132,8 @@ organizationEvent.post('/create', async (req, res) => {
 
 organizationEvent.put('/:uuid', async (req, res) => {
   await getOrganization(req, res);
-
   const { uuid } = req.params;
+
   const event = await Event.getByUUID(uuid);
   if (!event) {
     return res.status(404).send({
