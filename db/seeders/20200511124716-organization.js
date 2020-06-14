@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Organizations', [
       {
-        uuid: '989713f3-2f0b-4a14-b863-d98b5c00f94e',
+        uuid: '868d1201-2a4c-4686-9ed2-bd9335753693',
         name: 'Fregalo',
         reputation: 9,
         description: `
@@ -16,7 +16,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        uuid: '2dabf617-911f-4da8-85ee-d1a03685ba82',
+        uuid: 'c1112667-e704-493a-b2f0-4d27335db076',
         name: 'Tatar',
         reputation: 7,
         description: `
@@ -28,7 +28,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        uuid: '2d742eb2-cd96-47f2-a43c-d382ab46476d',
+        uuid: 'f78e23bf-933c-4c87-b9a0-f3dc8c453757',
         name: 'Rock battle',
         reputation: 2,
         description: `
@@ -39,7 +39,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        uuid: '27b6d56d-53cd-4b41-b3c1-b76b13175ffc',
+        uuid: '0084f28d-b41c-4e3f-a8ad-4551d4b2f767',
         name: 'VDOOH',
         reputation: 10,
         description: `Advertising network for running DOOH campaigns: Digital Outdoor and Indoor screens. Fast launch, flexible managing and media planning, budget control and online stats – all inside a single account`,
@@ -48,7 +48,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        uuid: 'acb8f6b5-c620-4ce4-a2f7-8c4c79b70cb4',
+        uuid: '7e554bd8-96fe-470b-8cba-3062798e77aa',
         name: 'Pocky',
         reputation: 10,
         description: 'Pocky sweets are the best in the world. And we know it. So we decided to create our own events in this mortal world',
@@ -57,7 +57,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        uuid: 'a9c71312-3dd0-4bc8-b54b-7898031d69e9',
+        uuid: '75dbdd58-5da6-46b8-a747-a060fc23e22b',
         name: 'Tetris',
         reputation: 9,
         description: 'Go to tetris battle',
