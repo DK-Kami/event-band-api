@@ -41,7 +41,7 @@ module.exports = {
         name: 'VDOOH',
         reputation: 10,
         description: 'Advertising network for running DOOH campaigns: Digital Outdoor and Indoor screens. Fast launch, flexible managing and media planning, budget control and online stats all inside a single account',
-        logo: 'vdooh.jpg',
+        logo: 'vdooh.png',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
