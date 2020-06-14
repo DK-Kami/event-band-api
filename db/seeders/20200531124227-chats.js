@@ -33,6 +33,115 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+
+      {
+        uuid: '1b7d49c8-dcbe-4006-9405-c3a1124e61b1',
+        EventId: 6,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '48d1077c-b247-4089-8ee2-0d219e791293',
+        EventId: 7,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '7fb05e96-48d1-4816-adbc-2a7e349f9603',
+        EventId: 8,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '3c038b60-906e-4dc2-bdc2-c45beed91fad',
+        EventId: 9,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'b44f71ed-6e10-45fd-a5eb-ece742c0d561',
+        EventId: 10,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'efaa3f24-18ea-4bef-af0e-6558eff04747',
+        EventId: 11,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '4fffeeef-c950-47df-8715-d2c589649103',
+        EventId: 12,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '0dda36d0-ac7e-42d3-9fc1-dac608e7d355',
+        EventId: 13,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '071418b7-5b44-4a1b-a768-6bffd4224e07',
+        EventId: 14,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '135eb8cc-ee64-4d22-941a-f7054295da67',
+        EventId: 15,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '9598f208-aa54-4afc-93f3-afcf107c11e5',
+        EventId: 16,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'c6a4cfea-058d-4396-88b2-164e7028334b',
+        EventId: 17,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '76c82a36-3013-424d-a594-b674f6db38bc',
+        EventId: 18,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '1c68da5f-9934-44d3-bd2a-b29b0b095739',
+        EventId: 19,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'aada512d-686b-4cf0-bae8-cc841278f6a0',
+        EventId: 20,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '122a43b3-e045-4991-84ad-2aefde5c9541',
+        EventId: 21,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'c6974dad-3a11-4bda-9843-2339173c55f9',
+        EventId: 22,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: 'de316c89-f05e-4717-87ca-046f8503ba38',
+        EventId: 23,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ], {});
 
     return queryInterface.bulkInsert('ChatMessages', [
