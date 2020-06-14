@@ -36,6 +36,7 @@ someOrganizationRouter.get('/', async (req, res) => {
   })).map(organizer => organizer.User);
 
   const events = (await organization.getEvents({
+    order: [['datetimeFrom', 'ASC']],
     include: [
       {
         model: ChatModel,
