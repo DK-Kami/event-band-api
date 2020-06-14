@@ -133,6 +133,7 @@ organizationEvent.post('/create', async (req, res) => {
 organizationEvent.put('/:uuid', async (req, res) => {
   await getOrganization(req, res);
   const { uuid } = req.params;
+  const { tags } = req.body;
 
   const event = await Event.getByUUID(uuid);
   if (!event) {
@@ -150,6 +151,19 @@ organizationEvent.put('/:uuid', async (req, res) => {
       }
 
       const newEvent = await Event.getByUUID(uuid);
+      if (tags && tags.length) {
+        const { id: EventId } = newEvent;
+        const eventTags = await event.getEventTags({ attributes: ['uuid'] }) || [];
+
+        await EventTag.delete(eventTags.map(eventTag => eventTag.uuid));
+        const promises = tags.map(async TagId => {
+          const newEventTag = await EventTag.create({ TagId, EventId });
+          return newEventTag;
+        });
+
+        await Promise.all(promises);
+      }
+
       return res.status(200).send({ event: newEvent });
     },
   );

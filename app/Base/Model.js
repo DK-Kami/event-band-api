@@ -1,5 +1,4 @@
 import { v4 } from 'uuid';
-import ModelError from './Error';
 
 class Model {
   constructor(Model) {
@@ -12,7 +11,7 @@ class Model {
    */
   handleError(error) {
     const { name } = error;
-    let message = 'very very bad request, but name: ' + name + ' and error: ' + error;
+    let message = `very very bad request, but name: ${name} and error: ${error}`;
 
     switch(name) {
       case 'SequelizeValidationError': {
