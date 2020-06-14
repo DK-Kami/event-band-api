@@ -235,7 +235,7 @@ module.exports = {
        * Tetris
        */
       {
-        uuid: '67a12d21-7421-427d-9a86-4e18ac729a1d',
+        uuid: '67a12d21-7431-427d-9a86-4e18ac729a1d',
         name: 'Tetris competitions conf.',
         description: 'Go to tetris battle',
         datetimeFrom: '2020-07-20',

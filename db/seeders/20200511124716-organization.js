@@ -50,6 +50,7 @@ module.exports = {
       {
         uuid: 'acb8f6b5-c620-4ce4-a2f7-8c4c79b70cb4',
         name: 'Pocky',
+        reputation: 10,
         description: 'Pocky sweets are the best in the world. And we know it. So we decided to create our own events in this mortal world',
         logo: 'pocky.jpeg',
         createdAt: new Date(),
@@ -58,7 +59,8 @@ module.exports = {
       {
         uuid: 'a9c71312-3dd0-4bc8-b54b-7898031d69e9',
         name: 'Tetris',
-        description: '',
+        reputation: 9,
+        description: 'Go to tetris battle',
         logo: 'tetris.jpeg',
         createdAt: new Date(),
         updatedAt: new Date(),

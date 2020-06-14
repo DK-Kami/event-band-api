@@ -448,7 +448,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        uuid: 'ce4e342e-ce02-40ca-9486-2e8c43be1123 ',
+        uuid: 'ce4e342e-ce02-40ca-9486-2e8c43be1123',
         EventId: 23,
         TagId: 27,
         createdAt: new Date(),
