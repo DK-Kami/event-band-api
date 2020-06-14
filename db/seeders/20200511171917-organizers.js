@@ -60,6 +60,22 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        uuid: '71b102c6-d0f0-4221-a011-b4186f796937',
+        status: 1,
+        UserId: 2,
+        OrganizationId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        uuid: '451e0818-52fc-479e-8a2f-624b7893f40d',
+        status: 1,
+        UserId: 2,
+        OrganizationId: 6,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ], {});
   },
 

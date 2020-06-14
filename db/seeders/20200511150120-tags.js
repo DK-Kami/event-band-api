@@ -77,7 +77,7 @@ module.exports = {
       },
       {
         uuid: '1df20420-76c8-4373-b7c5-61a55d76f7a7',
-        name: 'Desctop',
+        name: 'Desktop',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
