@@ -1,6 +1,12 @@
 import Organization from '../app/Organization/Organization';
 import User from '../app/User/User';
 
+function returnPermissionDenied(res) {
+  return res.status(400).send({
+    message: 'Permission denied! You have no power here, servant of Mordor.',
+  });
+}
+
 /**
  * Middleware, обеспечивающий безопасность путей организации,
  * путём проверки, передаваемого токена и получения организации
@@ -12,13 +18,15 @@ async function getOrganization(req, res) {
   } = req.payload;
 
   if (!organizationUUID) {
-    return res.status(400).send({
-      message: 'Permission denied! You have no power here, servant of Mordor.',
-    });
+    returnPermissionDenied(res);
   }
 
   const organization = await Organization.getByUUID(organizationUUID);
   const user = await User.getByUUID(userUUID);
+
+  if (!organization || !user) {
+    return returnPermissionDenied(res);
+  }
 
   req.payload.organization = organization;
   req.payload.user = user;
