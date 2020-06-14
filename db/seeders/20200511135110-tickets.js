@@ -104,8 +104,8 @@ module.exports = {
        */
       {
         uuid: '24464059-df2a-4a1c-b0e5-47cee0502481',
-        name: 'VDOOH Party №1',
-        description: 'Ticket for VDOOH party №1',
+        name: 'VDOOH Party No.1',
+        description: 'Ticket for VDOOH party No.1',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-09',
@@ -116,8 +116,8 @@ module.exports = {
       },
       {
         uuid: 'c9c623ea-9bf8-474c-9456-023cf23508d4',
-        name: 'VDOOH Party №1',
-        description: 'Free ticket for VDOOH party №1',
+        name: 'VDOOH Party No.1',
+        description: 'Free ticket for VDOOH party No.1',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-09',
@@ -129,8 +129,8 @@ module.exports = {
 
       {
         uuid: '17fd9cb7-53c3-47e3-9df0-e5ff7e507716',
-        name: 'VDOOH Party №2',
-        description: 'Ticket for VDOOH party №2',
+        name: 'VDOOH Party No.2',
+        description: 'Ticket for VDOOH party No.2',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-12',
@@ -141,8 +141,8 @@ module.exports = {
       },
       {
         uuid: '49034a99-c840-47e5-911a-9b26a6ed50c0',
-        name: 'VDOOH Party №2',
-        description: 'Free ticket for VDOOH party №2',
+        name: 'VDOOH Party No.2',
+        description: 'Free ticket for VDOOH party No.2',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-12',
@@ -154,8 +154,8 @@ module.exports = {
 
       {
         uuid: '45729f46-6614-44fb-90ed-3262d57bade3',
-        name: 'VDOOH Party №3',
-        description: 'Ticket for VDOOH party №3',
+        name: 'VDOOH Party No.3',
+        description: 'Ticket for VDOOH party No.3',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-15',
@@ -166,8 +166,8 @@ module.exports = {
       },
       {
         uuid: '5e4879e9-0c86-4e6b-b3cd-5726939258b3',
-        name: 'VDOOH Party №3',
-        description: 'Free ticket for VDOOH party №3',
+        name: 'VDOOH Party No.3',
+        description: 'Free ticket for VDOOH party No.3',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-15',
@@ -179,8 +179,8 @@ module.exports = {
 
       {
         uuid: 'ba3b1367-9388-4adf-b91f-18f7c010fb30',
-        name: 'VDOOH Party №4',
-        description: 'Ticket for VDOOH party №4',
+        name: 'VDOOH Party No.4',
+        description: 'Ticket for VDOOH party No.4',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-18',
@@ -191,8 +191,8 @@ module.exports = {
       },
       {
         uuid: '3463d4a1-2ea2-4f7e-a1a7-3afecce99d25',
-        name: 'VDOOH Party №4',
-        description: 'Free icket for VDOOH party №4',
+        name: 'VDOOH Party No.4',
+        description: 'Free icket for VDOOH party No.4',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-18',
@@ -204,8 +204,8 @@ module.exports = {
 
       {
         uuid: '04561c6e-83cc-4fff-a774-cfd422dc7f93',
-        name: 'VDOOH Party №5',
-        description: 'Ticket for VDOOH party №5',
+        name: 'VDOOH Party No.5',
+        description: 'Ticket for VDOOH party No.5',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-21',
@@ -216,8 +216,8 @@ module.exports = {
       },
       {
         uuid: '269cac1f-72a5-4b10-b69e-a391aa97e354',
-        name: 'VDOOH Party №5',
-        description: 'Free ticket for VDOOH party №5',
+        name: 'VDOOH Party No.5',
+        description: 'Free ticket for VDOOH party No.5',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-21',
@@ -229,8 +229,8 @@ module.exports = {
 
       {
         uuid: 'b299e8ab-e32f-471c-94c7-871b6e3db62d',
-        name: 'VDOOH Party №6',
-        description: 'Ticket for VDOOH party №6',
+        name: 'VDOOH Party No.6',
+        description: 'Ticket for VDOOH party No.6',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-24',
@@ -241,8 +241,8 @@ module.exports = {
       },
       {
         uuid: 'f3bb2a25-b4b0-4e5b-ae12-c51922323132',
-        name: 'VDOOH Party №6',
-        description: 'Free ticket for VDOOH party №6',
+        name: 'VDOOH Party No.6',
+        description: 'Free ticket for VDOOH party No.6',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-24',
@@ -254,8 +254,8 @@ module.exports = {
 
       {
         uuid: '11ffc549-04a8-43a6-afd1-b480aed5c033',
-        name: 'VDOOH Party №7',
-        description: 'Ticket for VDOOH party №7',
+        name: 'VDOOH Party No.7',
+        description: 'Ticket for VDOOH party No.7',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-27',
@@ -266,8 +266,8 @@ module.exports = {
       },
       {
         uuid: 'c144036b-4e09-4e67-ab42-8f14a1914614',
-        name: 'VDOOH Party №7',
-        description: 'Free ticket for VDOOH party №7',
+        name: 'VDOOH Party No.7',
+        description: 'Free ticket for VDOOH party No.7',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-27',
@@ -279,8 +279,8 @@ module.exports = {
 
       {
         uuid: '42a92ac2-3577-4d67-b017-c220a743e052',
-        name: 'VDOOH Party №8',
-        description: 'Ticket for VDOOH party №8',
+        name: 'VDOOH Party No.8',
+        description: 'Ticket for VDOOH party No.8',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-07-01',
@@ -291,8 +291,8 @@ module.exports = {
       },
       {
         uuid: 'b657ae1e-7918-4eb0-917a-fc8570ddd492',
-        name: 'VDOOH Party №8',
-        description: 'Free ticket for VDOOH party №8',
+        name: 'VDOOH Party No.8',
+        description: 'Free ticket for VDOOH party No.8',
         count: 200,
         price: 0,
         datetimeFrom: '2020-07-01',
@@ -304,8 +304,8 @@ module.exports = {
 
       {
         uuid: '1063f7a7-c449-4ac3-a1ce-674e99e453a4',
-        name: 'VDOOH Party №9',
-        description: 'Ticket for VDOOH party №9',
+        name: 'VDOOH Party No.9',
+        description: 'Ticket for VDOOH party No.9',
         count: 1000,
         price: 500,
         datetimeFrom: '2020-06-04',
@@ -316,8 +316,8 @@ module.exports = {
       },
       {
         uuid: '072afbc3-081f-4f6d-9d89-3abbe7de0dcf',
-        name: 'VDOOH Party №9',
-        description: 'Free ticket for VDOOH party №9',
+        name: 'VDOOH Party No.9',
+        description: 'Free ticket for VDOOH party No.9',
         count: 200,
         price: 0,
         datetimeFrom: '2020-06-04',
